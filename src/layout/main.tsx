@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import styled from "styled-components";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 import { AppConfig } from "@/utils/appConfig";
 
@@ -73,12 +74,16 @@ const FooterWrapper = styled.div`
     background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
-const Main = (props: IMainProps) => (
+const Main = (props: IMainProps) => {
+    const user = useUser();
+
+    return(
     <MainWrapper>
         <AppBar>
             <Logo className={titleFont.className}>{AppConfig.title}</Logo>
             <NavLinks>
                 <NavLink href="/">Home</NavLink>
+                <NavLink href="/profile/profile">{ user ? 'Profile' : 'Sign in' }</NavLink>
             </NavLinks>
         </AppBar>
 
@@ -88,6 +93,7 @@ const Main = (props: IMainProps) => (
       © Copyright {new Date().getFullYear()} {AppConfig.title}.
 </FooterWrapper>*/}
     </MainWrapper>
-);
+    )
+};
 
-export { Main };
+export default Main;
