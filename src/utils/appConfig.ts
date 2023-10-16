@@ -1,6 +1,6 @@
 export const AppConfig = {
-    site_name: "Nextech",
-    title: "Nextech",
-    description: "Pour tous vos besoins de développement web.",
+    site_name: "Neuchatech base",
+    title: "Neuchatech base",
+    description: "Pour vos développements web: www.neuchatech.ch",
     locale: "fr",
 };

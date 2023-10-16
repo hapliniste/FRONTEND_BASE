@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import styled from "styled-components";
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 import { AppConfig } from "@/utils/appConfig";
 
@@ -75,8 +74,7 @@ const FooterWrapper = styled.div`
 `;
 
 const Main = (props: IMainProps) => {
-    const user = useUser();
-
+    const user = null;
     return(
     <MainWrapper>
         <AppBar>

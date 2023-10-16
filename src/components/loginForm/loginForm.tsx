@@ -1,9 +1,5 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 
 const StyledCard = styled.div`
@@ -19,18 +15,9 @@ const StyledCard = styled.div`
 `;
 
 export default function LoginForm() {
-    const supabaseClient = useSupabaseClient();
-    const user = useUser();
-
     return (
         <StyledCard>
-            <Auth
-                redirectTo="http://localhost:3000/"
-                appearance={{ theme: ThemeSupa }}
-                supabaseClient={supabaseClient}
-                providers={["google", "github"]}
-                socialLayout="horizontal"
-            />
+            NOT IMPLEMENTED
         </StyledCard>
     );
 }
