@@ -2,6 +2,8 @@
 import type { AppProps } from "next/app";
 import { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
+import { ApolloProvider } from '@apollo/client';
+import apolloClient from '../utils/apolloClient';
 
 import "normalize.css/normalize.css";
 
@@ -12,11 +14,7 @@ import { lightTheme, darkTheme } from "@/styles/theme";
 export default function App({
     Component,
     pageProps,
-}: AppProps<{
-    //initialSession: Session;
-}>) {
-    //const [supabaseClient] = useState(() => createBrowserSupabaseClient());
-
+}: AppProps<{}>) {
     const [currentTheme, setCurrentTheme] = useState(lightTheme);
     useEffect(() => {
         const isDarkMode = window.matchMedia(
@@ -27,15 +25,12 @@ export default function App({
     }, []);
 
     return (
-        /*<SessionContextProvider
-            supabaseClient={supabaseClient}
-            initialSession={pageProps.initialSession}
-        >*/
-        <ThemeProvider theme={currentTheme}>
-            <Main>
-                <Component {...pageProps} />
-            </Main>
-        </ThemeProvider>
-        /*</SessionContextProvider>*/
+        <ApolloProvider client={apolloClient}>
+            <ThemeProvider theme={currentTheme}>
+                <Main>
+                    <Component {...pageProps} />
+                </Main>
+            </ThemeProvider>
+        </ApolloProvider>
     );
 }

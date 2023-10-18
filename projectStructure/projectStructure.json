@@ -1,0 +1,83 @@
+[
+  "codegen.ts",
+  "generateProjectStructure.js",
+  "jest.config.js",
+  "next-env.d.ts",
+  "next.config.js",
+  "package-lock.json",
+  "package.json",
+  {
+    "projectStructure": [
+      "projectStructure.json",
+      "projectStructure.txt"
+    ]
+  },
+  {
+    "public": [
+      "favicon.ico",
+      "next.svg",
+      "thirteen.svg",
+      "vercel.svg"
+    ]
+  },
+  "README.md",
+  "scaffoldNextSupabase.md",
+  {
+    "src": [
+      {
+        "components": [
+          {
+            "loginForm": [
+              "loginForm.tsx"
+            ]
+          }
+        ]
+      },
+      {
+        "layout": [
+          "main.tsx"
+        ]
+      },
+      {
+        "pages": [
+          {
+            "api": [
+              "hello.ts"
+            ]
+          },
+          "index.tsx",
+          {
+            "profile": [
+              "profile.tsx"
+            ]
+          },
+          "_app.tsx",
+          "_document.tsx"
+        ]
+      },
+      {
+        "types": []
+      },
+      {
+        "utils": [
+          "apolloClient.ts",
+          "appConfig.ts"
+        ]
+      },
+      {
+        "__generated__": [
+          "fragment-masking.ts",
+          "gql.ts",
+          "graphql.ts",
+          "index.ts"
+        ]
+      }
+    ]
+  },
+  {
+    "styles": [
+      "theme.ts"
+    ]
+  },
+  "tsconfig.json"
+]
