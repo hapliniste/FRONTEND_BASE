@@ -1,32 +1,19 @@
-import React from "react";
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
 
-const GET_TODOS = gql`
-  query GetTodos {
-    todos {
-      id
-      title
-      status
-      created_at
-    }
-  }
-`;
+import TodoList from '@/components/todo/TodoList';
 
-export default function Home() {
-  const { loading, error, data } = useQuery(GET_TODOS);
+const Home = () => {
+  
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  const [newTodo, setNewTodo] = useState('');
+
 
   return (
     <div>
-      <p>Neuchatech base</p>
-      <ul>
-        {data.todos.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
-        ))}
-      </ul>
+      Todo: implement
     </div>
   );
 }
+
+export default Home;

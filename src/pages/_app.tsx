@@ -3,7 +3,8 @@ import type { AppProps } from "next/app";
 import { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { ApolloProvider } from '@apollo/client';
-import apolloClient from '../utils/apolloClient';
+import apolloClient from '@/utils/apolloClient';
+import { SessionProvider } from "next-auth/react";
 
 import "normalize.css/normalize.css";
 
@@ -25,12 +26,14 @@ export default function App({
     }, []);
 
     return (
-        <ApolloProvider client={apolloClient}>
-            <ThemeProvider theme={currentTheme}>
-                <Main>
-                    <Component {...pageProps} />
-                </Main>
-            </ThemeProvider>
-        </ApolloProvider>
+        <SessionProvider session={pageProps.session}>
+            <ApolloProvider client={apolloClient}>
+                <ThemeProvider theme={currentTheme}>
+                    <Main>
+                        <Component {...pageProps} />
+                    </Main>
+                </ThemeProvider>
+            </ApolloProvider>
+        </SessionProvider>
     );
 }

@@ -1,6 +1,33 @@
 [
-  "codegen.ts",
   "generateProjectStructure.js",
+  "hasuraNextauthApollo.md",
+  {
+    "hasuraTemplate": [
+      "config.yaml",
+      {
+        "metadata": [
+          "actions.graphql",
+          "actions.yaml",
+          "allow_list.yaml",
+          "cron_triggers.yaml",
+          {
+            "databases": [
+              "databases.yaml"
+            ]
+          },
+          "query_collections.yaml",
+          "remote_schemas.yaml",
+          "version.yaml"
+        ]
+      },
+      {
+        "migrations": []
+      },
+      {
+        "seeds": []
+      }
+    ]
+  },
   "jest.config.js",
   "next-env.d.ts",
   "next.config.js",
@@ -14,14 +41,10 @@
   },
   {
     "public": [
-      "favicon.ico",
-      "next.svg",
-      "thirteen.svg",
-      "vercel.svg"
+      "favicon.ico"
     ]
   },
   "README.md",
-  "scaffoldNextSupabase.md",
   {
     "src": [
       {
@@ -29,6 +52,12 @@
           {
             "loginForm": [
               "loginForm.tsx"
+            ]
+          },
+          {
+            "todo": [
+              "TodoItem.tsx",
+              "TodoList.tsx"
             ]
           }
         ]
@@ -56,20 +85,14 @@
         ]
       },
       {
-        "types": []
+        "types": [
+          "next-auth.d.ts"
+        ]
       },
       {
         "utils": [
           "apolloClient.ts",
           "appConfig.ts"
-        ]
-      },
-      {
-        "__generated__": [
-          "fragment-masking.ts",
-          "gql.ts",
-          "graphql.ts",
-          "index.ts"
         ]
       }
     ]

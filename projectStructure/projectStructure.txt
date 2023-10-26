@@ -1,5 +1,19 @@
-├── codegen.ts
 ├── generateProjectStructure.js
+├── hasuraNextauthApollo.md
+├── hasuraTemplate
+|   ├── config.yaml
+|   ├── metadata
+|   |   ├── actions.graphql
+|   |   ├── actions.yaml
+|   |   ├── allow_list.yaml
+|   |   ├── cron_triggers.yaml
+|   |   ├── databases
+|   |   |   └── databases.yaml
+|   |   ├── query_collections.yaml
+|   |   ├── remote_schemas.yaml
+|   |   └── version.yaml
+|   ├── migrations
+|   └── seeds
 ├── jest.config.js
 ├── next-env.d.ts
 ├── next.config.js
@@ -9,16 +23,15 @@
 |   ├── projectStructure.json
 |   └── projectStructure.txt
 ├── public
-|   ├── favicon.ico
-|   ├── next.svg
-|   ├── thirteen.svg
-|   └── vercel.svg
+|   └── favicon.ico
 ├── README.md
-├── scaffoldNextSupabase.md
 ├── src
 |   ├── components
-|   |   └── loginForm
-|   |       └── loginForm.tsx
+|   |   ├── loginForm
+|   |   |   └── loginForm.tsx
+|   |   └── todo
+|   |       ├── TodoItem.tsx
+|   |       └── TodoList.tsx
 |   ├── layout
 |   |   └── main.tsx
 |   ├── pages
@@ -30,14 +43,10 @@
 |   |   ├── _app.tsx
 |   |   └── _document.tsx
 |   ├── types
-|   ├── utils
-|   |   ├── apolloClient.ts
-|   |   └── appConfig.ts
-|   └── __generated__
-|       ├── fragment-masking.ts
-|       ├── gql.ts
-|       ├── graphql.ts
-|       └── index.ts
+|   |   └── next-auth.d.ts
+|   └── utils
+|       ├── apolloClient.ts
+|       └── appConfig.ts
 ├── styles
 |   └── theme.ts
 └── tsconfig.json
