@@ -50,6 +50,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       { authorization: `Bearer ${token}` }
     );
 
+    console.log('-------------------');
+    console.log('id', session.user?.id);
+    console.log('token', token);
+    console.log('-------------------');
+
     return {
       props: {
         content: `This is protected content. Your name is ${user.name}`,
