@@ -1,19 +1,20 @@
+├── docker-compose-authentik.yml
+├── docker-compose-postgres-hasura.yml
 ├── generateProjectStructure.js
 ├── hasuraNextauthApollo.md
+├── hasurapg.env
 ├── hasuraTemplate
 |   ├── config.yaml
-|   ├── metadata
-|   |   ├── actions.graphql
-|   |   ├── actions.yaml
-|   |   ├── allow_list.yaml
-|   |   ├── cron_triggers.yaml
-|   |   ├── databases
-|   |   |   └── databases.yaml
-|   |   ├── query_collections.yaml
-|   |   ├── remote_schemas.yaml
-|   |   └── version.yaml
-|   ├── migrations
-|   └── seeds
+|   └── metadata
+|       ├── actions.graphql
+|       ├── actions.yaml
+|       ├── allow_list.yaml
+|       ├── cron_triggers.yaml
+|       ├── databases
+|       |   └── databases.yaml
+|       ├── query_collections.yaml
+|       ├── remote_schemas.yaml
+|       └── version.yaml
 ├── jest.config.js
 ├── next-env.d.ts
 ├── next.config.js
@@ -27,26 +28,65 @@
 ├── README.md
 ├── src
 |   ├── components
+|   |   ├── library
+|   |   |   ├── card.tsx
+|   |   |   ├── carousel.tsx
+|   |   |   ├── imageCard.tsx
+|   |   |   └── testComponent.tsx
 |   |   ├── loginForm
-|   |   |   └── loginForm.tsx
-|   |   └── todo
-|   |       ├── TodoItem.tsx
-|   |       └── TodoList.tsx
+|   |   |   ├── loginForm.tsx
+|   |   |   └── nextauthForm.tsx
+|   |   └── sections
+|   |       ├── contactForm.tsx
+|   |       ├── hero.tsx
+|   |       ├── heroAI.tsx
+|   |       ├── numerique.tsx
+|   |       ├── portfolio.tsx
+|   |       ├── processus.tsx
+|   |       ├── scrollSection.tsx
+|   |       ├── services.tsx
+|   |       ├── servicesOld.tsx
+|   |       ├── temoignages.tsx
+|   |       └── valeurs.tsx
 |   ├── layout
 |   |   └── main.tsx
 |   ├── pages
 |   |   ├── api
+|   |   |   ├── auth
+|   |   |   |   └── [...nextauth].ts
+|   |   |   ├── examples
+|   |   |   |   └── protected.ts
 |   |   |   └── hello.ts
 |   |   ├── index.tsx
 |   |   ├── profile
 |   |   |   └── profile.tsx
+|   |   ├── test.tsx
+|   |   ├── test0.tsx
+|   |   ├── test2.tsx
+|   |   ├── test3.tsx
+|   |   ├── test4.tsx
 |   |   ├── _app.tsx
 |   |   └── _document.tsx
 |   ├── types
-|   |   └── next-auth.d.ts
+|   |   ├── next-auth.d.ts
+|   |   └── next.d.ts
 |   └── utils
 |       ├── apolloClient.ts
 |       └── appConfig.ts
 ├── styles
-|   └── theme.ts
-└── tsconfig.json
+|   ├── arrowLeft.svg
+|   ├── theme.ts
+|   └── theme20231122.ts
+├── tsconfig.json
+└── wiki
+    ├── components.md
+    ├── databse.md
+    ├── home.md
+    ├── homepageOld.md
+    ├── recherches.md
+    └── references
+        ├── emblematik.ch_desktop.jpeg
+        ├── emblematik.ch_mobile.jpeg
+        ├── references.md
+        ├── www.coteries.com_desktop.jpeg
+        └── www.coteries.com_mobile.jpeg

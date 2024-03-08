@@ -24,8 +24,8 @@ const AppBar = styled.div`
     align-items: center;
     justify-content: space-between;
     padding-left: ${({ theme }) => theme.spacing};
-    background-color: ${({ theme }) => theme.secondaryColor};
-    color: ${({ theme }) => theme.textColor};
+    background-color: ${({ theme }) => theme.baseDark};
+    color: ${({ theme }) => theme.accentPrimary};
     height: ${({ theme }) => theme.appBarHeight};
 `;
 

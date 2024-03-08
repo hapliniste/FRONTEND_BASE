@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps<{}>) {
             "(prefers-color-scheme: dark)"
         ).matches;
         setCurrentTheme(isDarkMode ? darkTheme : lightTheme);
-        console.log("Current prefered theme is: " + isDarkMode);
+        //console.log("Current prefered theme is: " + isDarkMode);
     }, []);
 
     return (

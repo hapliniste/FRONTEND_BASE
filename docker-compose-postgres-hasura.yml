@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    env_file:
+      - ./hasurapg.env
+    restart: unless-stopped
+
+  graphql-engine:
+    image: hasura/graphql-engine:v2.1.0
+    container_name: hasura
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    env_file:
+      - ./hasurapg.env
+    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+    volumes:
+      - ./hasura-config:/hasura-config
+    restart: unless-stopped
+
+networks:
+  default:
+    external:
+      name: unified_network
