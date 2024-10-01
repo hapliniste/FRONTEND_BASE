@@ -16,7 +16,7 @@ La Hero section doit avoir de l'impact.
 Elle doit donner envie en un coup d'oeil.
 
 Sur la gauche (60-80%) un titre et une description.
-Sur la droite (40-20%) une image ou une vidéo.
+Sur la droite (40-20%) un call to action.
 
 La section doit être responsive.
 
@@ -27,7 +27,17 @@ Votre partenaire suisse pour une transition numérique réussie.
 Avec des solutions web modernes et performantes, nous œuvrons à vos côtés 
 pour faire de chaque projet un pilier de votre succès.
 
-TODO : 
+Call to action:
+La promotion du moment pour le produit vedette (500.- au lieu de 2000.- pour un site web) avec un gros bouton 
+qui redirige vers la section contact. Options de bouton:
+- "Commander maintenant"
+- "Contactez nous"
+- "En savoir plus"
+- "Découvrez l'offre"
+- "Obtenir un devis"
+- "Discuter votre projet"
+
+Future Development: 
 Ajouter une barre dans laquelle on peut taper notre projet. 
 Un assistant ChatGPT aide à définir le projet et à donner une estimation de prix.
 Un bouton à droite permet de naviguer directment vers la section "Contact" afin de fixer un rdv. Si le client a utilisé l'IA, on préremplit le formulaire avec les informations qu'il a donné.
@@ -43,12 +53,13 @@ const Section = styled.div`
     height: 100%;
 
     background: ${(props) => props.theme.secondaryColor};;
-    //background-image: url('/HeroBackground01.png');
+    background-image: url('/neuchatechherodaube01.webp');
     background-position: bottom right;
     //background-size: cover;
     background-repeat: no-repeat;
     background-size: 40%;
     background-color: ${(props) => props.theme.backgroundColor};
+    padding-top: 20em;
 `;
 
 const TextWrapper = styled.div`

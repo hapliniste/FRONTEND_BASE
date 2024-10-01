@@ -1,71 +1,85 @@
-import * as React from "react";
+import React from "react";
 import styled from "styled-components";
-import { v4 as uuid } from "uuid";
+import { Raleway } from "@next/font/google";
+
+const titleFont = Raleway({ subsets: ["latin"], weight: ["700"] });
 
 export interface ICardProps {
-    title?: string;
-    content?: string[] | string;
-    image?: string;
-    icon?: string; // Assuming this is a path to an icon image
+  title: string;
+  content: string;
+  icon: string;
 }
 
-const StyledCard = styled.div`
-    height: auto; // This allows the card to grow based on content
-    min-height: 20em; // Set a minimum height to prevent the card from shrinking too much
-    max-width: 35em; // Use em for max-width for scalability
-    border-radius: ${(props) => props.theme.borderRadius || '0.5em'};
-    background-color: ${(props) => props.theme.white};
-    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
-    padding: 1em;
-    position: relative; // For absolute positioning of the icon
+const CardWrapper = styled.div`
+  background-color: ${(props) => props.theme.white};
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 400px; // Fixed height
+  max-width: 350px; // Increased max-width
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    height: 350px; // Slightly smaller on mobile
+    padding: 1.5rem;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
-const StyledIcon = styled.img`
-    position: absolute;
-    top: 1em;
-    left: 1em;
-    max-height: 2em; // Use em to ensure scalability
+const CardHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
 `;
 
-const StyledImage = styled.img`
-    width: 100%;
-    border-radius: ${(props) => props.theme.borderRadius} ${(props) => props.theme.borderRadius} 0 0;
-    object-fit: cover; // Ensures the image covers the area without stretching
-    height: auto; // Maintain aspect ratio
+const CardIcon = styled.div`
+  width: 80px;
+  height: 80px;
+  background-color: ${(props) => props.theme.accentPrimary};
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.white};
+  font-size: 2rem;
+  margin-bottom: 1rem;
 `;
 
-const StyledTitle = styled.p`
-    font-size: ${(props) => props.theme.fontSize * 2};// Use em for font sizes
-    font-weight: bold;
-    margin: 1em 0;
+const CardTitle = styled.h3`
+  color: ${(props) => props.theme.baseDark};
+  margin-bottom: 0.5rem;
+  font-family: ${titleFont.style.fontFamily};
+  font-size: 1.5rem;
 `;
 
-const StyledContent = styled.div`
-    font-size: ${(props) => props.theme.fontSize } // Use em for font sizes
-    margin: 0.5em 0;
-
-    &.list-content {
-        list-style: inside; // For list items
-    }
+const CardContent = styled.p`
+  color: ${(props) => props.theme.baseMedium};
+  font-size: 1rem;
+  line-height: 1.6;
+  flex-grow: 1;
+  overflow-y: auto;
 `;
 
-export default function Card({ title, content, image, icon }: Partial<ICardProps>) {
-    return (
-        <StyledCard>
-            {image && <StyledImage src={image} />}
-            {icon && <StyledIcon src={icon} />}
-            {title && <StyledTitle>{title}</StyledTitle>}
-            {content && (
-                Array.isArray(content) ? (
-                    <ul className="list-content">
-                        {content.map((line) => (
-                            <li key={uuid()}>{line}</li>
-                        ))}
-                    </ul>
-                ) : (
-                    <StyledContent>{content}</StyledContent>
-                )
-            )}
-        </StyledCard>
-    );
-}
+const Card: React.FC<ICardProps> = ({ title, content, icon }) => {
+  return (
+    <CardWrapper>
+      <CardHeader>
+        <CardIcon>{icon}</CardIcon>
+        <CardTitle className={titleFont.className}>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>{content}</CardContent>
+    </CardWrapper>
+  );
+};
+
+export default Card;

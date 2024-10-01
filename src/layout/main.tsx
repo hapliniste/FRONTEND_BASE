@@ -13,9 +13,7 @@ type IMainProps = {
 
 const MainWrapper = styled.div`
     width: 100%;
-    height: 100%;
-    position: fixed;
-    overflow: hidden;
+    min-height: 100vh;
     background-color: ${(props) => props.theme.backgroundColor};
 `;
 
@@ -23,16 +21,23 @@ const AppBar = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: ${({ theme }) => theme.spacing};
-    background-color: ${({ theme }) => theme.baseDark};
+    padding: 0 ${({ theme }) => theme.spacing};
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
     color: ${({ theme }) => theme.accentPrimary};
     height: ${({ theme }) => theme.appBarHeight};
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 `;
 
 const Logo = styled.div`
-    font-size: 2em;
-    font-weight: bold;
-    color: ${({ theme }) => theme.primaryColor};
+    position: relative;
+    width: 250px;
+    height: 80px;
+    cursor: pointer;
 `;
 
 const NavLinks = styled.ul`
@@ -55,22 +60,18 @@ const NavLink = styled(Link)`
     }
 `;
 
-const MenuIcon = styled.div`
-    font-size: 2rem;
-`;
-
 const ContentWrapper = styled.div`
+    padding-top: ${({ theme }) => theme.appBarHeight};
     width: 100%;
     font-size: ${({ theme }) => theme.fontSize};
     color: ${({ theme }) => theme.textColor};
     background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
-const FooterWrapper = styled.div`
-    font-size: ${({ theme }) => theme.fontSize};
-    text-align: center;
-    color: ${({ theme }) => theme.textColor};
-    background-color: ${({ theme }) => theme.backgroundColor};
+const LogoImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 `;
 
 const Main = (props: IMainProps) => {
@@ -78,7 +79,14 @@ const Main = (props: IMainProps) => {
     return(
     <MainWrapper>
         <AppBar>
-            <Logo className={titleFont.className}>{AppConfig.title}</Logo>
+            <NavLink href="/">
+                <Logo>
+                    <LogoImage
+                    src="/neuchatech_logo.webp"
+                    alt={AppConfig.title}
+                    />
+                </Logo>
+            </NavLink>
             <NavLinks>
                 <NavLink href="/">Home</NavLink>
                 <NavLink href="/profile/profile">{ user ? 'Profile' : 'Sign in' }</NavLink>
@@ -86,10 +94,6 @@ const Main = (props: IMainProps) => {
         </AppBar>
 
         <ContentWrapper>{props.children}</ContentWrapper>
-
-        {/*<FooterWrapper>
-      © Copyright {new Date().getFullYear()} {AppConfig.title}.
-</FooterWrapper>*/}
     </MainWrapper>
     )
 };

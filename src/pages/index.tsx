@@ -18,12 +18,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 const ScrollContainer = styled.div`
     width: 100%;
-    height: calc(100vh - ${({ theme }) => theme.appBarHeight});
+    height: 100%;//(100vh - ${({ theme }) => theme.appBarHeight});
 
     //background-color: red;
 
     //scroll-snap-type: y mandatory;
-    overflow-y: scroll;
+    //overflow-y: scroll;
 
     /*scrollbar-width: none; // Firefox 
     -ms-overflow-style: none; // Internet Explorer 10+ 
@@ -43,7 +43,7 @@ export default function Home() {
             </ScrollSection>
 
             <ScrollSection>
-                <Valeurs scrollerRef={scrollContainerRef}/>
+                <Valeurs />
             </ScrollSection>
 
             <ScrollSection>
