@@ -22,7 +22,7 @@ const AppBar = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0 ${({ theme }) => theme.spacing};
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 1);
     backdrop-filter: blur(5px);
     color: ${({ theme }) => theme.accentPrimary};
     height: ${({ theme }) => theme.appBarHeight};

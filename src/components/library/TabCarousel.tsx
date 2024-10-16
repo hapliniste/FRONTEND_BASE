@@ -1,12 +1,12 @@
 // components/library/TabCarousel.tsx
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, EffectFade, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
-import 'swiper/css/effect-fade'; // Import additional effects as needed
+import 'swiper/css/effect-fade';
 
 interface Tab {
     title: string;
@@ -32,7 +32,7 @@ const TabBar = styled.div`
 const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
     'aria-selected': props.isActive,
     role: 'tab',
-}))<{ isActive: boolean; accentColor: string; progress: number }>`
+}))<{ isActive: boolean; accentColor: string }>`
     flex: 1;
     padding: 0.75rem 1.5rem;
     background-color: ${({ isActive, accentColor }) => (isActive ? accentColor : 'transparent')};
@@ -52,29 +52,41 @@ const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
     &:focus {
         outline: none;
     }
+`;
 
-    /* Active Tab Background Fill Animation */
-    ${({ isActive, progress }) =>
-        isActive &&
-        css`
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: ${progress}%;
-                background-color: rgba(255, 255, 255, 0.2); /* Overlay to show progression */
-                transition: width 0.1s linear;
-                z-index: 0;
-            }
+const progressAnimation = keyframes`
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+`;
 
-            /* Ensure content is above the progress overlay */
-            > * {
-                position: relative;
-                z-index: 1;
-            }
-        `}
+const ProgressOverlay = styled.div<{ isAnimating: boolean; interval: number }>`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    z-index: 0;
+    ${({ isAnimating, interval }) =>
+        isAnimating
+            ? css`
+                  width: 0%;
+                  animation: ${progressAnimation} ${interval}ms linear forwards;
+              `
+            : css`
+                  width: 100%;
+              `}
+`;
+
+const TabContent = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -89,73 +101,75 @@ const ContentContainer = styled.div`
     align-items: center;
 `;
 
-const TabCarousel: React.FC<TabCarouselProps> = ({ tabs, interval = 7000, swiperEffect = 'slide' }) => {
+const TabCarousel: React.FC<TabCarouselProps> = ({
+    tabs,
+    interval = 7000,
+    swiperEffect = 'slide',
+}) => {
     const [currentTab, setCurrentTab] = useState(0);
-    const [isAutoplay, setIsAutoplay] = useState(true);
+    const [isAutoplay, setIsAutoplay] = useState(false);
+    const [isInView, setIsInView] = useState(false);
     const swiperRef = useRef<any>(null);
-    const [progress, setProgress] = useState(0);
-    const requestRef = useRef<number | null>(null);
-    const startTimeRef = useRef<number | null>(null);
+    const carouselRef = useRef<HTMLDivElement>(null);
+    const [animationKey, setAnimationKey] = useState(0);
 
-    // Callback to handle progress animation
-    const animateProgress = useCallback(
-        (timestamp: number) => {
-            if (!startTimeRef.current) startTimeRef.current = timestamp;
-            const elapsed = timestamp - startTimeRef.current;
-            const progressPercentage = Math.min((elapsed / interval) * 100, 100);
-            setProgress(progressPercentage);
-            if (elapsed < interval) {
-                requestRef.current = requestAnimationFrame(animateProgress);
-            } else {
-                setProgress(0);
-                startTimeRef.current = null;
-                // Auto-switch to next tab
-                if (swiperRef.current && isAutoplay) {
-                    swiperRef.current.slideNext();
-                }
-            }
-        },
-        [interval, isAutoplay]
-    );
+    // Determine if the progress animation should be active
+    const isAnimating = isAutoplay && isInView;
 
-    // Start progress animation
+    // Set up Intersection Observer to detect when TabCarousel is in view
     useEffect(() => {
-        if (isAutoplay) {
-            requestRef.current = requestAnimationFrame(animateProgress);
-        }
-        return () => {
-            if (requestRef.current) cancelAnimationFrame(requestRef.current);
-        };
-    }, [currentTab, isAutoplay, animateProgress]);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setIsInView(true);
+                        setIsAutoplay(true); // Start autoplay when in view
+                        setAnimationKey((prevKey) => prevKey + 1); // Restart animation
+                    } else {
+                        setIsInView(false);
+                        setIsAutoplay(false); // Stop autoplay when out of view
+                    }
+                });
+            },
+            { threshold: 0.5 } // Adjust threshold as needed
+        );
 
-    // Handle autoplay control
+        if (carouselRef.current) {
+            observer.observe(carouselRef.current);
+        }
+
+        return () => {
+            if (carouselRef.current) {
+                observer.unobserve(carouselRef.current);
+            }
+        };
+    }, []);
+
+    // Handle autoplay control based on isAutoplay and isInView
     useEffect(() => {
         if (swiperRef.current) {
-            if (isAutoplay) {
+            if (isAutoplay && isInView) {
                 swiperRef.current.autoplay.start();
             } else {
                 swiperRef.current.autoplay.stop();
             }
         }
-    }, [isAutoplay]);
+    }, [isAutoplay, isInView]);
 
     // Handle tab click
     const handleTabClick = (index: number) => {
-        setCurrentTab(index);
         if (swiperRef.current) {
             swiperRef.current.slideTo(index);
         }
         setIsAutoplay(false); // Stop auto-play on manual interaction
-        setProgress(100); // Set progress to 100% immediately
+        setAnimationKey((prevKey) => prevKey + 1); // Set progress bar to 100%
     };
 
     // Handle slide change
     const handleSlideChange = (swiper: any) => {
         setCurrentTab(swiper.activeIndex);
-        setProgress(0);
-        if (isAutoplay) {
-            startTimeRef.current = null;
-            requestRef.current = requestAnimationFrame(animateProgress);
+        if (isAutoplay && isInView) {
+            setAnimationKey((prevKey) => prevKey + 1); // Restart progress bar
         }
     };
 
@@ -196,7 +210,7 @@ const TabCarousel: React.FC<TabCarouselProps> = ({ tabs, interval = 7000, swiper
     };
 
     return (
-        <div>
+        <div ref={carouselRef}>
             <TabBar role="tablist">
                 {tabs.map((tab, index) => (
                     <TabButton
@@ -204,8 +218,14 @@ const TabCarousel: React.FC<TabCarouselProps> = ({ tabs, interval = 7000, swiper
                         isActive={index === currentTab}
                         onClick={() => handleTabClick(index)}
                         accentColor={tab.accentColor || '#0070f3'}
-                        progress={index === currentTab ? progress : 0}
                     >
+                        {index === currentTab && (
+                            <ProgressOverlay
+                                key={animationKey}
+                                isAnimating={isAnimating}
+                                interval={interval}
+                            />
+                        )}
                         {tab.title}
                     </TabButton>
                 ))}
@@ -220,20 +240,20 @@ const TabCarousel: React.FC<TabCarouselProps> = ({ tabs, interval = 7000, swiper
                         swiperRef.current = swiper;
                     }}
                     autoplay={
-                        isAutoplay
+                        isAutoplay && isInView
                             ? {
                                   delay: interval,
                                   disableOnInteraction: false,
                               }
                             : false
                     }
-                    {...getEffectConfig()}
+                    {...(getEffectConfig() as any)}
                     className="mySwiper"
                     style={{ width: '100%', height: '100%' }}
                 >
                     {tabs.map((tab, index) => (
                         <SwiperSlide key={index}>
-                            <div style={{ width: '100%', height: '100%' }}>{tab.content}</div>
+                            <TabContent>{tab.content}</TabContent>
                         </SwiperSlide>
                     ))}
                 </StyledSwiper>

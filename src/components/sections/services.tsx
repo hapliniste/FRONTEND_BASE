@@ -1,3 +1,5 @@
+// pages/services.tsx
+
 import React from 'react';
 import styled from 'styled-components';
 import TabCarousel from '@/components/library/TabCarousel';
@@ -60,6 +62,7 @@ const services = [
                 </CardContent>
             </CardContainer>
         ),
+        //accentColor: '#0070f3', // Customize as needed
     },
     {
         title: "Développement sur mesure",
@@ -75,6 +78,7 @@ const services = [
                 </CardContent>
             </CardContainer>
         ),
+        //accentColor: '#28a745',
     },
     {
         title: "Assistant IA managé",
@@ -85,13 +89,14 @@ const services = [
                     <CardTitle>Assistant IA managé</CardTitle>
                 </div>
                 <CardContent>
-                    Nous mettons à votre disposition un assistant d'intelligence artificielle basé sur vos besoin afin de répondre à toute question, qu'il s'agisse d'un utilisation en interne ou pour répondre aux questions de vos clients. L'assistant a à disposition les connaissances nécessaires de votre entreprise et de vos produits. Pour une utilisation plus complexe reposant sur plus d'une page de données, nous proposons un système de {"\u00AB"} fine-tune {"\u00BB"} de l'assistant afin de lui offrir des connaissances sur l'ensemble de vos données.<br />
+                    Nous mettons à votre disposition un assistant d'intelligence artificielle basé sur vos besoin afin de répondre à toute question, qu'il s'agisse d'un utilisation en interne ou pour répondre aux questions de vos clients. L'assistant a à disposition les connaissances nécessaires de votre entreprise et de vos produits. Pour une utilisation plus complexe reposant sur plus d'une page de données, nous proposons un système de "fine-tune" de l'assistant afin de lui offrir des connaissances sur l'ensemble de vos données.<br />
                     Prix: Assistant simple: 200.- + frais d'utilisation* <br />
                     Assistant fine-tuned: à partir de 1000.- <br />
                     *basé sur les frais de l'API OpenAI : <a href="https://openai.com/api/pricing/" target="_blank" rel="noopener noreferrer">https://openai.com/api/pricing/</a>
                 </CardContent>
             </CardContainer>
         ),
+        //accentColor: '#ffc107',
     },
     {
         title: "Hébergement web",
@@ -111,6 +116,7 @@ const services = [
                 </CardContent>
             </CardContainer>
         ),
+        //accentColor: '#dc3545',
     },
 ];
 
