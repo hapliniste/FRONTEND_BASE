@@ -1,70 +1,131 @@
-import NextImage from 'next/image';
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import styled from 'styled-components';
+import { ArrowUpRight } from 'lucide-react'; // Make sure to install lucide-react
 
 export type Image = {
   id: number;
-  href: string;
-  imageSrc: string;
+  href?: string;  // Made optional
+  icon: string;
   name: string;
   username: string;
+  fullContent?: ReactNode;  // Changed to ReactNode
 };
 
-const CardWrapper = styled.a`
-  display: block;
+const CardWrapper = styled.div`  // Changed from 'a' to 'div' when no href
+  display: flex;
+  flex-direction: column;
   background-color: ${props => props.theme.white};
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+  padding: 2.5rem 2.75rem;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  cursor: ${props => props.onClick ? 'pointer' : 'default'};
 
   &:hover {
-    transform: scale(1.05);
+    transform: ${props => props.onClick ? 'translateY(-4px)' : 'none'};
+    box-shadow: ${props => props.onClick ? '0 20px 40px rgba(0, 0, 0, 0.08)' : '0 2px 4px rgba(0, 0, 0, 0.02)'};
+    
+    .arrow-icon {
+      transform: translate(4px, -4px);
+    }
   }
 `;
 
-const ImageWrapper = styled.div`
-  position: relative;
-  padding-top: 75%; // 4:3 aspect ratio
+const CardHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin-bottom: 1rem;  // Reduced from 2rem to 1rem
 `;
 
-const CardContent = styled.div`
-  padding: 1rem;
+const IconWrapper = styled.div`
+  position: relative;
+  margin-top: 0.25rem;
+`;
+
+const IconBackground = styled.div`
+  width: 3.25rem;
+  height: 3.25rem;
+  background-color: ${props => props.theme.accentPrimary}12;
+  border-radius: 0.875rem;
+`;
+
+const Icon = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.75rem;
+`;
+
+const HeaderContent = styled.div`
+  flex: 1;
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: ${props => props.theme.baseDark};
-  margin-bottom: 0.5rem;
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 `;
 
 const CardDescription = styled.p`
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.8;
   color: ${props => props.theme.baseMedium};
+  margin: 0;
+  margin-top: 1rem;  // Reduced from 2rem to 1rem
 `;
 
-const ImageCard = ({ image }: { image: Image }) => {
-  const [isLoading, setLoading] = useState(true);
+const ArrowIcon = styled(ArrowUpRight)`
+  position: absolute;
+  top: 2.75rem;
+  right: 2.75rem;
+  color: ${props => props.theme.baseMedium};
+  opacity: 0.5;
+  transition: all 0.3s ease;
+`;
 
+const Divider = styled.div`
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    ${props => props.theme.accentPrimary}12,
+    transparent
+  );
+  margin: 1rem 0;  // Reduced from 2rem to 1rem
+  width: 100%;
+`;
+
+const ImageCard = ({ image, onClick }: { image: Image; onClick?: () => void }) => {
+  const WrapperComponent = image.href ? CardWrapper.withComponent('a') : CardWrapper;
+  
   return (
-    <CardWrapper href={image.href}>
-      <ImageWrapper>
-        <NextImage
-          alt={image.name}
-          src={image.imageSrc}
-          layout="fill"
-          objectFit="cover"
-          className={`duration-700 ease-in-out ${
-            isLoading ? 'grayscale blur-2xl scale-110' : 'grayscale-0 blur-0 scale-100'
-          }`}
-          onLoadingComplete={() => setLoading(false)}
-        />
-      </ImageWrapper>
-      <CardContent>
-        <CardTitle>{image.name}</CardTitle>
-        <CardDescription>{image.username}</CardDescription>
-      </CardContent>
-    </CardWrapper>
+    <WrapperComponent 
+      href={image.href} 
+      onClick={onClick}
+    >
+      <CardHeader>
+        <IconWrapper>
+          <IconBackground />
+          <Icon>{image.icon}</Icon>
+        </IconWrapper>
+        <HeaderContent>
+          <CardTitle>{image.name}</CardTitle>
+        </HeaderContent>
+        {image.fullContent && <ArrowIcon size={22} className="arrow-icon" />}
+      </CardHeader>
+      <Divider />
+      <CardDescription>{image.username}</CardDescription>
+    </WrapperComponent>
   );
 };
 

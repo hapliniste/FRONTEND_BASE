@@ -1,11 +1,13 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import styled from "styled-components";
-
+import { Montserrat } from "next/font/google";
 import { AppConfig } from "@/utils/appConfig";
 
-import { DM_Sans } from "next/font/google";
-const titleFont = DM_Sans({ subsets: ["latin"], weight: ["700"] });
+const montserrat = Montserrat({ 
+    subsets: ["latin"],
+    weight: ["300", "400", "500", "600", "700"]
+});
 
 type IMainProps = {
     children: ReactNode;
@@ -15,6 +17,7 @@ const MainWrapper = styled.div`
     width: 100%;
     min-height: 100vh;
     background-color: ${(props) => props.theme.backgroundColor};
+    font-family: ${montserrat.style.fontFamily};
 `;
 
 const AppBar = styled.div`
@@ -77,7 +80,7 @@ const LogoImage = styled.img`
 const Main = (props: IMainProps) => {
     const user = null;
     return(
-    <MainWrapper>
+    <MainWrapper className={montserrat.className}>
         <AppBar>
             <NavLink href="/">
                 <Logo>

@@ -109,8 +109,8 @@ const baseTheme: Theme = {
     xlarge: '4rem',      // 64px
   },
   typography: {
-    fontFamily: 'Open Sans, sans-serif',
-    fontSize: '1rem',    // Base font size (16px)
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '1rem',
     lineHeight: '1.5',
   },
   borders: {

@@ -14,27 +14,39 @@ const Section = styled.section`
   background: ${(props) => props.theme.backgroundColor};
   overflow: hidden;
   position: relative;
-  padding: 4rem 2rem;
+  padding: 8rem 1.5rem;
+  
+  @media (min-width: 1024px) {
+    padding: 10rem 8%;
+  }
 `;
 
 const SectionTitle = styled.h2`
   text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
+  margin-bottom: 6rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.75rem;
+  font-weight: 700;
   color: ${props => props.theme.baseDark};
+  letter-spacing: -0.03em;
+  
+  @media (min-width: 768px) {
+    font-size: 3.25rem;
+  }
 `;
 
 const DesktopCardContainer = styled.div`
   display: none;
   @media (min-width: 768px) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: repeat(2, minmax(0, 460px));
+    gap: 2.5rem 4rem;
+    justify-content: center;
+    
+    & > div:nth-child(2n) {
+      transform: translateY(45%);
+    }
   }
-`;
-
-const StaggeredCard = styled.div<{ isEven: boolean }>`
-  margin-top: ${props => props.isEven ? '10rem' : '0'};
 `;
 
 const CardImage = styled.div`
@@ -130,17 +142,16 @@ const Valeurs: React.FC = () => {
       
       <DesktopCardContainer>
         {cardContent.map((valeur, index) => (
-          <StaggeredCard key={index} isEven={index % 2 !== 0}>
+          <div key={index}>
             <ImageCard
               image={{
                 id: index,
-                href: '#',
-                imageSrc: `/images/valeurs/${valeur.icon}.jpg`, // Assuming you have corresponding images
+                icon: valeur.icon,
                 name: valeur.title,
                 username: valeur.content
               }}
             />
-          </StaggeredCard>
+          </div>
         ))}
       </DesktopCardContainer>
 
@@ -151,7 +162,6 @@ const Valeurs: React.FC = () => {
               <ImageCard
                 image={{
                   id: index,
-                  href: '#',
                   imageSrc: `/images/valeurs/${valeur.icon}.jpg`,
                   name: valeur.title,
                   username: valeur.content
