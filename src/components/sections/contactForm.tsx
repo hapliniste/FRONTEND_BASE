@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Image from 'next/image';
 
 const Section = styled.div`
-    background: ${(props) => props.theme.colors.backgrounds.default};
     padding: ${(props) => props.theme.spacing.large};
 `;
 
@@ -12,8 +11,9 @@ const FormWrapper = styled.div`
     margin: 0 auto;
     background: ${(props) => props.theme.colors.backgrounds.white};
     padding: ${(props) => props.theme.spacing.large};
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-radius: ${(props) => props.theme.borders.radius};
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
     display: flex;
     flex-wrap: wrap;
 `;

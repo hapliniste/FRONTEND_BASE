@@ -11,7 +11,6 @@ interface ValeurCardProps {
 }
 
 const Section = styled.section`
-  background: ${(props) => props.theme.backgroundColor};
   overflow: hidden;
   position: relative;
   padding: 8rem 1.5rem;

@@ -72,7 +72,6 @@ const ProcessSteps = [
 ];
 
 const Section = styled.section`
-  background: ${(props) => props.theme.colors.backgrounds.default};
   padding: 8rem 1.5rem;
   
   @media (min-width: 1024px) {
@@ -149,8 +148,8 @@ const IconContainer = styled.div`
 `;
 
 const TimelineIcon = styled(motion.div)<{ isClientStep?: boolean }>`
-  width: 60px;
-  height: 60px;
+  width: 4rem;
+  height: 4rem;
   background: white;
   border-radius: 50%;
   display: flex;
@@ -159,7 +158,8 @@ const TimelineIcon = styled(motion.div)<{ isClientStep?: boolean }>`
   font-size: 1.75rem;
   position: relative;
   z-index: 2;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.03);
   
   ${props => props.isClientStep && `
     background: ${props.theme.accentPrimary};
@@ -176,20 +176,31 @@ const TimelineIcon = styled(motion.div)<{ isClientStep?: boolean }>`
 
 const LineSegment = styled(motion.div)`
   position: absolute;
-  top: 60px;
+  top: 5rem;
   left: calc(50% - 4px);
   width: 8px;
-  height: calc(100% - 60px);
+  height: calc(100% - 5rem);
+  margin-top: -0.5em;
   background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  border-radius: 999px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    border-radius: 999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
 
   @media (max-width: 768px) {
-    top: 44px;
-    height: calc(100% - 44px);
-    width: 6px;
-    left: calc(50% - 3px);
-    z-index: 1;
+    display: none;
   }
 `;
 
@@ -197,7 +208,8 @@ const TimelineCard = styled(motion.div)<{ isClientStep?: boolean }>`
   background: white;
   border-radius: 1.25rem;
   padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.03);
   margin: 0 0 2rem 0;
 
   ${props => props.isClientStep && `

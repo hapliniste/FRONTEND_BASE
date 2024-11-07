@@ -68,7 +68,7 @@ const ContentWrapper = styled.div`
     width: 100%;
     font-size: ${({ theme }) => theme.fontSize};
     color: ${({ theme }) => theme.textColor};
-    background-color: ${({ theme }) => theme.backgroundColor};
+    background: ${(props) => props.theme.colors.backgrounds.default};
 `;
 
 const LogoImage = styled.img`

@@ -14,7 +14,7 @@ export type Image = {
 const CardWrapper = styled.div`  // Changed from 'a' to 'div' when no href
   display: flex;
   flex-direction: column;
-  background-color: ${props => props.theme.white};
+  background-color: ${props => props.theme.colors.backgrounds.white};
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);

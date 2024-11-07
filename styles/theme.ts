@@ -90,7 +90,7 @@ const baseTheme: Theme = {
       highlight: '#fff000',
     },
     backgrounds: {
-      default: '#ffffff', // Renamed for clarity
+      default: '#fafafa',
       white: '#ffffff',
     },
     text: {
@@ -114,7 +114,7 @@ const baseTheme: Theme = {
     lineHeight: '1.5',
   },
   borders: {
-    radius: '0.125rem',  // 2px
+    radius: '1.25rem', 
     width: '0.125rem',   // 2px for border widths
   },
   sizes: {

@@ -8,7 +8,6 @@ import Image from 'next/image';
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
 
 const Section = styled.section`
-    background: ${(props) => props.theme.backgroundColor};
     overflow: hidden;
     position: relative;
     padding: 8rem 1.5rem;
@@ -38,7 +37,7 @@ const SectionTitle = styled.h2`
 `;
 
 const CardContainer = styled.div`
-    background: white;
+    background-color: ${props => props.theme.colors.backgrounds.white};
     border-radius: 1.5rem;
     overflow: hidden;
     width: 100%;
