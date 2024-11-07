@@ -44,6 +44,10 @@ interface Theme {
     borders: {
       color: string;
     };
+    status: {
+      success: string;
+      successLight: string;
+    }
   };
   spacing: {
     xsmall: string;
@@ -100,6 +104,10 @@ const baseTheme: Theme = {
     borders: {
       color: '#cccccc',
     },
+    status: {
+      success: '#34C759',  // Apple's SF Symbols green
+      successLight: '#34C75910', // Very light version for backgrounds
+    }
   },
   spacing: {
     xsmall: '0.25rem',  // 4px
