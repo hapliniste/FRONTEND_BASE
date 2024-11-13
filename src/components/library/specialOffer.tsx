@@ -17,7 +17,7 @@ const Card = styled(motion.div)`
 `;
 
 const Title = styled.h3`
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 1.75rem;
   font-weight: 600;
   color: ${props => props.theme.colors.text.primary};
@@ -32,7 +32,7 @@ const Description = styled.p`
 `;
 
 const Price = styled.div`
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: ${props => props.theme.colors.accent.primary};

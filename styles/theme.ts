@@ -1,21 +1,3 @@
-/*
-Basic colors:
-- black: #000000
-- white: #ffffff
-- light: #f2f2f2
-
-Base colors:
-- dark: #07151f
-- medium: #042137
-- light: #083968
-
-Accent colors:
-- primary: #e41b39
-- light: #fe4a4a
-- highlight: #fff000
-*/
-
-
 interface Theme {
   colors: {
     basic: {
@@ -89,7 +71,7 @@ const baseTheme: Theme = {
       light: '#083968',
     },
     accent: {
-      primary: '#e41b39',
+      primary: '#d52a1d',
       light: '#fe4a4a',
       highlight: '#fff000',
     },

@@ -22,11 +22,11 @@
 # Notes
 
 * Pour le processus:
-- [ ] Mettre "vous nous avez trouvé" en vert/validé
-- [ ] Fusionner "contact initial" et "prototypage", rendre cliquable
-- [ ] Réduire "développement", possiblement juste le titre
-- [ ] Fusionner "Lancement" et "phase de test"
-- [ ] Possiblement changer le style de "évolution et support"
+- [x] Mettre "vous nous avez trouvé" en vert/validé
+- [x] Fusionner "contact initial" et "prototypage", rendre cliquable
+- [x] Réduire "développement", possiblement juste le titre
+- [x] Fusionner "Lancement" et "phase de test"
+- [x] Possiblement changer le style de "évolution et support"
 
 Il est important que le processus semble simple et intuitif, et de faire comprendre qu'ils sont déjà dedans.
 La version revue comportera 5 étapes, dont une déjà réalisée et une "bonus", ce qui rend cela simple et pas effrayant.

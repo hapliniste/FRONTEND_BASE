@@ -17,14 +17,13 @@ const ProcessSteps = [
   {
     id: 1,
     title: "Vous Nous Avez Trouvés",
-    subtitle: "Première Étape Accomplie",
-    description: "Félicitations! Vous avez déjà franchi la première étape en nous trouvant. Notre expertise est maintenant à votre disposition pour concrétiser votre vision.",
+    description: "Félicitations! Vous avez déjà franchi la première étape en nous trouvant.\nNous sommes maintenant à votre disposition pour concrétiser votre vision.",
     icon: "✓",
     status: "completed"
   },
   {
     id: 2,
-    title: "Premier Contact & Prototypage",
+    title: "Premier Contact",
     subtitle: "Discutons et Visualisons Ensemble",
     description: "Commençons par un entretien gratuit pour comprendre vos objectifs et besoins. Nous créerons ensuite des prototypes personnalisés pour vous permettre de visualiser concrètement votre projet avant son développement.",
     icon: "🎯",
@@ -39,14 +38,14 @@ const ProcessSteps = [
     id: 4,
     title: "Test & Lancement",
     subtitle: "De la Validation au Déploiement",
-    description: "Testez votre solution et partagez vos retours pour les ajustements finaux. Une fois satisfait, nous déployons votre projet sur nos serveurs suisses sécurisés, prêt à conquérir votre marché.",
+    description: "Testez votre solution et partagez vos retours pour les ajustements finaux.\nUne fois satisfait, nous déployons votre projet sur nos serveurs suisses sécurisés.",
     icon: "🚀"
   },
   {
     id: 5,
     title: "Support & Évolution",
     subtitle: "Un Accompagnement Sur le Long Terme",
-    description: "Notre engagement continue après le lancement. Nous restons à vos côtés pour maintenir, optimiser et faire évoluer votre solution selon vos besoins futurs.",
+    description: "Notre engagement continue après le lancement.\nNous restons à vos côtés pour maintenir, optimiser et faire évoluer votre solution selon vos besoins futurs.",
     icon: "🤝",
     status: "bonus"
   }
@@ -72,7 +71,7 @@ const Container = styled.div`
 const SectionTitle = styled.h2`
   text-align: center;
   margin-bottom: 6rem;
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 2.75rem;
   font-weight: 700;
   color: ${props => props.theme.baseDark};
@@ -123,8 +122,7 @@ const IconContainer = styled.div`
   z-index: 2;
 
   @media (max-width: 768px) {
-    position: absolute;
-    transform: translateX(-10px);
+    display: none;
   }
 `;
 
@@ -171,16 +169,9 @@ const TimelineCard = styled(motion.div)<{ status?: 'completed' | 'bonus'; isEmpt
     background: ${props.theme.colors.status.successLight};
   `}
 
-  ${props => props.status === 'bonus' && css`
-    transform: translateY(0);
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: none;
-    
-    ${CardTitle} {
-      opacity: 0.8;
-    }
-  `}
+  @media (max-width: 768px) {
+    margin: 0 0 1rem 0;  // Réduire la marge sur mobile
+  }
 `;
 
 const ClickableCard = styled(TimelineCard)`
@@ -201,8 +192,20 @@ const CardTitle = styled.h3`
   margin: 0;
   line-height: 1.3;
 
+  .mobile-icon {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    .mobile-icon {
+      display: inline;
+      font-size: 1.25rem;
+    }
   }
 `;
 
@@ -224,6 +227,7 @@ const CardDescription = styled.p`
   line-height: 1.6;
   color: ${props => props.theme.baseMedium};
   margin: 0;
+  white-space: pre-line;
 
   @media (max-width: 768px) {
     font-size: 0.95rem;
@@ -246,7 +250,7 @@ const OfferCard = styled(motion.div)`
 `;
 
 const OfferTitle = styled.h3`
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 1.75rem;
   font-weight: 600;
   color: ${props => props.theme.baseDark};
@@ -254,7 +258,7 @@ const OfferTitle = styled.h3`
 `;
 
 const OfferPrice = styled.div`
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: ${props => props.theme.accentPrimary};
@@ -323,11 +327,12 @@ const TimelineIcon = styled(motion.div)<{ status?: 'completed' | 'clickable' }>`
   `}
 
   @media (max-width: 768px) {
-    width: 44px;
-    height: 44px;
-    font-size: 1.25rem;
-    z-index: 2;
+    display: none;
   }
+`;
+
+const CardContent = styled.div`
+  flex: 1;
 `;
 
 const Processus: React.FC = () => {
@@ -396,7 +401,10 @@ const Processus: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
                 >
-                  <CardTitle>{step.title}</CardTitle>
+                  <CardTitle>
+                    <span className="mobile-icon">{step.icon}</span>
+                    {step.title}
+                  </CardTitle>
                   {step.subtitle && <CardSubtitle>{step.subtitle}</CardSubtitle>}
                   {step.description && <CardDescription>{step.description}</CardDescription>}
                 </ClickableCard>
@@ -408,8 +416,12 @@ const Processus: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+                  onClick={step.isClickable ? scrollToContact : undefined}
                 >
-                  <CardTitle style={{ margin: 0 }}>{step.title}</CardTitle>
+                  <CardTitle>
+                    <span className="mobile-icon">{step.icon}</span>
+                    {step.title}
+                  </CardTitle>
                   {step.subtitle && <CardSubtitle>{step.subtitle}</CardSubtitle>}
                   {step.description && <CardDescription>{step.description}</CardDescription>}
                 </TimelineCard>

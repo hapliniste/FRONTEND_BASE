@@ -9,6 +9,7 @@ import Processus from "@/components/sections/processus";
 import Numerique from "@/components/sections/numerique";
 import ContactForm from "@/components/sections/contactForm";
 import SpecialOffer from "@/components/library/specialOffer";
+import ImportanceWeb from "@/components/sections/importanceWeb";
 
 import ScrollSection from "@/components/sections/scrollSection";
 
@@ -43,6 +44,10 @@ export default function Home() {
 
             <ScrollSection>
                 <Valeurs />
+            </ScrollSection>
+
+            <ScrollSection>
+                <ImportanceWeb />
             </ScrollSection>
 
             <ScrollSection>

@@ -66,7 +66,7 @@ const HeaderContent = styled.div`
 `;
 
 const CardTitle = styled.h3`
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   font-weight: 600;
   color: ${props => props.theme.baseDark};
@@ -76,7 +76,7 @@ const CardTitle = styled.h3`
 `;
 
 const CardDescription = styled.p`
-  font-family: 'Montserrat', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.8;

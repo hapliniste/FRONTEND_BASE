@@ -25,7 +25,7 @@ const ContentWrapper = styled.div`
 const SectionTitle = styled.h2`
     text-align: center;
     margin-bottom: 6rem;
-    font-family: 'Montserrat', sans-serif;
+    //font-family: 'Montserrat', sans-serif;
     font-size: 2.75rem;
     font-weight: 700;
     color: ${props => props.theme.baseDark};
@@ -88,7 +88,7 @@ const CardIcon = styled.span`
 `;
 
 const CardTitle = styled.h3`
-    font-family: 'Montserrat', sans-serif;
+    //font-family: 'Montserrat', sans-serif;
     font-size: 1.75rem;
     font-weight: 600;
     color: ${props => props.theme.baseDark};
@@ -124,7 +124,7 @@ const FeatureItem = styled.li`
 `;
 
 const PriceTag = styled.div`
-    font-family: 'Montserrat', sans-serif;
+    //font-family: 'Montserrat', sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: ${props => props.theme.baseDark};
