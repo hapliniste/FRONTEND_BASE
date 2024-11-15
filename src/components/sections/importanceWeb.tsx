@@ -4,21 +4,22 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 const Section = styled.section`
-  padding: 8rem 1.5rem;
-  background: linear-gradient(to bottom, transparent, ${props => props.theme.backgroundColor}15);
+  overflow: hidden;
+  position: relative;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
+  background: linear-gradient(to bottom, transparent, ${props => props.theme.colors.backgrounds.default}15);
   
   @media (min-width: 1024px) {
-    padding: 10rem 8%;
+    padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
   }
 `;
 
 const SectionTitle = styled(motion.h2)`
   text-align: center;
-  margin-bottom: 4rem;
-  //font-family: 'Montserrat', sans-serif;
+  margin-bottom: ${props => props.theme.spacing.xlarge};
   font-size: 2.75rem;
   font-weight: 700;
-  color: ${props => props.theme.baseDark};
+  color: ${props => props.theme.colors.text.primary};
   
   @media (min-width: 768px) {
     font-size: 3.25rem;
@@ -26,15 +27,12 @@ const SectionTitle = styled(motion.h2)`
 `;
 
 const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3rem;
-  max-width: 1400px;
+  width: 100%;
+  max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
-
-  @media (min-width: 1200px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: ${props => props.theme.spacing.large};
 `;
 
 const StatItem = styled(motion.div)`

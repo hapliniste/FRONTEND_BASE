@@ -13,20 +13,25 @@ interface ValeurCardProps {
 const Section = styled.section`
   overflow: hidden;
   position: relative;
-  padding: 8rem 1.5rem;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   
   @media (min-width: 1024px) {
-    padding: 10rem 8%;
+    padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
   }
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: ${props => props.theme.sizes.maxWidth};
+  margin: 0 auto;
 `;
 
 const SectionTitle = styled.h2`
   text-align: center;
   margin-bottom: 6rem;
-  //font-family: 'Montserrat', sans-serif;
   font-size: 2.75rem;
   font-weight: 700;
-  color: ${props => props.theme.baseDark};
+  color: ${props => props.theme.colors.text.primary};
   letter-spacing: -0.03em;
   
   @media (min-width: 768px) {
@@ -129,7 +134,7 @@ const cardContent: ValeurCardProps[] = [
   {
     title: "L'excellence à un prix attractif",
     content: "Nous offrons des solutions économiques sans compromettre la qualité, les performances ou la sécurité. Obtenez le site Web moderne et professionnel dont votre entreprise a besoin à un prix abordable.",
-    icon: "💎",
+    icon: "",
     isEven: false
   },
 ];
@@ -137,39 +142,41 @@ const cardContent: ValeurCardProps[] = [
 const Valeurs: React.FC = () => {
   return (
     <Section>
-      <SectionTitle>Nos Valeurs</SectionTitle>
-      
-      <DesktopCardContainer>
-        {cardContent.map((valeur, index) => (
-          <div key={index}>
-            <ImageCard
-              image={{
-                id: index,
-                icon: valeur.icon,
-                name: valeur.title,
-                username: valeur.content
-              }}
-            />
-          </div>
-        ))}
-      </DesktopCardContainer>
-
-      <MobileCardContainer>
-        <Carousel
-          slides={cardContent.map((valeur, index) => ({
-            content: (
+      <ContentWrapper>
+        <SectionTitle>Nos Valeurs</SectionTitle>
+        
+        <DesktopCardContainer>
+          {cardContent.map((valeur, index) => (
+            <div key={index}>
               <ImageCard
                 image={{
                   id: index,
-                  imageSrc: `/images/valeurs/${valeur.icon}.jpg`,
+                  icon: valeur.icon,
                   name: valeur.title,
                   username: valeur.content
                 }}
               />
-            )
-          }))}
-        />
-      </MobileCardContainer>
+            </div>
+          ))}
+        </DesktopCardContainer>
+
+        <MobileCardContainer>
+          <Carousel
+            slides={cardContent.map((valeur, index) => ({
+              content: (
+                <ImageCard
+                  image={{
+                    id: index,
+                    imageSrc: `/images/valeurs/${valeur.icon}.jpg`,
+                    name: valeur.title,
+                    username: valeur.content
+                  }}
+                />
+              )
+            }))}
+          />
+        </MobileCardContainer>
+      </ContentWrapper>
     </Section>
   );
 };

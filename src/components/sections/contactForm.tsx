@@ -1,315 +1,524 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Image from 'next/image';
+import { motion } from "framer-motion";
+import Image from "next/image";
 
-const Section = styled.div`
-    padding: ${(props) => props.theme.spacing.large};
+// Layout Components
+const Section = styled.section`
+  overflow: hidden;
+  position: relative;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
+  padding-bottom: ${props => props.theme.spacing.large};
+  
+  @media (min-width: 1024px) {
+    padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
+    padding-bottom: ${props => props.theme.spacing.large};
+  }
 `;
 
-const FormWrapper = styled.div`
-    max-width: 1200px;
-    margin: 0 auto;
-    background: ${(props) => props.theme.colors.backgrounds.white};
-    padding: ${(props) => props.theme.spacing.large};
-    border-radius: ${(props) => props.theme.borders.radius};
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    display: flex;
-    flex-wrap: wrap;
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: ${props => props.theme.sizes.maxWidth};
+  margin: 0 auto;
 `;
 
-const FormColumn = styled.div`
-    flex: 1;
-    min-width: 300px;
-    padding: ${(props) => props.theme.spacing.medium};
+const FormContainer = styled.div`
+  background: ${props => props.theme.colors.backgrounds.white};
+  border-radius: ${props => props.theme.borders.radius};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  overflow: hidden;
 `;
 
+const FormGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${props => props.theme.spacing.xlarge};
+  padding: ${props => props.theme.spacing.large};
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: ${props => props.theme.spacing.medium};
+    gap: ${props => props.theme.spacing.medium};
+  }
+`;
+
+// Typography Components
 const Title = styled.h2`
-    color: ${(props) => props.theme.colors.text.primary};
-    margin-bottom: ${(props) => props.theme.spacing.medium};
-    font-size: 2.5rem;
+  color: ${props => props.theme.colors.text.primary};
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: ${props => props.theme.spacing.medium};
+  letter-spacing: -0.03em;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 const Subtitle = styled.p`
-    color: ${(props) => props.theme.colors.text.secondary};
-    margin-bottom: ${(props) => props.theme.spacing.large};
-    font-size: 1.2rem;
+  color: ${props => props.theme.colors.text.secondary};
+  font-size: 1.2rem;
+  margin-bottom: ${props => props.theme.spacing.large};
 `;
 
-const StyledForm = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: ${(props) => props.theme.spacing.medium};
+// Form Components
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.medium};
+`;
+
+const FormField = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: ${props => props.theme.spacing.medium};
+`;
+
+const Label = styled.label<{ optional?: boolean }>`
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: ${props => props.theme.colors.text.primary};
+  margin-bottom: ${props => props.theme.spacing.xsmall};
+  margin-left: ${props => props.theme.spacing.medium};
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.xsmall};
+
+  ${props => props.optional && `
+    &::after {
+      content: '(optionnel)';
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: ${props.theme.colors.text.secondary};
+      margin-left: ${props.theme.spacing.xsmall};
+    }
+  `}
 `;
 
 const Input = styled.input`
-    padding: ${(props) => props.theme.spacing.small};
-    border: 2px solid ${(props) => props.theme.colors.borders.color};
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+  padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.large}`};
+  border: 2px solid ${props => props.theme.colors.borders.color};
+  border-radius: 999px;
+  font-size: 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 
-    &:focus {
-        border-color: ${(props) => props.theme.colors.accent.primary};
-        outline: none;
-    }
+  @media (max-width: 768px) {
+    padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.medium}`};
+  }
+
+  &:focus {
+    border-color: ${props => props.theme.colors.accent.primary};
+    outline: none;
+    box-shadow: 0 0 0 3px ${props => `${props.theme.colors.accent.primary}15`};
+  }
 `;
 
 const TextArea = styled.textarea`
-    padding: ${(props) => props.theme.spacing.small};
-    border: 2px solid ${(props) => props.theme.colors.borders.color};
-    border-radius: 10px;
-    font-size: 1rem;
-    min-height: 150px;
-    transition: border-color 0.3s ease;
+  padding: ${props => props.theme.spacing.medium};
+  border: 2px solid ${props => props.theme.colors.borders.color};
+  border-radius: ${props => props.theme.borders.radius};
+  font-size: 1rem;
+  min-height: 150px;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 
-    &:focus {
-        border-color: ${(props) => props.theme.colors.accent.primary};
-        outline: none;
-    }
+  &:focus {
+    border-color: ${props => props.theme.colors.accent.primary};
+    outline: none;
+    box-shadow: 0 0 0 3px ${props => `${props.theme.colors.accent.primary}15`};
+  }
 `;
 
-const SubmitButton = styled.button`
-    padding: ${(props) => props.theme.spacing.small} ${(props) => props.theme.spacing.medium};
-    background-color: ${(props) => props.theme.colors.accent.primary};
-    color: ${(props) => props.theme.colors.basic.white};
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+// Service Selection Components
+const ServiceOptions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: ${props => props.theme.spacing.small};
+  margin: ${props => props.theme.spacing.medium} 0;
 
-    &:hover {
-        background-color: ${(props) => props.theme.colors.accent.light};
-        transform: translateY(-2px);
-    }
-
-    &:active {
-        transform: translateY(0);
-    }
-
-    &:disabled {
-        background-color: ${(props) => props.theme.colors.borders.color};
-        cursor: not-allowed;
-    }
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
-const ServiceCards = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: ${(props) => props.theme.spacing.small};
-    margin-top: ${(props) => props.theme.spacing.medium};
+const ServiceCard = styled.label<{ selected?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  padding: ${props => props.theme.spacing.medium};
+  background: ${props => props.theme.colors.backgrounds.white};
+  border-radius: ${props => props.theme.borders.radius};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 2px solid ${props => props.selected ? 
+    props.theme.colors.accent.primary : 
+    'rgba(0, 0, 0, 0.03)'
+  };
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: ${props => props.theme.colors.accent.primary};
+  }
 `;
 
-const ServiceCard = styled.label`
-    flex: 1;
-    padding: ${(props) => props.theme.spacing.small};
-    border: 2px solid ${(props) => props.theme.colors.borders.color};
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        border-color: ${(props) => props.theme.colors.accent.primary};
-    }
-
-    input:checked + & {
-        background-color: ${(props) => props.theme.colors.accent.primary};
-        color: ${(props) => props.theme.colors.basic.white};
-    }
+const ServiceTitle = styled.span`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: ${props => props.theme.colors.text.primary};
+  margin-bottom: ${props => props.theme.spacing.small};
 `;
 
+const ServiceDescription = styled.span`
+  font-size: 1rem;
+  color: ${props => props.theme.colors.text.secondary};
+  line-height: 1.5;
+`;
+
+// Contact Info Components
 const ContactInfo = styled.div`
-    margin-top: ${(props) => props.theme.spacing.large};
+  background: ${props => `${props.theme.colors.accent.primary}08`};
+  padding: ${props => props.theme.spacing.large};
+  border-radius: ${props => props.theme.borders.radius};
+  margin-bottom: ${props => props.theme.spacing.large};
 `;
 
-const ContactItem = styled.p`
-    display: flex;
-    align-items: center;
-    margin-bottom: ${(props) => props.theme.spacing.small};
-    font-size: 1.1rem;
+const ContactItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.medium};
+  margin-bottom: ${props => props.theme.spacing.medium};
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const ContactIcon = styled.span`
-    margin-right: ${(props) => props.theme.spacing.small};
-    font-size: 1.5rem;
+  font-size: 1.5rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+`;
+
+const ContactText = styled.span`
+  color: ${props => props.theme.colors.text.primary};
+  flex: 1;
+  justify-content: left;
+  text-align: left;
 `;
 
 const RevealButton = styled.button`
-    background: none;
-    border: none;
-    color: ${(props) => props.theme.colors.accent.primary};
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 0;
-    margin-left: ${(props) => props.theme.spacing.small};
+  background: none;
+  border: none;
+  color: ${props => props.theme.colors.accent.primary};
+  font-size: 1rem;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.small};
+  margin: 0 auto;
 
-    &:hover {
-        text-decoration: underline;
-    }
+  &:hover {
+    color: ${props => props.theme.colors.accent.light};
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
 `;
 
+const ContactDetails = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.medium};
+`;
+
+// Button Components
+const SubmitButton = styled.button`
+  padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.large}`};
+  background: ${props => props.theme.colors.accent.primary};
+  color: ${props => props.theme.colors.basic.white};
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${props => props.theme.colors.accent.light};
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
+// New image container
+const ImageContainer = styled.div`
+  position: relative;
+  flex: 1;
+  min-height: 300px;
+  border-radius: ${props => props.theme.borders.radius};
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+// Update the right column container
+const RightColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+// Component Implementation
 const ContactForm: React.FC = () => {
-    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-    const [revealedContact, setRevealedContact] = useState(false);
-    const [contactInfo, setContactInfo] = useState<{ email: string; phone: string } | null>(null);
-    const [loadingContact, setLoadingContact] = useState(false);
+  const [selectedService, setSelectedService] = useState<string>('');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [contactInfo, setContactInfo] = useState<{ email: string; phone: string; address: string } | null>(null);
+  const [loadingContact, setLoadingContact] = useState(false);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setStatus('submitting');
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus('submitting');
 
-        const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
 
-        try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                body: formData,
-            });
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        body: formData,
+      });
 
-            if (response.ok) {
-                setStatus('success');
-            } else {
-                setStatus('error');
-            }
-        } catch (error) {
-            setStatus('error');
-        }
-    };
+      if (response.ok) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
+  };
 
-    const handleRevealContact = async () => {
-        setLoadingContact(true);
-        try {
-            const response = await fetch('/api/contact-info');
-            if (response.ok) {
-                const data = await response.json();
-                setContactInfo(data);
-                setStatus('idle');
-            } else {
-                // Handle non-OK responses
-                console.error('Failed to fetch contact info');
-            }
-        } catch (error) {
-            console.error('Error fetching contact info:', error);
-        } finally {
-            setLoadingContact(false);
-            setRevealedContact(true);
-        }
-    };
+  const handleRevealContact = async () => {
+    setLoadingContact(true);
+    try {
+      const response = await fetch('/api/contact-info');
+      if (response.ok) {
+        const data = await response.json();
+        setContactInfo(data);
+      } else {
+        console.error('Failed to fetch contact info');
+      }
+    } catch (error) {
+      console.error('Error fetching contact info:', error);
+    } finally {
+      setLoadingContact(false);
+    }
+  };
 
-    return (
-        <Section>
-            <FormWrapper>
-                <FormColumn>
-                    <Title>Contactez-nous</Title>
-                    <Subtitle>Nous serions ravis d&apos;en savoir plus sur votre projet !</Subtitle>
-                    <StyledForm onSubmit={handleSubmit}>
-                        <Input type="text" name="name" placeholder="Votre nom" required />
-                        <Input type="email" name="email" placeholder="Votre email" required />
-                        <Input type="tel" name="phone" placeholder="Votre téléphone (optionnel)" />
-                        <TextArea name="message" placeholder="Parlez-nous de votre projet ou dites-nous simplement bonjour !" required></TextArea>
-                        <ServiceCards>
-                            <input type="radio" id="service1" name="service" value="site-standard" hidden />
-                            <ServiceCard htmlFor="service1">
-                                <h4>Site standard</h4>
-                                <p>Parfait pour les petites entreprises</p>
-                            </ServiceCard>
-                            <input type="radio" id="service2" name="service" value="developpement-sur-mesure" hidden />
-                            <ServiceCard htmlFor="service2">
-                                <h4>Développement sur mesure</h4>
-                                <p>Adapté à vos besoins spécifiques</p>
-                            </ServiceCard>
-                            <input type="radio" id="service3" name="service" value="assistant-ia" hidden />
-                            <ServiceCard htmlFor="service3">
-                                <h4>Assistant IA</h4>
-                                <p>Boostez votre entreprise avec l&apos;IA</p>
-                            </ServiceCard>
-                            <input type="radio" id="service4" name="service" value="consulting" hidden />
-                            <ServiceCard htmlFor="service4">
-                                <h4>Consulting</h4>
-                                <p>Expertise et conseils personnalisés</p>
-                            </ServiceCard>
-                        </ServiceCards>
-                        <SubmitButton type="submit" disabled={status === 'submitting'}>
-                            {status === 'submitting' ? 'Envoi en cours...' : 'Envoyer le message'}
-                        </SubmitButton>
-                    </StyledForm>
-                    {status === 'success' && <p>Merci de nous avoir contactés ! Nous reviendrons vers vous rapidement.</p>}
-                    {status === 'error' && <p>Oups ! Une erreur s&apos;est produite. Veuillez réessayer ou nous contacter directement par email.</p>}
-                </FormColumn>
-                <FormColumn>
-                    <ContactInfo>
-                        <ContactItem>
-                            <ContactIcon>📍</ContactIcon> 123 Rue de la Technologie, Neuchâtel, Suisse
-                        </ContactItem>
-                        {revealedContact && contactInfo ? (
-                            <>
-                                <ContactItem>
-                                    <ContactIcon>📧</ContactIcon> {contactInfo.email}
-                                </ContactItem>
-                                <ContactItem>
-                                    <ContactIcon>📞</ContactIcon> {contactInfo.phone}
-                                </ContactItem>
-                            </>
-                        ) : (
-                            <RevealButton onClick={handleRevealContact} disabled={loadingContact}>
-                                {loadingContact ? 'Chargement...' : 'Cliquez pour révéler les coordonnées'}
-                            </RevealButton>
-                        )}
-                    </ContactInfo>
-                    <Image
-                        src="/path-to-your-friendly-team-photo.jpg"
-                        alt="Notre équipe sympathique"
-                        width={500}
-                        height={300}
-                        style={{ borderRadius: '10px', marginTop: '20px' }}
-                    />
-                </FormColumn>
-            </FormWrapper>
-        </Section>
-    );
+  const services = [
+    {
+      id: 'site-standard',
+      title: 'Site standard',
+      description: 'Parfait pour les petites entreprises'
+    },
+    {
+      id: 'developpement-sur-mesure',
+      title: 'Développement sur mesure',
+      description: 'Adapté à vos besoins spécifiques'
+    },
+    {
+      id: 'assistant-ia',
+      title: 'Assistant IA',
+      description: "Boostez votre entreprise avec l'IA"
+    },
+    {
+      id: 'consulting',
+      title: 'Consulting',
+      description: 'Expertise et conseils personnalisés'
+    }
+  ];
+
+  return (
+    <Section id="contact">
+      <ContentWrapper>
+        <FormContainer>
+          <FormGrid>
+            {/* Left Column - Form */}
+            <div>
+              <Title>Contactez-nous</Title>
+              <Subtitle>Nous serions ravis d&apos;en savoir plus sur votre projet !</Subtitle>
+              
+              <Form onSubmit={handleSubmit}>
+                <FormField>
+                  <Label htmlFor="name">Nom complet</Label>
+                  <Input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required 
+                  />
+                </FormField>
+
+                <FormField>
+                  <Label htmlFor="email">Adresse email</Label>
+                  <Input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                  />
+                </FormField>
+
+                <FormField>
+                  <Label htmlFor="phone" optional>Téléphone</Label>
+                  <Input 
+                    type="tel" 
+                    id="phone" 
+                    name="phone" 
+                  />
+                </FormField>
+
+                <FormField>
+                  <Label>Service souhaité</Label>
+                  <ServiceOptions>
+                    {services.map(service => (
+                      <ServiceCard 
+                        key={service.id}
+                        selected={selectedService === service.id}
+                        onClick={() => setSelectedService(service.id)}
+                      >
+                        <ServiceTitle>{service.title}</ServiceTitle>
+                        <ServiceDescription>{service.description}</ServiceDescription>
+                        <input
+                          type="radio"
+                          name="service"
+                          value={service.id}
+                          checked={selectedService === service.id}
+                          onChange={() => setSelectedService(service.id)}
+                          style={{ display: 'none' }}
+                        />
+                      </ServiceCard>
+                    ))}
+                  </ServiceOptions>
+                </FormField>
+
+                <FormField>
+                  <Label htmlFor="message">Votre message</Label>
+                  <TextArea 
+                    id="message" 
+                    name="message" 
+                    required
+                    placeholder="Parlez-nous de votre projet..."
+                  />
+                </FormField>
+
+                <SubmitButton 
+                  type="submit" 
+                  disabled={status === 'submitting'}
+                >
+                  {status === 'submitting' ? 'Envoi en cours...' : 'Envoyer le message'}
+                </SubmitButton>
+
+                {status === 'success' && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{ color: '#34C759', marginTop: '1rem' }}
+                  >
+                    Merci de nous avoir contactés ! Nous reviendrons vers vous rapidement.
+                  </motion.p>
+                )}
+
+                {status === 'error' && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{ color: '#FF3B30', marginTop: '1rem' }}
+                  >
+                    Une erreur s&apos;est produite. Veuillez réessayer ou nous contacter directement.
+                  </motion.p>
+                )}
+              </Form>
+            </div>
+
+            {/* Right Column - Contact Info */}
+            <RightColumn>
+              <ContactInfo>
+                {!contactInfo ? (
+                  <RevealButton 
+                    onClick={handleRevealContact} 
+                    disabled={loadingContact}
+                  >
+                    {loadingContact ? (
+                      <>
+                        <span>Chargement...</span>
+                        <motion.span
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        >
+                          ⟳
+                        </motion.span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Cliquez ici pour afficher nos coordonnées</span>
+                      </>
+                    )}
+                  </RevealButton>
+                ) : (
+                  <ContactDetails
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ContactItem>
+                      <ContactIcon>📍</ContactIcon>
+                      <ContactText>{contactInfo.address}</ContactText>
+                    </ContactItem>
+                    <ContactItem>
+                      <ContactIcon>📧</ContactIcon>
+                      <ContactText>{contactInfo.email}</ContactText>
+                    </ContactItem>
+                    <ContactItem>
+                      <ContactIcon>📞</ContactIcon>
+                      <ContactText>{contactInfo.phone}</ContactText>
+                    </ContactItem>
+                  </ContactDetails>
+                )}
+              </ContactInfo>
+
+              <ImageContainer>
+                <Image
+                  src="https://placehold.co/600x1200/999999/666666.png?text=Photo+Professionnelle"
+                  alt="Photo professionnelle"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              </ImageContainer>
+            </RightColumn>
+          </FormGrid>
+        </FormContainer>
+      </ContentWrapper>
+    </Section>
+  );
 };
 
 export default ContactForm;
-
-/*
-Contact Form Component
-
-Purpose:
-- Provide a friendly and approachable way for potential clients to reach out
-- Encourage initial contact, even if the client is not fully committed yet
-- Gather essential information without overwhelming the user
-
-Key Considerations:
-1. Simplicity and Ease of Use:
-   - Minimal required fields (name, email, message)
-   - Optional phone number for those who prefer call-backs
-   - No complex fields like appointment scheduling or service selection
-
-2. Friendly and Inviting Design:
-   - Warm, welcoming copy that encourages casual inquiries
-   - Clean, uncluttered layout
-   - Soft colors and ample white space
-
-3. Low-Pressure Approach:
-   - No mention of budgets or timelines in the initial contact
-   - Open-ended message field allows clients to share as much or as little as they want
-
-4. Responsive and Accessible:
-   - Ensure the form works well on all device sizes
-   - Implement proper accessibility attributes for screen readers
-
-5. Clear Next Steps:
-   - Success message sets expectations for follow-up
-   - Error message provides alternative contact method
-
-Future Enhancements:
-- Consider adding a subtle note about response times or working hours
-- Explore adding a CAPTCHA solution that doesn't impact user experience
-- Implement analytics to track form submissions and conversion rates
-
-Remember: The goal is to make the initial contact as frictionless as possible. 
-Detailed project discussions can happen after the first point of contact.
-*/

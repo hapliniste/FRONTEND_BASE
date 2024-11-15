@@ -52,29 +52,27 @@ const ProcessSteps = [
 ];
 
 const Section = styled.section`
-  padding: 8rem 1.5rem;
+  overflow: hidden;
+  position: relative;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   
   @media (min-width: 1024px) {
-    padding: 10rem 8%;
-  }
-
-  @media (max-width: 768px) {
-    padding: 4rem 1rem; // Reduced padding on mobile
+    padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
   }
 `;
 
 const Container = styled.div`
-  max-width: 1000px;
+  width: 100%;
+  max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
 `;
 
 const SectionTitle = styled.h2`
   text-align: center;
-  margin-bottom: 6rem;
-  //font-family: 'Montserrat', sans-serif;
+  margin-bottom: ${props => props.theme.spacing.xlarge};
   font-size: 2.75rem;
   font-weight: 700;
-  color: ${props => props.theme.baseDark};
+  color: ${props => props.theme.colors.text.primary};
   letter-spacing: -0.03em;
   
   @media (min-width: 768px) {
@@ -83,7 +81,7 @@ const SectionTitle = styled.h2`
 
   @media (max-width: 768px) {
     font-size: 2rem;
-    margin-bottom: 3rem; // Reduced margin on mobile
+    margin-bottom: ${props => props.theme.spacing.large};
   }
 `;
 

@@ -6,6 +6,9 @@ const nextConfig = {
       displayName: true,
       ssr: true
     }
+  },
+  images: {
+    domains: ['placehold.co']
   }
 }
 

@@ -14,6 +14,7 @@ interface Theme {
       primary: string;
       light: string;
       highlight: string;
+      gradient: string;
     };
     backgrounds: {
       default: string;
@@ -37,6 +38,16 @@ interface Theme {
     medium: string;
     large: string;
     xlarge: string;
+    section: {
+      paddingY: {
+        mobile: string;
+        desktop: string;
+      },
+      paddingX: {
+        mobile: string;
+        desktop: string;
+      }
+    }
   };
   typography: {
     fontFamily: string;
@@ -51,6 +62,7 @@ interface Theme {
     appBarHeight: string;
     appBarReducedHeight: string;
     footerHeight: string;
+    maxWidth: string;
   };
   breakpoints: {
     portrait: string;
@@ -74,6 +86,7 @@ const baseTheme: Theme = {
       primary: '#d52a1d',
       light: '#fe4a4a',
       highlight: '#fff000',
+      gradient: 'linear-gradient(115deg, #d52a1d 0%, #fe4a4a 100%)',
     },
     backgrounds: {
       default: '#fafafa',
@@ -97,6 +110,16 @@ const baseTheme: Theme = {
     medium: '1rem',      // 16px
     large: '2rem',       // 32px
     xlarge: '4rem',      // 64px
+    section: {
+      paddingY: {
+        mobile: '2rem',
+        desktop: '8rem',
+      },
+      paddingX: {
+        mobile: '1.5rem',
+        desktop: '8%',
+      }
+    }
   },
   typography: {
     fontFamily: "'Montserrat', sans-serif",
@@ -111,6 +134,7 @@ const baseTheme: Theme = {
     appBarHeight: '4rem',          // 64px
     appBarReducedHeight: '2rem',   // 32px
     footerHeight: '2rem',          // 32px
+    maxWidth: '1200px',
   },
   breakpoints: {
     portrait: '(max-aspect-ratio: 1)',

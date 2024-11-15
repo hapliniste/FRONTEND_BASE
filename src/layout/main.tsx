@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import styled from "styled-components";
@@ -14,60 +15,68 @@ type IMainProps = {
 };
 
 const MainWrapper = styled.div`
-    width: 100%;
+    width: 100vw;
     min-height: 100vh;
-    background-color: ${(props) => props.theme.backgroundColor};
+    background-color: ${(props) => props.theme.colors.backgrounds.default};
     font-family: ${montserrat.style.fontFamily};
+    overflow-x: hidden;
 `;
 
-const AppBar = styled.div`
+const AppBar = styled.header<{ scrolled: boolean }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 ${({ theme }) => theme.spacing};
-    background-color: rgba(255, 255, 255, 1);
-    backdrop-filter: blur(5px);
-    color: ${({ theme }) => theme.accentPrimary};
-    height: ${({ theme }) => theme.appBarHeight};
+    width: 100%;
+    padding: 0 ${({ theme }) => theme.spacing.medium};
+    background-color: ${(props) =>
+        props.scrolled ? 'rgba(255, 255, 255, 1)' : 'transparent'};
+    transition: background-color 0.3s ease;
+    color: ${({ theme }) => theme.colors.text.primary};
+    height: ${({ theme }) => theme.sizes.appBarHeight};
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    
+    @media (max-width: 768px) {
+        padding: 0 ${({ theme }) => theme.spacing.small};
+    }
 `;
 
-const Logo = styled.div`
+const Logo = styled.div<{ scrolled: boolean }>`
     position: relative;
-    width: 250px;
-    height: 80px;
+    width: 150px;
+    height: 50px;
     cursor: pointer;
+    opacity: ${(props) => (props.scrolled ? 1 : 0)};
+    transition: opacity 0.3s ease;
 `;
 
-const NavLinks = styled.ul`
+const NavLinks = styled.nav<{ scrolled: boolean }>`
     display: flex;
-    font-size: ${({ theme }) => theme.fontSize};
-    color: ${({ theme }) => theme.primaryColor};
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    font-size: ${({ theme }) => theme.typography.fontSize};
+    color: ${({ theme }) => theme.colors.text.primary};
+    opacity: ${(props) => (props.scrolled ? 1 : 0)};
+    transition: opacity 0.3s ease;
 `;
 
 const NavLink = styled(Link)`
     text-decoration: none;
-    color: ${({ theme }) => theme.primaryColor};
-    margin-right: ${({ theme }) => theme.spacing};
+    color: ${({ theme }) => theme.colors.text.primary};
+    margin-left: ${({ theme }) => theme.spacing.medium};
     &:hover {
-        color: ${({ theme }) => theme.accentColor};
-    }
-    &:visited {
-        color: ${({ theme }) => theme.visitedColor};
+        color: ${({ theme }) => theme.colors.accent.primary};
     }
 `;
 
 const ContentWrapper = styled.div`
-    padding-top: ${({ theme }) => theme.appBarHeight};
     width: 100%;
-    font-size: ${({ theme }) => theme.fontSize};
-    color: ${({ theme }) => theme.textColor};
+    margin: 0;
+    padding: 0;
+    font-size: ${({ theme }) => theme.typography.fontSize};
+    color: ${({ theme }) => theme.colors.text.primary};
     background: ${(props) => props.theme.colors.backgrounds.default};
 `;
 
@@ -78,27 +87,38 @@ const LogoImage = styled.img`
 `;
 
 const Main = (props: IMainProps) => {
-    const user = null;
-    return(
-    <MainWrapper className={montserrat.className}>
-        <AppBar>
-            <NavLink href="/">
-                <Logo>
-                    <LogoImage
-                    src="/neuchatech_logo.webp"
-                    alt={AppConfig.title}
-                    />
-                </Logo>
-            </NavLink>
-            <NavLinks>
-                <NavLink href="/">Home</NavLink>
-                <NavLink href="/profile/profile">{ user ? 'Profile' : 'Sign in' }</NavLink>
-            </NavLinks>
-        </AppBar>
+    const [scrolled, setScrolled] = useState(false);
 
-        <ContentWrapper>{props.children}</ContentWrapper>
-    </MainWrapper>
-    )
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    return (
+        <MainWrapper className={montserrat.className}>
+            <AppBar scrolled={scrolled}>
+                <NavLink href="/">
+                    <Logo scrolled={scrolled}>
+                        <LogoImage
+                            src="/neuchatech_logo.webp"
+                            alt={AppConfig.title}
+                        />
+                    </Logo>
+                </NavLink>
+                <NavLinks scrolled={scrolled}>
+                    <NavLink href="/">Accueil</NavLink>
+                    <NavLink href="#services">Nos Services</NavLink>
+                    <NavLink href="#contact">Contact</NavLink>
+                </NavLinks>
+            </AppBar>
+
+            <ContentWrapper>{props.children}</ContentWrapper>
+        </MainWrapper>
+    );
 };
 
 export default Main;

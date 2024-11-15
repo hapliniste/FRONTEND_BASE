@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import Head from "next/head";
 
@@ -10,8 +10,6 @@ import Numerique from "@/components/sections/numerique";
 import ContactForm from "@/components/sections/contactForm";
 import SpecialOffer from "@/components/library/specialOffer";
 import ImportanceWeb from "@/components/sections/importanceWeb";
-
-import ScrollSection from "@/components/sections/scrollSection";
 
 const ScrollContainer = styled.div`
     width: 100%;
@@ -30,47 +28,22 @@ const OfferWrapper = styled.div`
 `;
 
 export default function Home() {
-    const scrollContainerRef: React.Ref<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
     return (
-        <ScrollContainer ref={scrollContainerRef}>
-            <ScrollSection>
-                <Hero />
-            </ScrollSection>
-
-            <ScrollSection>
-                <Services />
-            </ScrollSection>
-
-            <ScrollSection>
-                <Valeurs />
-            </ScrollSection>
-
-            <ScrollSection>
-                <ImportanceWeb />
-            </ScrollSection>
-
-            <ScrollSection>
-                <Processus />
-            </ScrollSection>
-
-            <ScrollSection>
-                <Numerique />
-            </ScrollSection>
-
-            <ScrollSection>
-                <OfferWrapper>
-                    <SpecialOffer
-                        title="Offre Spéciale Site Web Standard"
-                        description="Profitez de notre offre de lancement et obtenez votre site web professionnel"
-                        price="500 CHF"
-                    />
-                </OfferWrapper>
-            </ScrollSection>
-
-            <ScrollSection>
-                <ContactForm />
-            </ScrollSection>
-        </ScrollContainer>
+        <>
+            <Hero />
+            <Services />
+            <Valeurs />
+            <ImportanceWeb />
+            <Processus />
+            <OfferWrapper>
+                <SpecialOffer
+                    title="Offre Spéciale Site Web Standard"
+                    description="Profitez de notre offre de lancement et obtenez votre site web professionnel"
+                    price="500 CHF"
+                />
+            </OfferWrapper>
+            <ContactForm />
+        </>
     );
 }

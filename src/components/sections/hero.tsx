@@ -1,124 +1,231 @@
-import React, {useRef, useEffect} from "react";
-import styled from "styled-components";
-import gsap from 'gsap';
+import React, { useRef, useEffect } from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import VisualElements from './VisualElements';
 
-import { AppConfig } from "@/utils/AppConfig";
+import { Outfit } from 'next/font/google';
+const titleFont = Outfit({
+  subsets: ['latin'],
+  weight: ['700'],
+});
 
+import { Montserrat } from 'next/font/google';
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700']
+});
 
-import { DM_Sans } from '@next/font/google'
-const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] })
+import { DM_Sans } from '@next/font/google';
+const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] });
 
-import { Raleway } from '@next/font/google'
-const titleFont = Raleway({ subsets: ['latin'], weight: ['900'] })
-
-/*
-La Hero section doit avoir de l'impact. 
-Elle doit donner envie en un coup d'oeil.
-
-Sur la gauche (60-80%) un titre et une description.
-Sur la droite (40-20%) un call to action.
-
-La section doit être responsive.
-
-Titre: 
-Ensemble, donnons vie à vos projets numériques
-Description: 
-Votre partenaire suisse pour une transition numérique réussie. 
-Avec des solutions web modernes et performantes, nous œuvrons à vos côtés 
-pour faire de chaque projet un pilier de votre succès.
-
-Call to action:
-La promotion du moment pour le produit vedette (500.- au lieu de 2000.- pour un site web) avec un gros bouton 
-qui redirige vers la section contact. Options de bouton:
-- "Commander maintenant"
-- "Contactez nous"
-- "En savoir plus"
-- "Découvrez l'offre"
-- "Obtenir un devis"
-- "Discuter votre projet"
-
-Future Development: 
-Ajouter une barre dans laquelle on peut taper notre projet. 
-Un assistant ChatGPT aide à définir le projet et à donner une estimation de prix.
-Un bouton à droite permet de naviguer directment vers la section "Contact" afin de fixer un rdv. Si le client a utilisé l'IA, on préremplit le formulaire avec les informations qu'il a donné.
-
-*/
-
-const Section = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-
-    width: 100%;
-    height: 100%;
-
-    background: ${(props) => props.theme.secondaryColor};;
-    background-image: url('/neuchatechherodaube01.webp');
-    background-position: bottom right;
-    //background-size: cover;
-    background-repeat: no-repeat;
-    background-size: 40%;
-    background-color: ${(props) => props.theme.backgroundColor};
-    padding-top: 20em;
+// Layout Components
+const Section = styled.section`
+  position: relative;
+  width: 100%;
+  height: 66vh;
+  background-color: ${(props) => props.theme.colors.backgrounds.default};
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    height: auto;
+  }
 `;
 
-const TextWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    margin-left: 10%;
-    width: 60%;
-    padding: ${(props) => props.theme.spacing};
+const InnerSection = styled.div`
+  overflow: hidden;
+  position: relative;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
+  height: 100%;
+  display: flex;
+  align-items: center;
+  
+  @media (min-width: 1024px) {
+    padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
+  }
 `;
 
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: ${props => props.theme.sizes.maxWidth};
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+`;
+
+const ContentArea = styled.div`
+  width: 100%;
+  max-width: 600px;
+  text-align: left;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    margin: 0 auto;
+  }
+`;
+
+// Typography Components
 const Title = styled.h1`
-    color: ${(props) => props.theme.textColor};
-    font-size: 60pt;
-    //font-size: 800%;
-    //text-transform: uppercase;   
-    margin: 0;
-`;
-const TitleColor = styled.span`
-    color: ${(props) => props.theme.accentPrimary};
-`;
-const TitleGradient = styled.span`
-    background: rgb(227,26,68);
-    background: linear-gradient(115deg, rgba(227,26,68,1) 0%, rgba(230,95,83,1) 100%);
+  color: ${(props) => props.theme.colors.text.primary};
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  .gradient {
+    background: ${(props) => props.theme.colors.accent.gradient};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+    white-space: normal;
+  }
 `;
-const Description = styled.div`
-    width: 80%;
-    color: ${(props) => props.theme.textColor};
-    font-size: 18pt;
-    margin-top: 2em;
+
+const SubTitle = styled.h2`
+  color: ${(props) => props.theme.colors.text.primary};
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+  }
 `;
-const Line = styled.p`
-margin: 0;
-margin-bottom: 0.5em;
-`
+
+const Description = styled.p`
+  color: ${(props) => props.theme.colors.text.secondary};
+  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  max-width: 80%;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+`;
+
+// UI Elements
+const LogoTitle = styled.img`
+  height: 1em;
+  margin-right: 0.5rem;
+  vertical-align: baseline;
+  position: relative;
+  top: 0.15em;
+`;
+
+const CTAButton = styled.button`
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 1rem 2.5rem;
+  background-color: ${(props) => props.theme.colors.accent.primary};
+  color: ${(props) => props.theme.colors.basic.white};
+  border: none;
+  border-radius: 99rem;
+  font-weight: 600;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.accent.light};
+  }
+`;
 
 const Hero: React.FC = () => {
-    const titleRef = useRef(null);
-    const descRef = useRef(null);
+  const contactRef = useRef<HTMLElement | null>(null);
 
-    useEffect(() => {
-        gsap.fromTo(titleRef.current, {opacity: 0}, {opacity: 1, duration: 1});
-    }, [])
+  useEffect(() => {
+    contactRef.current = document.getElementById('contact');
+  }, []);
 
-    return (
-        <Section>
-            <TextWrapper>
-                <div ref={titleRef}>
-                    <Title className={titleFont.className}><TitleColor>Ensemble</TitleColor>, donnons vie</Title>
-                    <Title className={titleFont.className}>à vos <TitleGradient>projets numériques</TitleGradient></Title>
-                </div>
-                <Description className={DMSansFont.className} ref={descRef}>
-                    <Line>Neuchatech est votre partenaire suisse pour une transition numérique réussie.</Line>
-                    <Line>Avec des solutions web modernes et performantes, nous œuvrons à vos côtés pour faire de chaque projet un pilier de votre succès.</Line>
-                </Description>
-            </TextWrapper>
-        </Section>
-    );
+  const scrollToContact = () => {
+    if (contactRef.current) {
+      contactRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    } else {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: custom * 0.2 },
+    }),
+  };
+
+  return (
+    <Section>
+      <InnerSection>
+        <ContentWrapper>
+          <ContentArea>
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              custom={0}
+              variants={titleVariants}
+            >
+              <Title className={titleFont.className}>
+                <LogoTitle src="/neuchatech_logo.webp" alt="Neuchatech" />
+                donne vie à vos
+                <br />
+                <span className="gradient">projets numériques</span>
+              </Title>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              custom={1}
+              variants={titleVariants}
+            >
+              <SubTitle className={montserrat.className}>
+                Votre partenaire suisse pour une transition numérique réussie
+              </SubTitle>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              custom={2}
+              variants={titleVariants}
+            >
+              <Description className={DMSansFont.className}>
+                Des solutions web modernes et performantes pour faire de chaque
+                projet un pilier de votre succès.
+              </Description>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              custom={3}
+              variants={titleVariants}
+            >
+              <CTAButton 
+                onClick={scrollToContact}
+                className={montserrat.className}
+              >
+                Obtenez un devis gratuit
+              </CTAButton>
+            </motion.div>
+          </ContentArea>
+        </ContentWrapper>
+      </InnerSection>
+      <VisualElements />
+    </Section>
+  );
 };
+
 export default Hero;

@@ -29,7 +29,7 @@ Une section hero moderne et impactante qui inspire confiance tout en restant pro
    - Exemple: "Des solutions web modernes et performantes pour faire de chaque projet un pilier de votre succès"
 
 4. Call-to-Action:
-   - Bouton principal: "Discuter votre projet"
+   - Bouton principal: "Parlons de votre projet" -> "Obtenez un devis gratuit"
    - Style: Design moderne, légèrement brutalist
    - Animation: Subtile au hover
    - Action: Scroll smooth vers la section contact

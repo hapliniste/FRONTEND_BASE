@@ -10,25 +10,25 @@ const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 const Section = styled.section`
     overflow: hidden;
     position: relative;
-    padding: 8rem 1.5rem;
+    padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
     
     @media (min-width: 1024px) {
-        padding: 10rem 8%;
+        padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
     }
 `;
 
 const ContentWrapper = styled.div`
-    max-width: 1000px;
+    width: 100%;
+    max-width: ${props => props.theme.sizes.maxWidth};
     margin: 0 auto;
 `;
 
 const SectionTitle = styled.h2`
     text-align: center;
     margin-bottom: 6rem;
-    //font-family: 'Montserrat', sans-serif;
     font-size: 2.75rem;
     font-weight: 700;
-    color: ${props => props.theme.baseDark};
+    color: ${props => props.theme.colors.text.primary};
     letter-spacing: -0.03em;
     
     @media (min-width: 768px) {
@@ -88,7 +88,6 @@ const CardIcon = styled.span`
 `;
 
 const CardTitle = styled.h3`
-    //font-family: 'Montserrat', sans-serif;
     font-size: 1.75rem;
     font-weight: 600;
     color: ${props => props.theme.baseDark};
@@ -124,7 +123,6 @@ const FeatureItem = styled.li`
 `;
 
 const PriceTag = styled.div`
-    //font-family: 'Montserrat', sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: ${props => props.theme.baseDark};
