@@ -5,12 +5,18 @@ import { ThemeProvider } from "styled-components";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/utils/apolloClient";
 import { SessionProvider } from "next-auth/react";
+import { Plus_Jakarta_Sans } from 'next/font/google';
 
 import "normalize.css/normalize.css";
 
 import Main from "@/layout/main";
 
 import { lightTheme, darkTheme } from "@/styles/theme";
+
+const jakarta = Plus_Jakarta_Sans({ 
+  subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600', '700', '800']  // Added lighter weights
+});
 
 export default function App({ Component, pageProps }: AppProps<{}>) {
     const [currentTheme, setCurrentTheme] = useState(lightTheme);
@@ -26,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps<{}>) {
         <ApolloProvider client={apolloClient}>
             <SessionProvider session={pageProps.session}>
                 <ThemeProvider theme={currentTheme}>
-                    <Main>
+                    <Main className={jakarta.className}>
                         <Component {...pageProps} />
                     </Main>
                 </ThemeProvider>

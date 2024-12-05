@@ -10,7 +10,6 @@ import Numerique from "@/components/sections/numerique";
 import ContactForm from "@/components/sections/contactForm";
 import SpecialOffer from "@/components/library/specialOffer";
 //import ImportanceWeb from "@/components/sections/importanceWeb";
-import Numerique2 from "@/components/sections/numerique2";
 
 const ScrollContainer = styled.div`
     width: 100%;
@@ -35,7 +34,7 @@ export default function Home() {
             <Hero />
             <Services />
             <Valeurs />
-            <Numerique2 />
+            <Numerique />
             <Processus />
             <OfferWrapper>
                 <SpecialOffer

@@ -11,6 +11,7 @@ import React, { useRef, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import SpecialOffer from "../library/specialOffer";
+import { SectionTitle } from '@/components/library/typography';
 
 // Process steps data
 const ProcessSteps = [
@@ -65,24 +66,6 @@ const Container = styled.div`
   width: 100%;
   max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
-`;
-
-const SectionTitle = styled.h2`
-  text-align: center;
-  margin-bottom: ${props => props.theme.spacing.xlarge};
-  font-size: 2.75rem;
-  font-weight: 700;
-  color: ${props => props.theme.colors.text.primary};
-  letter-spacing: -0.03em;
-  
-  @media (min-width: 768px) {
-    font-size: 3.25rem;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-    margin-bottom: ${props => props.theme.spacing.large};
-  }
 `;
 
 const TimelineContainer = styled.div`

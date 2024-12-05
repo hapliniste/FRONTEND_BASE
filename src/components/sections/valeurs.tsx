@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Carousel from "@/components/library/carousel";
 import ImageCard from "@/components/library/imageCard";
+import { SectionTitle } from '@/components/library/typography';
 
 interface ValeurCardProps {
   title: string;
@@ -13,24 +14,10 @@ interface ValeurCardProps {
 const Section = styled.section`
   overflow: hidden;
   position: relative;
-  padding: 0;//${({theme}) => `${theme.spacing.section.paddingY.mobile} ${theme.spacing.section.paddingX.mobile}`};
+  padding: 0;
   
   @media (min-width: 1024px) {
     padding: ${({theme}) => `${theme.spacing.section.paddingY.desktop} ${theme.spacing.section.paddingX.desktop}`};
-  }
-`;
-
-const SectionTitle = styled.h2`
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: ${({theme}) => theme.colors.text.primary};
-  letter-spacing: -0.03em;
-  margin-bottom: 2rem;
-  
-  @media (min-width: 768px) {
-    font-size: 2.75rem;
-    margin-bottom: 4rem;
   }
 `;
 
@@ -40,31 +27,31 @@ const DesktopCardContainer = styled.div`
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4rem;
+    gap: ${({theme}) => theme.spacing.xlarge};
     max-width: ${({theme}) => theme.sizes.maxWidth};
     margin: 0 auto;
-    padding: 4rem 2rem;
+    padding: ${({theme}) => theme.spacing.xlarge} ${({theme}) => theme.spacing.large};
     
     & > div {
       min-height: 300px;
       display: flex;
       transition: all 0.3s ease;
       box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-      border-radius: 2rem;
+      border-radius: ${({theme}) => theme.borders.radius};
       
       &:nth-child(even) {
         transform: translateY(40%);
         
         &:hover {
           transform: translateY(calc(40% - 0.5rem)) scale(1.02);
-          box-shadow: 0 20px 80px rgba(0, 0, 0, 0.03);
+          box-shadow: 0 20px 80px ${({theme}) => `${theme.colors.basic.black}03`};
         }
       }
       
       &:nth-child(odd) {
         &:hover {
           transform: translateY(-0.5rem) scale(1.05);
-          box-shadow: 0 20px 80px rgba(0, 0, 0, 0.03);
+          box-shadow: 0 20px 80px ${({theme}) => `${theme.colors.basic.black}03`};
         }
       }
       
@@ -85,7 +72,7 @@ const MobileCardContainer = styled.div`
   }
 
   .swiper {
-    padding-bottom: 2rem;
+    padding-bottom: ${({theme}) => theme.spacing.large};
   }
 
   .swiper-slide {
@@ -98,8 +85,8 @@ const MobileCardContainer = styled.div`
 const CardImage = styled.div`
   width: 40%;
   height: 200px;
-  background-color: ${props => props.theme.accentPrimary};
-  border-radius: 10px;
+  background-color: ${({theme}) => theme.colors.accent.primary};
+  border-radius: ${({theme}) => theme.borders.radius};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -112,13 +99,13 @@ const CardContent = styled.div`
 
 const CardTitle = styled.h3`
   font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: ${props => props.theme.baseDark};
+  margin-bottom: ${({theme}) => theme.spacing.medium};
+  color: ${({theme}) => theme.colors.base.dark};
 `;
 
 const CardDescription = styled.p`
-  font-size: 1rem;
-  color: ${props => props.theme.baseMedium};
+  font-size: ${({theme}) => theme.typography.fontSize};
+  color: ${({theme}) => theme.colors.base.medium};
 `;
 
 const MobileCard = styled.div`
@@ -126,20 +113,20 @@ const MobileCard = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 1rem;
+  padding: ${({theme}) => theme.spacing.medium};
 `;
 
 const MobileCardImage = styled.div`
   width: 100%;
   height: 150px;
   max-width: 200px;
-  background-color: ${props => props.theme.accentPrimary};
-  border-radius: 10px;
+  background-color: ${({theme}) => theme.colors.accent.primary};
+  border-radius: ${({theme}) => theme.borders.radius};
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: ${({theme}) => theme.spacing.medium};
 `;
 
 const cardContent: ValeurCardProps[] = [

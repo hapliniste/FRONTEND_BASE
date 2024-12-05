@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TabCarousel from '@/components/library/TabCarousel';
 import Image from 'next/image';
+import { SectionTitle } from '@/components/library/typography';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
 
@@ -11,9 +12,11 @@ const Section = styled.section`
     overflow: hidden;
     position: relative;
     padding: ${({theme}) => `${theme.spacing.section.paddingY.mobile} ${theme.spacing.section.paddingX.mobile}`};
+    padding-bottom: 2rem;
     
     @media (min-width: 1024px) {
         padding: ${({theme}) => `${theme.spacing.section.paddingY.desktop} ${theme.spacing.section.paddingX.desktop}`};
+        padding-bottom: 3rem;
     }
 `;
 
@@ -21,20 +24,6 @@ const ContentWrapper = styled.div`
     width: 100%;
     max-width: ${({theme}) => theme.sizes.maxWidth};
     margin: 0 auto;
-`;
-
-const SectionTitle = styled.h2`
-    text-align: center;
-    margin-bottom: 6rem;
-    font-size: 2.75rem;
-    font-weight: 700;
-    color: ${({theme}) => theme.colors.text.primary};
-    letter-spacing: -0.03em;
-    margin: ${({theme}) => `${theme.spacing.large} 0`};
-    
-    @media (min-width: 768px) {
-        font-size: 3.25rem;
-    }
 `;
 
 const CardContainer = styled.div`
@@ -302,7 +291,7 @@ const Services: React.FC = () => {
     return (
         <Section id="services">
             <ContentWrapper>
-                <SectionTitle>Nos Services</SectionTitle>
+                <SectionTitle centered noUnderline>Nos Services</SectionTitle>
                 <TabCarousel
                     tabs={services}
                     interval={7000}

@@ -1,8 +1,14 @@
 import { Montserrat } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 
 export const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700']
+});
+
+export const jakarta = Plus_Jakarta_Sans({ 
+  subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600', '700', '800']
 });
 
 interface Theme {
@@ -58,8 +64,24 @@ interface Theme {
   };
   typography: {
     fontFamily: string;
+    headingFontFamily: string;
     fontSize: string;
     lineHeight: string;
+    sectionTitle: {
+      fontSize: {
+        desktop: string;
+        mobile: string;
+      };
+      fontWeight: number;
+      letterSpacing: string;
+      marginBottom: string;
+      underline: {
+        width: string;
+        height: string;
+        color: string;
+        offset: string;
+      };
+    };
   };
   borders: {
     radius: string;
@@ -130,8 +152,24 @@ const baseTheme: Theme = {
   },
   typography: {
     fontFamily: montserrat.style.fontFamily,
+    headingFontFamily: jakarta.style.fontFamily,
     fontSize: '1rem',
     lineHeight: '1.5',
+    sectionTitle: {
+      fontSize: {
+        desktop: '3.25rem',
+        mobile: '2rem'
+      },
+      fontWeight: 300,
+      letterSpacing: '-0.03em',
+      marginBottom: '4rem',
+      underline: {
+        width: '5rem',
+        height: '4px',
+        color: '#222222',
+        offset: '1rem'
+      }
+    }
   },
   borders: {
     radius: '1.25rem', 

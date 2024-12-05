@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { SectionTitle } from '@/components/library/typography';
 
 const Section = styled.section`
   overflow: hidden;
@@ -11,18 +12,6 @@ const Section = styled.section`
   
   @media (min-width: 1024px) {
     padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
-  }
-`;
-
-const SectionTitle = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: ${props => props.theme.spacing.xlarge};
-  font-size: 2.75rem;
-  font-weight: 700;
-  color: ${props => props.theme.colors.text.primary};
-  
-  @media (min-width: 768px) {
-    font-size: 3.25rem;
   }
 `;
 
