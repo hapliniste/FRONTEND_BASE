@@ -4,53 +4,60 @@ import { ArrowUpRight } from 'lucide-react'; // Make sure to install lucide-reac
 
 export type Image = {
   id: number;
-  href?: string;  // Made optional
+  href?: string;
   icon: string;
-  name: string;
-  username: string;
-  fullContent?: ReactNode;  // Changed to ReactNode
+  title: string;
+  content: React.ReactNode;
+  fullContent?: React.ReactNode;
 };
 
-const CardWrapper = styled.div`  // Changed from 'a' to 'div' when no href
+const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${props => props.theme.colors.backgrounds.white};
-  border-radius: 1.5rem;
+  background-color: ${({theme}) => theme.colors.backgrounds.white};
+  border-radius: 2rem;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   transition: all 0.3s ease;
-  padding: 2.5rem 2.75rem;
+  padding: 1.5rem;
   position: relative;
   border: 1px solid rgba(0, 0, 0, 0.03);
-  cursor: ${props => props.onClick ? 'pointer' : 'default'};
-
-  &:hover {
-    transform: ${props => props.onClick ? 'translateY(-4px)' : 'none'};
-    box-shadow: ${props => props.onClick ? '0 20px 40px rgba(0, 0, 0, 0.08)' : '0 2px 4px rgba(0, 0, 0, 0.02)'};
-    
-    .arrow-icon {
-      transform: translate(4px, -4px);
-    }
+  width: 100%;
+  max-width: 320px;
+  
+  @media (min-width: 768px) {
+    max-width: none;
+    padding: 2rem;
   }
 `;
 
 const CardHeader = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  margin-bottom: 1rem;  // Reduced from 2rem to 1rem
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 `;
 
 const IconWrapper = styled.div`
   position: relative;
-  margin-top: 0.25rem;
+  flex-shrink: 0;
 `;
 
 const IconBackground = styled.div`
-  width: 3.25rem;
-  height: 3.25rem;
-  background-color: ${props => props.theme.accentPrimary}12;
-  border-radius: 0.875rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: ${({theme}) => `${theme.colors.accent.primary}12`};
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+
+  @media (min-width: 768px) {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
 `;
 
 const Icon = styled.div`
@@ -66,23 +73,44 @@ const HeaderContent = styled.div`
 `;
 
 const CardTitle = styled.h3`
-  //font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: ${props => props.theme.baseDark};
+  color: ${({theme}) => theme.colors.text.primary};
   margin: 0;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
+  flex-grow: 1;
+
+  @media (min-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
-const CardDescription = styled.p`
-  //font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.8;
-  color: ${props => props.theme.baseMedium};
-  margin: 0;
-  margin-top: 1rem;  // Reduced from 2rem to 1rem
+const CardDescription = styled.div`
+  color: ${({theme}) => theme.colors.text.secondary};
+  font-size: 0.875rem;
+  line-height: 1.6;
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    
+    li {
+      margin-bottom: 0.25rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 `;
 
 const ArrowIcon = styled(ArrowUpRight)`
@@ -115,16 +143,17 @@ const ImageCard = ({ image, onClick }: { image: Image; onClick?: () => void }) =
     >
       <CardHeader>
         <IconWrapper>
-          <IconBackground />
-          <Icon>{image.icon}</Icon>
+          <IconBackground>
+            {image.icon}
+          </IconBackground>
         </IconWrapper>
         <HeaderContent>
-          <CardTitle>{image.name}</CardTitle>
+          <CardTitle>{image.title}</CardTitle>
         </HeaderContent>
         {image.fullContent && <ArrowIcon size={22} className="arrow-icon" />}
       </CardHeader>
       <Divider />
-      <CardDescription>{image.username}</CardDescription>
+      <CardDescription>{image.content}</CardDescription>
     </WrapperComponent>
   );
 };

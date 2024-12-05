@@ -1,9 +1,8 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 import styled from 'styled-components';
 
 interface SlideContent {
@@ -15,49 +14,45 @@ interface CarouselProps {
 }
 
 const StyledSwiper = styled(Swiper)`
-  padding: 0 1rem;
-  
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: ${props => props.theme.accentPrimary};
+  .swiper-pagination {
+    position: relative;
+    margin-top: 1rem;
   }
 
-  .swiper-pagination-bullet-active {
-    background-color: ${props => props.theme.accentPrimary};
+  .swiper-pagination-bullet {
+    background: ${({theme}) => theme.colors.accent.primary};
+    opacity: 0.3;
+    
+    &-active {
+      opacity: 1;
+    }
   }
 
   .swiper-slide {
+    height: auto;
     display: flex;
     justify-content: center;
-    width: 100%;
-    max-width: 460px;
-
-    @media (max-width: 767px) {
-      max-width: 100%;
-    }
   }
 `;
 
 const Carousel: React.FC<CarouselProps> = ({ slides }) => {
   return (
     <StyledSwiper
-      slidesPerView={1}
+      slidesPerView={1.2}
       centeredSlides={true}
-      spaceBetween={30}
+      spaceBetween={16}
       loop={true}
+      loopedSlides={slides.length}
+      watchSlidesProgress={true}
+      preventInteractionOnTransition={true}
       pagination={{
         clickable: true,
+        dynamicBullets: true,
       }}
-      navigation={true}
-      modules={[Pagination, Navigation]}
-      breakpoints={{
-        768: {
-          slidesPerView: 'auto',
-        },
-      }}
+      modules={[Pagination]}
     >
       {slides.map((slide, index) => (
-        <SwiperSlide key={index}>{slide.content}</SwiperSlide>
+        <SwiperSlide key={`slide-${index}`}>{slide.content}</SwiperSlide>
       ))}
     </StyledSwiper>
   );

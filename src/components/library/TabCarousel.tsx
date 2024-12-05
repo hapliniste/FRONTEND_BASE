@@ -7,11 +7,13 @@ import { EffectCards, EffectFade, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/effect-fade';
+import Image from 'next/image';
 
 interface Tab {
     title: string;
     content: React.ReactNode;
     accentColor?: string;
+    icon?: string;
 }
 
 interface TabCarouselProps {
@@ -27,6 +29,10 @@ const TabBar = styled.div`
     background-color: ${({ theme }) => theme.tabBarBackground || '#f0f0f0'};
     margin-bottom: 1.5rem;
     position: relative;
+    
+    @media (max-width: 768px) {
+        font-size: 0.875rem; // Reduced from 1rem
+    }
 `;
 
 const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
@@ -35,22 +41,45 @@ const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
 }))<{ isActive: boolean; accentColor: string }>`
     flex: 1;
     padding: 0.75rem 1.5rem;
-    background-color: ${({ isActive, accentColor }) => (isActive ? accentColor : 'transparent')};
+    background-color: ${({ isActive, theme }) => (isActive ? theme.colors.accent.primary : 'transparent')};
     color: ${({ isActive, theme }) => (isActive ? theme.textOnAccent || '#fff' : theme.textColor || '#000')};
     border: none;
     cursor: pointer;
     position: relative;
-    font-size: 1rem;
     transition: background-color 0.3s, color 0.3s;
     overflow: hidden;
 
-    /* Add border between tabs except for the first tab */
+    .tab-text {
+        font-size: 1rem;
+    }
+
+    .tab-icon {
+        display: none;
+        font-size: 1.5rem;
+        
+        img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+    }
+
     &:not(:first-child) {
         border-left: 1px solid ${({ theme }) => theme.borderColor || '#ddd'};
     }
 
-    &:focus {
-        outline: none;
+    @media (max-width: 768px) {
+        padding: 1rem;
+
+        .tab-text {
+            display: none;
+        }
+
+        .tab-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 `;
 
@@ -69,6 +98,7 @@ const ProgressOverlay = styled.div<{ isAnimating: boolean; interval: number }>`
     left: 0;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.2);
+    //background-color: ${({ theme }) => theme.colors.accent.light};
     z-index: 0;
     ${({ isAnimating, interval }) =>
         isAnimating
@@ -131,7 +161,7 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                     }
                 });
             },
-            { threshold: 0.5 } // Adjust threshold as needed
+            { threshold: 0.8 } // Adjust threshold as needed
         );
 
         if (carouselRef.current) {
@@ -226,7 +256,21 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                                 interval={interval}
                             />
                         )}
-                        {tab.title}
+                        <span className="tab-icon" aria-hidden="true">
+                            {typeof tab.icon === 'string' && tab.icon.endsWith('.png') ? (
+                                <Image
+                                    src={tab.icon}
+                                    alt={`${tab.title} icon`}
+                                    width={32}
+                                    height={32}
+                                />
+                            ) : (
+                                tab.icon
+                            )}
+                        </span>
+                        <span className="tab-text">
+                            {tab.title}
+                        </span>
                     </TabButton>
                 ))}
             </TabBar>

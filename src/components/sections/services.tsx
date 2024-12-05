@@ -10,16 +10,16 @@ const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 const Section = styled.section`
     overflow: hidden;
     position: relative;
-    padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
+    padding: ${({theme}) => `${theme.spacing.section.paddingY.mobile} ${theme.spacing.section.paddingX.mobile}`};
     
     @media (min-width: 1024px) {
-        padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
+        padding: ${({theme}) => `${theme.spacing.section.paddingY.desktop} ${theme.spacing.section.paddingX.desktop}`};
     }
 `;
 
 const ContentWrapper = styled.div`
     width: 100%;
-    max-width: ${props => props.theme.sizes.maxWidth};
+    max-width: ${({theme}) => theme.sizes.maxWidth};
     margin: 0 auto;
 `;
 
@@ -28,8 +28,9 @@ const SectionTitle = styled.h2`
     margin-bottom: 6rem;
     font-size: 2.75rem;
     font-weight: 700;
-    color: ${props => props.theme.colors.text.primary};
+    color: ${({theme}) => theme.colors.text.primary};
     letter-spacing: -0.03em;
+    margin: ${({theme}) => `${theme.spacing.large} 0`};
     
     @media (min-width: 768px) {
         font-size: 3.25rem;
@@ -37,28 +38,31 @@ const SectionTitle = styled.h2`
 `;
 
 const CardContainer = styled.div`
-    background-color: ${props => props.theme.colors.backgrounds.white};
+    background-color: ${({theme}) => theme.colors.backgrounds.white};
     border-radius: 1.5rem;
     overflow: hidden;
     width: 100%;
-    height: 100%;
+    height: 40em;
     display: flex;
-    flex-direction: row;
-    border: 1px solid ${props => props.theme.accentPrimary}12;
+    flex-direction: column;
+    border: 1px solid ${({theme}) => `${theme.accentPrimary}12`};
 
-    @media (max-width: 768px) {
-        flex-direction: column;
+    @media (min-width: 768px) {
+        flex-direction: row;
     }
 `;
 
 const CardImageWrapper = styled.div`
     position: relative;
-    width: 30%;
-    min-height: 100%;
+    display: none;
+    width: 100%;
+    height: 200px;
 
-    @media (max-width: 768px) {
-        width: 100%;
-        height: 200px;
+    @media (min-width: 768px) {
+        display: block;
+        width: 30%;
+        height: 100%;
+        min-height: 100%;
     }
 `;
 
@@ -76,28 +80,34 @@ const CardHeader = styled.div`
     margin-bottom: 1.5rem;
 `;
 
-const CardIcon = styled.span`
-    font-size: 2.5rem;
+const CardIcon = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
-    background: ${props => props.theme.accentPrimary}12;
+    width: 100px;
+    height: 100px;
+    background: ${({theme}) => `${theme.accentPrimary}12`};
     border-radius: 12px;
+    padding: 1.25rem;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 `;
 
 const CardTitle = styled.h3`
     font-size: 1.75rem;
     font-weight: 600;
-    color: ${props => props.theme.baseDark};
+    color: ${({theme}) => theme.baseDark};
     margin: 0;
 `;
 
 const CardDescription = styled.p`
     font-size: 1.1rem;
     line-height: 1.6;
-    color: ${props => props.theme.baseMedium};
+    color: ${({theme}) => theme.baseMedium};
     margin-bottom: 1.5rem;
 `;
 
@@ -112,12 +122,12 @@ const FeatureItem = styled.li`
     align-items: center;
     gap: 0.75rem;
     font-size: 1rem;
-    color: ${props => props.theme.baseMedium};
+    color: ${({theme}) => theme.baseMedium};
     margin-bottom: 0.75rem;
     
     &:before {
         content: "✓";
-        color: ${props => props.theme.accentPrimary};
+        color: ${({theme}) => theme.accentPrimary};
         font-weight: bold;
     }
 `;
@@ -125,16 +135,17 @@ const FeatureItem = styled.li`
 const PriceTag = styled.div`
     font-size: 1.5rem;
     font-weight: 600;
-    color: ${props => props.theme.baseDark};
+    color: ${({theme}) => theme.baseDark};
     margin-top: auto;
     padding-top: 1.5rem;
-    border-top: 1px solid ${props => props.theme.accentPrimary}12;
+    border-top: 1px solid ${({theme}) => `${theme.accentPrimary}12`};
 `;
 
 // Define your services
 const services = [
     {
         title: "Site standard",
+        icon: "/icon_website.png",
         content: (
             <CardContainer>
                 <CardImageWrapper>
@@ -148,7 +159,14 @@ const services = [
                 </CardImageWrapper>
                 <CardBody>
                     <CardHeader>
-                        <CardIcon>🌐</CardIcon>
+                        <CardIcon>
+                            <Image
+                                src="/icon_website.png"
+                                alt="Site web standard icon"
+                                width={64}
+                                height={64}
+                            />
+                        </CardIcon>
                         <CardTitle>Site standard</CardTitle>
                     </CardHeader>
                     <CardDescription>
@@ -167,6 +185,7 @@ const services = [
     },
     {
         title: "Développement sur mesure",
+        icon: "/icon_customdev.png",
         content: (
             <CardContainer>
                 <CardImageWrapper>
@@ -179,7 +198,14 @@ const services = [
                 </CardImageWrapper>
                 <CardBody>
                     <CardHeader>
-                        <CardIcon>🛠️</CardIcon>
+                        <CardIcon>
+                            <Image
+                                src="/icon_customdev.png"
+                                alt="Développement sur mesure icon"
+                                width={64}
+                                height={64}
+                            />
+                        </CardIcon>
                         <CardTitle>Développement sur mesure</CardTitle>
                     </CardHeader>
                     <CardDescription>
@@ -199,6 +225,7 @@ const services = [
     },
     {
         title: "Assistant IA managé",
+        icon: "/icon_assistant.png",
         content: (
             <CardContainer>
                 <CardImageWrapper>
@@ -211,7 +238,14 @@ const services = [
                 </CardImageWrapper>
                 <CardBody>
                     <CardHeader>
-                        <CardIcon>🤖</CardIcon>
+                        <CardIcon>
+                            <Image
+                                src="/icon_assistant.png"
+                                alt="Assistant IA icon"
+                                width={64}
+                                height={64}
+                            />
+                        </CardIcon>
                         <CardTitle>Assistant IA managé</CardTitle>
                     </CardHeader>
                     <CardDescription>
@@ -225,13 +259,14 @@ const services = [
                         <FeatureItem>Mises à jour automatiques</FeatureItem>
                         <FeatureItem>Restez maître de vos données</FeatureItem>
                     </FeaturesList>
-                    <PriceTag>Dès 200 CHF + utilisation</PriceTag>
+                    <PriceTag>Dès 500 CHF + coûts d&apos;utilisation</PriceTag>
                 </CardBody>
             </CardContainer>
         ),
     },
     {
         title: "Hébergement web",
+        icon: "☁️",
         content: (
             <CardContainer>
                 <CardImageWrapper>
@@ -265,7 +300,7 @@ const services = [
 
 const Services: React.FC = () => {
     return (
-        <Section>
+        <Section id="services">
             <ContentWrapper>
                 <SectionTitle>Nos Services</SectionTitle>
                 <TabCarousel

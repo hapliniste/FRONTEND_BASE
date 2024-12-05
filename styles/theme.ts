@@ -1,3 +1,10 @@
+import { Montserrat } from 'next/font/google';
+
+export const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700']
+});
+
 interface Theme {
   colors: {
     basic: {
@@ -116,13 +123,13 @@ const baseTheme: Theme = {
         desktop: '8rem',
       },
       paddingX: {
-        mobile: '1.5rem',
+        mobile: '1rem',
         desktop: '8%',
       }
     }
   },
   typography: {
-    fontFamily: "'Montserrat', sans-serif",
+    fontFamily: montserrat.style.fontFamily,
     fontSize: '1rem',
     lineHeight: '1.5',
   },

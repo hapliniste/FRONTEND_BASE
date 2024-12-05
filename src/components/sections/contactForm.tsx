@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { montserrat } from '@/styles/theme';
 
 // Layout Components
 const Section = styled.section`
@@ -50,6 +51,7 @@ const Title = styled.h2`
   font-weight: 700;
   margin-bottom: ${props => props.theme.spacing.medium};
   letter-spacing: -0.03em;
+  font-family: ${props => props.theme.typography.fontFamily};
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -60,6 +62,7 @@ const Subtitle = styled.p`
   color: ${props => props.theme.colors.text.secondary};
   font-size: 1.2rem;
   margin-bottom: ${props => props.theme.spacing.large};
+  font-family: ${props => props.theme.typography.fontFamily};
 `;
 
 // Form Components
@@ -84,6 +87,7 @@ const Label = styled.label<{ optional?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${props => props.theme.spacing.xsmall};
+  font-family: ${props => props.theme.typography.fontFamily};
 
   ${props => props.optional && `
     &::after {
@@ -362,7 +366,7 @@ const ContactForm: React.FC = () => {
           <FormGrid>
             {/* Left Column - Form */}
             <div>
-              <Title>Contactez-nous</Title>
+              <Title className={montserrat.className}>Contactez-nous</Title>
               <Subtitle>Nous serions ravis d&apos;en savoir plus sur votre projet !</Subtitle>
               
               <Form onSubmit={handleSubmit}>
@@ -396,7 +400,7 @@ const ContactForm: React.FC = () => {
                 </FormField>
 
                 <FormField>
-                  <Label>Service souhaité</Label>
+                  <Label optional>Service souhaité</Label>
                   <ServiceOptions>
                     {services.map(service => (
                       <ServiceCard 

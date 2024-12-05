@@ -156,7 +156,7 @@ const LineSegment = styled(motion.div)<{ isAfterCompleted?: boolean }>`
 
 const TimelineCard = styled(motion.div)<{ status?: 'completed' | 'bonus'; isEmpty?: boolean }>`
   background: white;
-  border-radius: ${props => props.isEmpty ? '999px' : '1.25rem'};
+  border-radius: ${props => props.isEmpty ? '999px' : '2rem'};
   padding: ${props => props.isEmpty ? '1rem 2rem' : '1.75rem'};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.03);
@@ -174,13 +174,6 @@ const TimelineCard = styled(motion.div)<{ status?: 'completed' | 'bonus'; isEmpt
 
 const ClickableCard = styled(TimelineCard)`
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
 `;
 
 const CardTitle = styled.h3`
@@ -396,8 +389,39 @@ const Processus: React.FC = () => {
                   status={step.status}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
+                  animate={{ 
+                    y: 0, 
+                    scale: 1,
+                    boxShadow: "0 0 0 rgba(0, 0, 0, 0)"
+                  }}
+                  whileHover={{ 
+                    y: -4, 
+                    scale: 1.02,
+                    boxShadow: "0 40px 80px rgba(0, 0, 0, 0.03)"
+                  }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+                  transition={{ 
+                    opacity: {
+                      duration: 0.5,
+                      delay: index * 0.1 + 0.2
+                    },
+                    x: {
+                      duration: 0.5,
+                      delay: index * 0.1 + 0.2
+                    },
+                    y: {
+                      duration: 0.3,
+                      //ease: 'backOut'
+                    },
+                    scale: {
+                      duration: 0.3,
+                      //ease: 'backOut'
+                    },
+                    boxShadow: {
+                      duration: 0.3,
+                      //ease: 'backOut'
+                    }
+                  }}
                 >
                   <CardTitle>
                     <span className="mobile-icon">{step.icon}</span>

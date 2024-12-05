@@ -3,10 +3,10 @@
 ## Todo
 
 - [ ] Faire le Hero
-- [ ] Mettre les services en haut, suivi des valeurs, ce que le web vous apporte, processus, contact
+- [x] Mettre les services en haut, suivi des valeurs, ce que le web vous apporte, processus, contact
 - [ ] Faire une section "ce que le web vous apporte"
-- [ ] Ameliorer le rendu mobile
-- [ ] Rendre le site plus compact et simple à lire vite *
+- [x] Ameliorer le rendu mobile
+- [x] Rendre le site plus compact et simple à lire vite *
 - [ ] Mettre les images et icones
 - [ ] Dernier checkup, demander du feedback
 - [ ] Deployer
@@ -30,3 +30,26 @@
 
 Il est important que le processus semble simple et intuitif, et de faire comprendre qu'ils sont déjà dedans.
 La version revue comportera 5 étapes, dont une déjà réalisée et une "bonus", ce qui rend cela simple et pas effrayant.
+
+
+
+Images à faire:
+- [x] website : 
+- [x] custom dev : 
+- [x] AI : an AI assistant head
+- [ ] hosting : a cloud
+
+- [x] trust : a handshake
+- [ ] speed : a lighting bolt
+- [ ] technologies : a computer
+- [?] ownership : a lock, a hand holding a key
+- [ ] price : a piggy bank
+
+- [ ] a checkmark
+- [ ] a telephone
+- [ ] code
+- [ ] a rocketship
+
+- [ ] a pin
+- [ ] a letter
+- [ ] a telephone icon

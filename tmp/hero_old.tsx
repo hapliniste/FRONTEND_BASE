@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import VisualElements from './VisualElements';
 
 import { Outfit } from 'next/font/google';
 const titleFont = Outfit({
@@ -65,8 +66,6 @@ const ContentArea = styled.div`
     text-align: center;
     margin: 0 auto;
     box-shadow: none;
-    padding: 0;
-    width: 100%;
   }
 `;
 
@@ -230,6 +229,7 @@ const Hero: React.FC = () => {
           </ContentArea>
         </ContentWrapper>
       </InnerSection>
+      <VisualElements />
     </Section>
   );
 };

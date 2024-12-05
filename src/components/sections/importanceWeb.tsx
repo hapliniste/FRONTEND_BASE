@@ -62,48 +62,56 @@ const StatText = styled.p`
 
 const stats = [
   {
+    //très bonne stat
     number: 75,
     suffix: "%",
     text: "des consommateurs jugent instantanément la crédibilité d'une entreprise sur la base de son site web",
     animationType: "percentage"
   },
   {
+    //très bonne stat
     number: 88,
     suffix: "%",
     text: "des personnes qui recherchent une entreprise sur leur téléphone la contactent dans les 24 heures",
     animationType: "percentage"
   },
   {
+    //très bonne stat
     number: 61,
     suffix: "%",
     text: "des utilisateurs ne reviendront jamais sur un site mobile difficile à utiliser",
     animationType: "percentage"
   },
   {
+    //stat pas top
     number: 2.8,
     suffix: "×",
     text: "plus de revenus générés en moyenne par les entreprises disposant d'un site web professionnel",
     animationType: "multiplier"
   },
   {
+    //stat ok
     number: 81,
     suffix: "%",
     text: "des consommateurs recherchent en ligne avant tout achat",
     animationType: "percentage"
   },
   {
+    //bonne stat
     number: 72,
     suffix: "%",
     text: "des recherches locales mènent à une visite en magasin dans les 5km",
     animationType: "percentage"
   },
   {
+    //très bonne stat
     number: 47,
     suffix: "%",
     text: "des visiteurs s'attendent à ce qu'un site se charge en moins de 2 secondes",
     animationType: "percentage"
   },
   {
+    //stat ok
     number: 71,
     suffix: "%",
     text: "des entreprises ont soit pas de site web, soit un site obsolète",

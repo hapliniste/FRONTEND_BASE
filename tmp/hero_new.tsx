@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import VisualElements from './VisualElements';
 
 import { Outfit } from 'next/font/google';
 const titleFont = Outfit({
@@ -21,22 +22,25 @@ const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] });
 const Section = styled.section`
   position: relative;
   width: 100%;
-  height: 50vh;
+  height: 80vh;
+  min-height: 600px;
   background-color: ${(props) => props.theme.colors.backgrounds.default};
-  overflow: hidden;
+  overflow: visible;
   
   @media (max-width: 768px) {
     height: auto;
+    min-height: auto;
   }
 `;
 
 const InnerSection = styled.div`
-  overflow: hidden;
   position: relative;
-  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
+  width: 100%;
   height: 100%;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   display: flex;
   align-items: center;
+  z-index: 2;
   
   @media (min-width: 1024px) {
     padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
@@ -47,8 +51,12 @@ const ContentWrapper = styled.div`
   width: 100%;
   max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
-  position: relative;
-  z-index: 2;
+  display: flex;
+  justify-content: flex-start;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 const ContentArea = styled.div`
@@ -63,10 +71,32 @@ const ContentArea = styled.div`
   
   @media (max-width: 768px) {
     text-align: center;
-    margin: 0 auto;
+    padding: ${props => props.theme.spacing.medium};
     box-shadow: none;
-    padding: 0;
+  }
+`;
+
+// Update VisualElements component to handle different layouts
+const FloatingElementsWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  @media (max-width: 1400px) {
+    right: 0;
+    left: auto;
+    width: 30%; // Only show right side on medium screens
+  }
+
+  @media (max-width: 768px) {
+    position: relative;
     width: 100%;
+    height: auto;
+    margin-top: ${props => props.theme.spacing.large};
   }
 `;
 
@@ -230,6 +260,7 @@ const Hero: React.FC = () => {
           </ContentArea>
         </ContentWrapper>
       </InnerSection>
+      <VisualElements />
     </Section>
   );
 };
