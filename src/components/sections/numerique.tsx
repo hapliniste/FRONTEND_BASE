@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, animate } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { SectionTitle } from '@/components/library/typography';
+import Image from 'next/image';
+import { jakarta } from '@/styles/theme';
 
 const Section = styled.section`
   overflow: hidden;
   position: relative;
-  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
+  //padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   background: linear-gradient(to bottom, transparent, ${props => props.theme.colors.backgrounds.default}15);
   margin: 0;
   
@@ -25,30 +27,43 @@ const ContentWrapper = styled.div`
 const FeatureRow = styled(motion.div)<{ reverse?: boolean }>`
   display: flex;
   flex-direction: column;
-  margin-bottom: ${props => props.theme.spacing.xxlarge};
+  margin-bottom: ${props => props.theme.spacing.xlarge};
+  gap: ${props => props.theme.spacing.small};
+  @media (min-width: 768px) {
+    gap: ${props => props.theme.spacing.small};
+    margin-bottom: ${props => props.theme.spacing.xxlarge};
+  }
+`;
+
+const ContentImageWrapper = styled.div<{ reverse?: boolean }>`
+  display: flex;
+  flex-direction: column;
   
   @media (min-width: 768px) {
     flex-direction: ${props => props.reverse ? 'row-reverse' : 'row'};
     align-items: center;
-    gap: ${props => props.theme.spacing.xxlarge};
+    gap: ${props => props.theme.spacing.large};
   }
 `;
 
 const ImageSection = styled.div`
   flex: 1.2;
-  min-height: 300px;
+  height: 400px;
   position: relative;
-  margin-bottom: ${props => props.theme.spacing.large};
+  //margin-bottom: ${props => props.theme.spacing.large};
   
-  @media (min-width: 768px) {
-    margin-bottom: 0;
-    min-height: 400px;
+  @media (max-width: 768px) {
+    height: 250px;
+    //margin-bottom: ${props => props.theme.spacing.medium};
+    aspect-ratio: 16/9;
+    width: 100%;
   }
 `;
 
 const ContentSection = styled.div`
   flex: 1;
   max-width: 600px;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
 `;
 
 const FeatureTitle = styled(motion.h3)`
@@ -70,7 +85,7 @@ const FeatureText = styled.p`
 `;
 
 const BulletList = styled.ul`
-  margin: ${props => props.theme.spacing.medium} 0 ${props => props.theme.spacing.xlarge};
+  margin: ${props => props.theme.spacing.medium} 0 ${props => props.theme.spacing.large};
   padding-left: 1.5rem;
 `;
 
@@ -87,42 +102,32 @@ const BulletItem = styled.li`
 `;
 
 const StatsList = styled.div`
-  display: grid;
-  gap: ${props => props.theme.spacing.medium};
+  display: flex;
+  gap: ${props => props.theme.spacing.large};
+  margin-top: ${props => props.theme.spacing.medium};
+  flex-wrap: wrap;
+  width: auto;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  @media (max-width: 768px) {
+    gap: ${props => props.theme.spacing.medium};
+    margin-top: ${props => props.theme.spacing.small};
   }
-`;
-
-const StatLink = styled.a`
-  text-decoration: none;
-  display: block;
-  height: 100%;
 `;
 
 const StatItem = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: ${props => props.theme.colors.backgrounds.card};
-  transition: all 0.3s ease-in-out;
-  height: 100%;
-  
-  &:hover {
-    transform: translateY(-4px);
-    background: ${props => props.theme.colors.backgrounds.cardHover};
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
+  flex: 1;
+  min-width: 200px;
 `;
 
 const StatNumber = styled.span`
   font-size: 2.5rem;
-  font-weight: 800;
-  color: ${props => props.theme.colors.accent.primary};
-  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  color: ${props => props.theme.colors.text.primary};
+  font-family: ${props => props.theme.typography.headingFontFamily};
   line-height: 1;
   letter-spacing: -0.02em;
 `;
@@ -130,8 +135,47 @@ const StatNumber = styled.span`
 const StatText = styled.span`
   font-size: 1rem;
   line-height: 1.5;
-  color: ${props => props.theme.colors.text.secondary};
+  color: ${props => props.theme.colors.text.primary};
   font-weight: 400;
+`;
+
+// New component for sources
+const SourcesSection = styled.div`
+  margin-top: ${props => props.theme.spacing.large};
+  padding-top: ${props => props.theme.spacing.xsmall};
+  border-top: 1px solid ${props => `${props.theme.colors.text.primary}15`};
+`;
+
+const SourcesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.medium};
+`;
+
+const SourceItem = styled.a`
+  color: ${props => props.theme.colors.text.secondary};
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  gap: ${props => props.theme.spacing.small};
+  align-items: baseline;
+  
+  &:hover {
+    color: ${props => props.theme.colors.accent.primary};
+  }
+  
+  &::before {
+    content: "→";
+    color: ${props => props.theme.colors.accent.primary};
+  }
+`;
+
+const SourcesTitle = styled.h4`
+  font-size: 1.1rem;
+  color: ${props => props.theme.colors.text.primary};
+  margin-top: ${props => props.theme.spacing.small};
+  margin-bottom: ${props => props.theme.spacing.medium};
+  font-family: ${props => props.theme.typography.titleFontFamily};
 `;
 
 interface Feature {
@@ -237,106 +281,164 @@ const features: Feature[] = [
   }
 ];
 
-const Numerique: React.FC = () => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true
+// Updated AnimatedNumber component
+const AnimatedNumber: React.FC<{ value: string }> = ({ value }) => {
+  const numberRef = React.useRef<HTMLSpanElement>(null);
+  const { ref: inViewRef, inView } = useInView({ 
+    threshold: 0.3,
+    triggerOnce: true 
   });
 
   React.useEffect(() => {
-    if (inView) {
-      controls.start('visible');
+    const node = numberRef.current;
+    if (node && inView) {
+      // Handle range values like "15-50%"
+      if (value.includes('-')) {
+        const [start, end] = value.split('-').map(v => parseInt(v));
+        const controls = animate(0, end, {
+          duration: 2,
+          ease: "easeOut",
+          onUpdate: (v) => {
+            node.textContent = `${start}-${Math.round(v)}%`;
+          },
+        });
+        return () => controls.stop();
+      } else {
+        // Handle regular percentage values
+        const numberValue = parseInt(value);
+        const controls = animate(0, numberValue, {
+          duration: 2,
+          ease: "easeOut",
+          onUpdate: (v) => {
+            node.textContent = `${Math.round(v)}%`;
+          },
+        });
+        return () => controls.stop();
+      }
     }
-  }, [controls, inView]);
+  }, [inView, value]);
+
+  return (
+    <span ref={(el) => {
+      numberRef.current = el;
+      inViewRef(el);
+    }}>
+      {value.includes('-') ? value : '0%'}
+    </span>
+  );
+};
+
+const FeatureSection: React.FC<{ feature: Feature; index: number }> = ({ feature, index }) => {
+  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const controls = useAnimation();
+
+  React.useEffect(() => {
+    if (inView) {
+      controls.start(`visible${index}`);
+    }
+  }, [inView, controls, index]);
+
+  return (
+    <FeatureRow
+      ref={ref}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      variants={{
+        visible: { opacity: 1, x: 0 },
+        hidden: { opacity: 0, x: index % 2 === 0 ? -50 : 50 }
+      }}
+      transition={{ duration: 0.6 }}
+    >
+      <ContentImageWrapper reverse={index % 2 === 1}>
+        <ImageSection>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            style={{ width: '100%', height: '100%', position: 'relative' }}
+          >
+            <Image
+              src={`https://placehold.co/1200x800/999999/666666.png?text=${feature.title.replace(/ /g, '+')}`}
+              alt={feature.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: 'cover' }}
+              priority={index === 0}
+            />
+          </motion.div>
+        </ImageSection>
+
+        <ContentSection>
+          <FeatureTitle>{feature.title}</FeatureTitle>
+          <FeatureText>{feature.content.mainText}</FeatureText>
+          <BulletList>
+            {feature.content.bulletPoints.map((point, bulletIndex) => (
+              <BulletItem key={bulletIndex}>{point}</BulletItem>
+            ))}
+          </BulletList>
+        </ContentSection>
+      </ContentImageWrapper>
+      
+      <StatsList>
+        {feature.stats.map((stat, statIndex) => (
+          <StatItem
+            key={stat.text}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: statIndex * 0.2 }}
+          >
+            <StatNumber>
+              {stat.value.includes('%') ? (
+                <AnimatedNumber value={stat.value} />
+              ) : (
+                stat.value
+              )}
+            </StatNumber>
+            <StatText>{stat.text}</StatText>
+          </StatItem>
+        ))}
+      </StatsList>
+    </FeatureRow>
+  );
+};
+
+const Numerique: React.FC = () => {
+  const allSources = Array.from(new Set(
+    features.flatMap(feature => 
+      feature.stats.map(stat => stat.source)
+    )
+  ));
 
   return (
     <Section>
-      <SectionTitle
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+      <SectionTitle>
         Pourquoi avoir un site web professionnel ?
       </SectionTitle>
 
-      <ContentWrapper ref={ref}>
+      <ContentWrapper>
         {features.map((feature, index) => (
-          <FeatureRow
-            key={feature.title}
-            reverse={index % 2 === 1}
-            initial="hidden"
-            animate={controls}
-            variants={{
-              visible: { opacity: 1, x: 0 },
-              hidden: { opacity: 0, x: index % 2 === 0 ? -50 : 50 }
-            }}
-            transition={{ duration: 0.6, delay: index * 0.2 }}
-          >
-            <ImageSection>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={controls}
-                variants={{
-                  visible: { opacity: 1, scale: 1 },
-                  hidden: { opacity: 0, scale: 0.8 }
-                }}
-                transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  position: 'relative'
-                }}
-              >
-                <img 
-                  src={feature.image} 
-                  alt={feature.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0
-                  }}
-                />
-              </motion.div>
-            </ImageSection>
-
-            <ContentSection>
-              <FeatureTitle>{feature.title}</FeatureTitle>
-              <FeatureText>{feature.content.mainText}</FeatureText>
-              <BulletList>
-                {feature.content.bulletPoints.map((point, bulletIndex) => (
-                  <BulletItem key={bulletIndex}>{point}</BulletItem>
-                ))}
-              </BulletList>
-              <StatsList>
-                {feature.stats.map((stat, statIndex) => (
-                  <StatLink 
-                    key={stat.text}
-                    href={stat.source}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <StatItem
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={controls}
-                      variants={{
-                        visible: { opacity: 1, y: 0 },
-                        hidden: { opacity: 0, y: 20 }
-                      }}
-                      transition={{ duration: 0.6, delay: index * 0.2 + statIndex * 0.1 }}
-                    >
-                      <StatNumber>{stat.value}</StatNumber>
-                      <StatText>{stat.text}</StatText>
-                    </StatItem>
-                  </StatLink>
-                ))}
-              </StatsList>
-            </ContentSection>
-          </FeatureRow>
+          <FeatureSection 
+            key={feature.title} 
+            feature={feature} 
+            index={index} 
+          />
         ))}
+
+        <SourcesSection>
+          <SourcesTitle>Sources</SourcesTitle>
+          <SourcesList>
+            {allSources.map((source, index) => (
+              <SourceItem 
+                key={index}
+                href={source}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {source.replace('https://', '')}
+              </SourceItem>
+            ))}
+          </SourcesList>
+        </SourcesSection>
       </ContentWrapper>
     </Section>
   );
