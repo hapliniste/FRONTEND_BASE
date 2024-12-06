@@ -97,6 +97,11 @@ const CardImage = styled.div`
 
 const CardContent = styled.div`
   flex: 1;
+  padding: ${({theme}) => theme.spacing.medium};
+
+  @media (max-width: 768px) {
+    padding: ${({theme}) => `${theme.spacing.medium} ${theme.spacing.small}`};
+  }
 `;
 
 const CardTitle = styled.h3`
@@ -108,6 +113,15 @@ const CardTitle = styled.h3`
 const CardDescription = styled.p`
   font-size: ${({theme}) => theme.typography.fontSize};
   color: ${({theme}) => theme.colors.base.medium};
+  line-height: 1.6;
+  
+  & + p {
+    margin-top: ${({theme}) => theme.spacing.medium};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+  }
 `;
 
 const MobileCard = styled.div`
@@ -131,13 +145,43 @@ const MobileCardImage = styled.div`
   margin-bottom: ${({theme}) => theme.spacing.medium};
 `;
 
+const TechList = styled.ul`
+  list-style: none;
+  padding: 0;
+  padding-left: 0 !important;
+  margin: ${({theme}) => theme.spacing.medium} 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: ${({theme}) => theme.spacing.medium};
+  
+  li {
+    background: ${({theme}) => `${theme.colors.accent.primary}10`};
+    padding: ${({theme}) => `${theme.spacing.xsmall} ${theme.spacing.medium}`};
+    border-radius: ${({theme}) => theme.borders.radius};
+    font-size: 0.9rem;
+    color: ${({theme}) => theme.colors.accent.primary};
+    flex: 0 1 auto;
+    height: 2em;
+    line-height: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: space-evenly;
+    gap: ${({theme}) => theme.spacing.small};
+  }
+`;
+
 const cardContent: ValeurCardProps[] = [
   {
     title: "Relation de confiance",
     content: (
       <>
         <p>
-          Nous sommes basés à Neuchâtel et hébergeons nos serveurs en Suisse afin d'assurer 
+          Nous sommes basés à Neuchâtel et hébergeons nos serveurs en Suisse afin d&apos;assurer 
           une sécurité et confidentialité des données de premier ordre.
         </p>
         <p>
@@ -152,11 +196,16 @@ const cardContent: ValeurCardProps[] = [
   {
     title: "Rapidité et simplicité",
     content: (
-      <p>
-        Notre engagement est de rendre votre transition numérique fluide et efficace, 
-        avec des solutions rapides et intuitives. Notre accompagnement à chaque étape 
-        vous garantit une expérience sereine et sans stress.
-      </p>
+      <>
+        <p>
+          Notre engagement est de rendre votre transition numérique fluide et efficace, 
+        avec des solutions rapides et intuitives.
+        </p>
+        <p>
+        Notre accompagnement à chaque étape 
+          vous garantit une expérience sereine et sans stress.
+        </p>
+      </>
     ),
     icon: "⚡",
     isEven: true
@@ -166,14 +215,18 @@ const cardContent: ValeurCardProps[] = [
     content: (
       <>
         <p>
-          Nous utilisons les meilleures outils afin d'offrir des fonctionnalités 
-          incroyables et une viabilité à long terme de nos solutions.
+          Nous utilisons les meilleures outils afin d&apos;offrir des fonctionnalités 
+          incroyables et une viabilité à long terme.
         </p>
-        <ul>
+        <p>
+          Notre stack technique moderne nous permet de créer des solutions 
+          performantes et évolutives.
+        </p>
+        <TechList>
           <li>React</li>
           <li>Nextjs</li>
           <li>Graphql</li>
-        </ul>
+        </TechList>
       </>
     ),
     icon: "💻",
@@ -182,12 +235,17 @@ const cardContent: ValeurCardProps[] = [
   {
     title: "Votre projet vous appartient",
     content: (
-      <p>
-        De plus en plus de platformes web vous enferment dans leur écosystème, 
-        ne donnant pas le code source afin de vous rendre dépendant de leur service 
-        et hébergement. Chez Neuchatech, nous croyons en la liberté et la transparence, 
-        chaque projet étant livré avec son code source.
-      </p>
+      <>
+        <p>
+          De plus en plus de plateformes web vous enferment dans leur écosystème,
+          vous rendant dépendant de leurs services.
+        </p>
+        <p>
+          Chez Neuchatech, nous croyons en la liberté et la transparence.
+          Chaque projet est livré avec son code source, vous donnant un contrôle total
+          sur votre solution.
+        </p>
+      </>
     ),
     icon: "🔓",
     isEven: true
@@ -195,11 +253,16 @@ const cardContent: ValeurCardProps[] = [
   {
     title: "L'excellence à un prix attractif",
     content: (
-      <p>
-        Nous offrons des solutions économiques sans compromettre la qualité, 
-        les performances ou la sécurité. Obtenez le site Web moderne et professionnel 
-        dont votre entreprise a besoin à un prix abordable.
-      </p>
+      <>
+        <p>
+          Nous offrons des solutions économiques sans compromettre la qualité
+          ni les performances.
+        </p>
+        <p>
+          Obtenez le site Web moderne et professionnel dont votre entreprise 
+          a besoin, à un prix abordable et transparent.
+        </p>
+      </>
     ),
     icon: "💰",
     isEven: false

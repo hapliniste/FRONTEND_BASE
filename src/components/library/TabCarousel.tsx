@@ -31,7 +31,8 @@ const TabBar = styled.div`
     position: relative;
     
     @media (max-width: 768px) {
-        font-size: 0.875rem; // Reduced from 1rem
+        font-size: 0.875rem;
+        margin: ${({theme}) => theme.spacing.xsmall};
     }
 `;
 
@@ -69,7 +70,7 @@ const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
     }
 
     @media (max-width: 768px) {
-        padding: 1rem;
+        padding: 0.75rem;
 
         .tab-text {
             display: none;
@@ -79,6 +80,11 @@ const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .tab-icon img {
+            width: 100%;
+            height: 1.75em;
         }
     }
 `;
@@ -208,12 +214,22 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
         setAnimationKey((prevKey) => prevKey + 1); // Set progress bar to 100%
     };
 
-    // Handle slide change
+    // Handle manual swipe interaction
     const handleSlideChange = (swiper: any) => {
         setCurrentTab(swiper.activeIndex);
         if (isAutoplay && isInView) {
             setAnimationKey((prevKey) => prevKey + 1); // Restart progress bar
         }
+    };
+
+    // Remove the onTouchStart handler and replace with onSwiper
+    const handleSwiperInit = (swiper: any) => {
+        swiperRef.current = swiper;
+        
+        // Add custom event listeners for actual swipe movements
+        swiper.on('sliderFirstMove', () => {
+            setIsAutoplay(false); // Stop autoplay only when user actually starts swiping
+        });
     };
 
     // Determine Swiper modules based on effect
@@ -274,8 +290,8 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                                 <Image
                                     src={tab.icon}
                                     alt={`${tab.title} icon`}
-                                    width={32}
-                                    height={32}
+                                    width={128}
+                                    height={128}
                                 />
                             ) : (
                                 tab.icon
@@ -293,14 +309,12 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                     grabCursor={true}
                     modules={getSwiperModules()}
                     onSlideChange={handleSlideChange}
-                    onSwiper={(swiper) => {
-                        swiperRef.current = swiper;
-                    }}
+                    onSwiper={handleSwiperInit}
                     autoplay={
                         isAutoplay && isInView
                             ? {
                                   delay: interval,
-                                  disableOnInteraction: false,
+                                  disableOnInteraction: true,
                               }
                             : false
                     }

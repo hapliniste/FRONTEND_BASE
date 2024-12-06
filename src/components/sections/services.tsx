@@ -44,6 +44,10 @@ const CardContainer = styled.div`
         margin: 0 ${({theme}) => theme.spacing.medium};
     }
     
+    @media (max-width: 768px) {
+        height: auto;
+        min-height: 32em;
+    }
 `;
 
 const CardImageWrapper = styled.div`
@@ -65,6 +69,11 @@ const CardBody = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+        padding: 1.25rem;
+    }
 `;
 
 const CardHeader = styled.div`
@@ -72,6 +81,11 @@ const CardHeader = styled.div`
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
+
+    @media (max-width: 768px) {
+        margin-bottom: 0.75rem;
+        gap: 0.75rem;
+    }
 `;
 
 const CardIcon = styled.div`
@@ -83,6 +97,12 @@ const CardIcon = styled.div`
     background: ${({theme}) => `${theme.accentPrimary}12`};
     border-radius: 12px;
     padding: 1.25rem;
+
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+        padding: 0.875rem;
+    }
 
     img {
         width: 100%;
@@ -96,6 +116,10 @@ const CardTitle = styled.h3`
     font-weight: 600;
     color: ${({theme}) => theme.baseDark};
     margin: 0;
+
+    @media (max-width: 768px) {
+        font-size: 1.5rem;
+    }
 `;
 
 const CardDescription = styled.p`
@@ -103,12 +127,22 @@ const CardDescription = styled.p`
     line-height: 1.6;
     color: ${({theme}) => theme.baseMedium};
     margin-bottom: 1.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 1.75rem;
+    }
 `;
 
 const FeaturesList = styled.ul`
     list-style: none;
     padding: 0;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 2rem 0;
+
+    @media (max-width: 768px) {
+        margin: 0 0 1.75rem 0;
+    }
 `;
 
 const FeatureItem = styled.li`
@@ -118,6 +152,12 @@ const FeatureItem = styled.li`
     font-size: 1rem;
     color: ${({theme}) => theme.baseMedium};
     margin-bottom: 0.75rem;
+    
+    @media (max-width: 768px) {
+        font-size: 1rem;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
     
     &:before {
         content: "✓";
@@ -133,6 +173,11 @@ const PriceTag = styled.div`
     margin-top: auto;
     padding-top: 1.5rem;
     border-top: 1px solid ${({theme}) => `${theme.accentPrimary}12`};
+
+    @media (max-width: 768px) {
+        font-size: 1.375rem;
+        padding-top: 1rem;
+    }
 `;
 
 // Define your services
@@ -170,7 +215,7 @@ const services = [
                         <FeatureItem>Design moderne adapté à tous les appareils</FeatureItem>
                         <FeatureItem>Optimisé pour le référencement (SEO)</FeatureItem>
                         <FeatureItem>Mise à jour facile du contenu</FeatureItem>
-                        <FeatureItem>Options d'hébergement suisse</FeatureItem>
+                        <FeatureItem>Options d&apos;hébergement suisse</FeatureItem>
                     </FeaturesList>
                     <PriceTag>À partir de 500 CHF</PriceTag>
                 </CardBody>
@@ -277,7 +322,7 @@ const services = [
                         <CardTitle>Hébergement web</CardTitle>
                     </CardHeader>
                     <CardDescription>
-                        Une solution d'hébergement web suisse fiable et sécurisée pour votre site web ou application demandante. 
+                        Une solution d&apos;hébergement web suisse fiable et sécurisée pour votre site web ou application demandante. 
                     </CardDescription>
                     <FeaturesList>
                         <FeatureItem>Serveurs en Suisse</FeatureItem>

@@ -11,6 +11,10 @@ const Section = styled.section`
   padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   padding-bottom: ${props => props.theme.spacing.large};
   
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+  
   @media (min-width: 1024px) {
     padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
     padding-bottom: ${props => props.theme.spacing.large};
@@ -25,10 +29,13 @@ const ContentWrapper = styled.div`
 
 const FormContainer = styled.div`
   background: ${props => props.theme.colors.backgrounds.white};
-  border-radius: ${props => props.theme.borders.radius};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.03);
   overflow: hidden;
+  
+  @media (min-width: 769px) {
+    border-radius: ${props => props.theme.borders.radius};
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
 `;
 
 const FormGrid = styled.div`
