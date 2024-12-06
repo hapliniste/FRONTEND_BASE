@@ -9,9 +9,11 @@ const Section = styled.section`
   position: relative;
   padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   background: linear-gradient(to bottom, transparent, ${props => props.theme.colors.backgrounds.default}15);
+  margin: 0;
   
   @media (min-width: 1024px) {
     padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
+    margin: 0;
   }
 `;
 

@@ -12,11 +12,12 @@ const Section = styled.section`
     overflow: hidden;
     position: relative;
     padding: ${({theme}) => `${theme.spacing.section.paddingY.mobile} ${theme.spacing.section.paddingX.mobile}`};
-    padding-bottom: 2rem;
+    margin: 0;
+    padding: 0;
     
     @media (min-width: 1024px) {
         padding: ${({theme}) => `${theme.spacing.section.paddingY.desktop} ${theme.spacing.section.paddingX.desktop}`};
-        padding-bottom: 3rem;
+        margin: 0;
     }
 `;
 
@@ -28,17 +29,21 @@ const ContentWrapper = styled.div`
 
 const CardContainer = styled.div`
     background-color: ${({theme}) => theme.colors.backgrounds.white};
-    border-radius: 1.5rem;
+    //border-radius: 1.5rem;
+    border-radius: ${({theme}) => theme.borders.radius};
     overflow: hidden;
     width: 100%;
     height: 40em;
     display: flex;
     flex-direction: column;
     border: 1px solid ${({theme}) => `${theme.accentPrimary}12`};
+    margin: 0 ${({theme}) => theme.spacing.xsmall};
 
     @media (min-width: 768px) {
         flex-direction: row;
+        margin: 0 ${({theme}) => theme.spacing.medium};
     }
+    
 `;
 
 const CardImageWrapper = styled.div`
@@ -272,7 +277,7 @@ const services = [
                         <CardTitle>Hébergement web</CardTitle>
                     </CardHeader>
                     <CardDescription>
-                        Un hébergement suisse sécurisé et performant pour votre site ou application web.
+                        Une solution d'hébergement web suisse fiable et sécurisée pour votre site web ou application demandante. 
                     </CardDescription>
                     <FeaturesList>
                         <FeatureItem>Serveurs en Suisse</FeatureItem>

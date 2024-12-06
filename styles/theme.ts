@@ -51,6 +51,8 @@ interface Theme {
     medium: string;
     large: string;
     xlarge: string;
+    xxlarge: string;
+    xxxlarge: string;
     section: {
       paddingY: {
         mobile: string;
@@ -85,6 +87,7 @@ interface Theme {
   };
   borders: {
     radius: string;
+    radiusLarge: string;
     width: string;
   };
   sizes: {
@@ -139,10 +142,12 @@ const baseTheme: Theme = {
     medium: '1rem',      // 16px
     large: '2rem',       // 32px
     xlarge: '4rem',      // 64px
+    xxlarge: '8rem',     // 128px
+    xxxlarge: '16rem',   // 256px
     section: {
       paddingY: {
-        mobile: '2rem',
-        desktop: '8rem',
+        mobile: '0rem',
+        desktop: '0rem',
       },
       paddingX: {
         mobile: '1rem',
@@ -173,6 +178,7 @@ const baseTheme: Theme = {
   },
   borders: {
     radius: '1.25rem', 
+    radiusLarge: '3rem',
     width: '0.125rem',   // 2px for border widths
   },
   sizes: {

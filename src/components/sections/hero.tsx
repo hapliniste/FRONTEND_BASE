@@ -24,9 +24,11 @@ const Section = styled.section`
   height: 50vh;
   background-color: ${(props) => props.theme.colors.backgrounds.default};
   overflow: hidden;
+  padding-top: ${props => props.theme.spacing.xlarge};
   
   @media (max-width: 768px) {
     height: auto;
+    padding-top: ${props => props.theme.spacing.xlarge};
   }
 `;
 

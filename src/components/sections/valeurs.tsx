@@ -15,9 +15,11 @@ const Section = styled.section`
   overflow: hidden;
   position: relative;
   padding: 0;
+  margin: 0;
   
   @media (min-width: 1024px) {
     padding: ${({theme}) => `${theme.spacing.section.paddingY.desktop} ${theme.spacing.section.paddingX.desktop}`};
+    margin: 0;
   }
 `;
 

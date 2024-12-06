@@ -28,9 +28,7 @@ const AppBar = styled.header<{ scrolled: boolean }>`
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: ${({theme, scrolled}) =>
-        scrolled ? theme.colors.backgrounds.default : 'transparent'};
-    transition: background-color 0.3s ease;
+    background-color: transparent;
     color: ${({ theme }) => theme.colors.text.primary};
     height: ${({ theme }) => theme.sizes.appBarHeight};
     position: fixed;
@@ -40,7 +38,6 @@ const AppBar = styled.header<{ scrolled: boolean }>`
     z-index: 1000;
     padding: 0;
     margin: 0;
-    //background-color: green;
 `;
 
 const AppBarContent = styled.div`
@@ -50,23 +47,61 @@ const AppBarContent = styled.div`
     width: 100%;
     height: 100%;
     max-width: ${({ theme }) => theme.sizes.maxWidth};
-    padding: 0;
+    padding: 0 ${({ theme }) => theme.spacing.small};
     margin: 0;
-
-    //background-color: red;
     
-    @media (max-width: 768px) {
-        padding: 0 ${({ theme }) => theme.spacing.small};
+    @media (min-width: 769px) {
+        padding: 0 ${({ theme }) => theme.spacing.medium};
     }
 `;
 
 const Logo = styled.div<{ scrolled: boolean }>`
     position: relative;
-    width: 16em;//240px;
-    //height: 100%;//60px;
+    width: 16em;
+    height: 3em;
     cursor: pointer;
     opacity: ${(props) => (props.scrolled ? 1 : 0)};
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
+    //padding: ${({ theme }) => theme.spacing.small};
+    //border-radius: 99em;
+    //background-color: ${({ theme }) => theme.colors.backgrounds.default};
+    //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+`;
+
+const LogoImage = styled.img<{ scrolled: boolean }>`
+position: relative;
+    //width: 16em;
+    height: 3em;
+    cursor: pointer;
+    opacity: ${(props) => (props.scrolled ? 1 : 0)};
+    transition: all 0.3s ease;
+    //padding: ${({ theme }) => theme.spacing.small};
+    //border-radius: 99em;
+    //background-color: ${({ theme }) => theme.colors.backgrounds.default};
+    //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    //width: 100%;
+    //height: 100%;
+    //object-fit: contain;
+    //border-radius: 99em;
+    //border-radius: 0.0em;
+    //background-color: ${({ theme }) => theme.colors.backgrounds.default};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: ${({ theme }) => theme.colors.accent.light};
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px ${({ theme }) => `${theme.colors.accent.primary}30`};
+    }
 `;
 
 const NavLinks = styled.nav<{ scrolled: boolean }>`
@@ -81,20 +116,35 @@ const NavLinks = styled.nav<{ scrolled: boolean }>`
     @media (max-width: 768px) {
         display: none;
     }
-    //background-color: green;
 `;
 
 const NavSection = styled.div`
+    //height: 2em;
     display: flex;
     align-items: center;
-    gap: ${({ theme }) => theme.spacing.large};
+    gap: ${({ theme }) => theme.spacing.medium};
+    background-color: ${({ theme }) => `${theme.colors.backgrounds.default}`};
+    padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+    border-radius: 99em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+`;
 
-    //background-color: pink;
+const MobileMenuWrapper = styled.div`
+    @media (max-width: 768px) {
+        display: flex;
+        align-items: center;
+        margin-right: ${({ theme }) => theme.spacing.medium};
+    }
+    @media (min-width: 769px) {
+        display: none;
+    }
 `;
 
 const StyledLink = styled(Link)`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.text.primary};
+    transition: color 0.2s ease;
+
     &:hover {
         color: ${({ theme }) => theme.colors.accent.primary};
     }
@@ -103,14 +153,17 @@ const StyledLink = styled(Link)`
 const NavButton = styled.button`
     padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
     border: none;
-    border-radius: 99em;//4px;
+    border-radius: 99em;
     background-color: ${({ theme }) => theme.colors.accent.primary};
     color: white;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px ${({ theme }) => `${theme.colors.accent.primary}20`};
     
     &:hover {
-        background-color: ${({ theme }) => theme.colors.accent.secondary};
+        background-color: ${({ theme }) => theme.colors.accent.light};
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px ${({ theme }) => `${theme.colors.accent.primary}30`};
     }
 `;
 
@@ -123,11 +176,7 @@ const ContentWrapper = styled.div`
     background: ${(props) => props.theme.colors.backgrounds.default};
 `;
 
-const LogoImage = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-`;
+
 
 const Main = (props: IMainProps) => {
     const [scrolled, setScrolled] = useState(false);
@@ -176,12 +225,13 @@ const Main = (props: IMainProps) => {
             <AppBar scrolled={scrolled}>
                 <AppBarContent>
                     <StyledLink href="/">
-                        <Logo scrolled={scrolled}>
+                        {/*<Logo scrolled={scrolled}>*/}
                             <LogoImage
+                                scrolled={scrolled}
                                 src="/neuchatech_logo.webp"
                                 alt={AppConfig.title}
                             />
-                        </Logo>
+                        {/*</Logo>*/}
                     </StyledLink>
                     <NavLinks scrolled={scrolled}>
                         <NavSection>
@@ -196,7 +246,9 @@ const Main = (props: IMainProps) => {
                             </NavButton>
                         </NavSection>
                     </NavLinks>
-                    <HamburgerMenu links={navigationLinks} />
+                    <MobileMenuWrapper>
+                        <HamburgerMenu links={navigationLinks} />
+                    </MobileMenuWrapper>
                 </AppBarContent>
             </AppBar>
             <ContentWrapper>{props.children}</ContentWrapper>

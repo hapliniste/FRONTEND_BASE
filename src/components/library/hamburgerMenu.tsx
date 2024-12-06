@@ -4,57 +4,73 @@ import Link from 'next/link';
 
 const HamburgerButton = styled.button<{ isOpen: boolean }>`
     display: none;
-    background: none;
+    background: ${({ theme }) => theme.colors.backgrounds.default};
     border: none;
     cursor: pointer;
-    padding: ${({ theme }) => theme.spacing.small};
+    padding: 0;
     z-index: 1001;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
     @media (max-width: 768px) {
-        display: block;
+        display: flex;
     }
 `;
 
 const HamburgerIcon = styled.div<{ isOpen: boolean }>`
-    width: 24px;
+    width: 20px;
     height: 2px;
     background: ${props => props.isOpen ? 'transparent' : props.theme.colors.text.primary};
     position: relative;
     transition: all 0.3s ease;
+    transform: translateY(${props => props.isOpen ? '1px' : '0'});
 
     &::before,
     &::after {
         content: '';
         position: absolute;
-        width: 24px;
+        left: 0;
+        width: 20px;
         height: 2px;
         background: ${props => props.theme.colors.text.primary};
         transition: all 0.3s ease;
     }
 
     &::before {
-        transform: ${props => props.isOpen ? 'rotate(45deg)' : 'translateY(-8px)'};
+        transform: ${props => props.isOpen ? 'rotate(45deg)' : 'translateY(-6px)'};
     }
 
     &::after {
-        transform: ${props => props.isOpen ? 'rotate(-45deg)' : 'translateY(8px)'};
+        transform: ${props => props.isOpen ? 'rotate(-45deg)' : 'translateY(6px)'};
     }
 `;
 
 const MenuPopup = styled.div<{ isOpen: boolean }>`
     display: none;
     position: absolute;
-    top: ${props => props.theme.sizes.appBarHeight};
-    right: 0;
-    width: 200px;
-    background: ${props => props.theme.colors.backgrounds.white};
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    top: calc(${props => props.theme.sizes.appBarHeight} - 0.5rem);
+    right: ${({ theme }) => theme.spacing.medium};
+    width: 240px;
+    background: ${props => props.theme.colors.backgrounds.default};
+    border-radius: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     opacity: ${props => props.isOpen ? 1 : 0};
     transform: translateY(${props => props.isOpen ? '0' : '-10px'});
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     pointer-events: ${props => props.isOpen ? 'auto' : 'none'};
-    padding: ${({ theme }) => theme.spacing.small} 0;
+    padding: ${({ theme }) => theme.spacing.small};
+    overflow: hidden;
 
     @media (max-width: 768px) {
         display: block;
@@ -68,6 +84,7 @@ const MobileLink = styled(Link)`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.text.primary};
     transition: all 0.2s ease;
+    border-radius: 0.75rem;
     
     &:hover {
         background: ${({ theme }) => `${theme.colors.accent.primary}10`};
@@ -77,8 +94,8 @@ const MobileLink = styled(Link)`
 
 const Divider = styled.div`
     height: 1px;
-    background: ${props => props.theme.colors.borders.color};
-    margin: ${({ theme }) => theme.spacing.small} 0;
+    background: ${props => `${props.theme.colors.borders.color}40`};
+    margin: ${({ theme }) => theme.spacing.xsmall} ${({ theme }) => theme.spacing.small};
 `;
 
 interface HamburgerMenuProps {

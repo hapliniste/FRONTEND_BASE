@@ -122,13 +122,26 @@ const TabContent = styled.div`
 const StyledSwiper = styled(Swiper)`
     width: 100%;
     height: 100%;
+    padding: ${({ theme }) => theme.spacing.medium} 0;
+
+    .swiper-slide {
+        transition: all 0.3s ease;
+        //opacity: 0.5;
+        //transform: scale(0.9);
+    }
+
+    .swiper-slide-active {
+        //opacity: 1;
+        //transform: scale(1);
+    }
 `;
 
 const ContentContainer = styled.div`
-    min-height: 300px; /* Adjust as needed for uniformity */
+    min-height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
+    //margin: 0 ${({ theme }) => theme.spacing.medium};
 `;
 
 const TabCarousel: React.FC<TabCarouselProps> = ({
