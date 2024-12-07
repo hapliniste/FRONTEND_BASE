@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { NextSeo } from 'next-seo';
 
 import { Outfit } from 'next/font/google';
 const titleFont = Outfit({
@@ -174,65 +175,87 @@ const Hero: React.FC = () => {
     }),
   };
 
+  const heroSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Neuchatech",
+    "url": "https://neuchatech.ch",
+    "description": "Solutions web professionnelles à Neuchâtel",
+    "potentialAction": {
+      "@type": "ContactAction",
+      "target": "https://neuchatech.ch/#contact"
+    }
+  };
+
   return (
-    <Section>
-      <InnerSection>
-        <ContentWrapper>
-          <ContentArea>
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              custom={0}
-              variants={titleVariants}
-            >
-              <Title className={titleFont.className}>
-                <LogoTitle src="/neuchatech_logo.webp" alt="Neuchatech" />
-                donne vie à vos
-                <br />
-                <span className="gradient">projets numériques</span>
-              </Title>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              custom={1}
-              variants={titleVariants}
-            >
-              <SubTitle className={montserrat.className}>
-                Votre partenaire suisse pour une transition numérique réussie
-              </SubTitle>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              custom={2}
-              variants={titleVariants}
-            >
-              <Description className={DMSansFont.className}>
-                Des solutions web modernes et performantes pour faire de chaque
-                projet un pilier de votre succès.
-              </Description>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              custom={3}
-              variants={titleVariants}
-            >
-              <CTAButton 
-                onClick={scrollToContact}
-                className={montserrat.className}
+    <>
+      <NextSeo
+        title="Accueil"
+        description="Solutions web professionnelles à Neuchâtel. Développement de sites web, applications et assistants IA pour votre entreprise."
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}
+      />
+      <Section>
+        <InnerSection>
+          <ContentWrapper>
+            <ContentArea>
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                custom={0}
+                variants={titleVariants}
               >
-                Obtenez un devis gratuit
-              </CTAButton>
-            </motion.div>
-          </ContentArea>
-        </ContentWrapper>
-      </InnerSection>
-    </Section>
+                <Title className={titleFont.className}>
+                  <LogoTitle src="/neuchatech_logo.webp" alt="Neuchatech" />
+                  donne vie à vos
+                  <br />
+                  <span className="gradient">projets numériques</span>
+                </Title>
+              </motion.div>
+
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                custom={1}
+                variants={titleVariants}
+              >
+                <SubTitle className={montserrat.className}>
+                  Votre partenaire suisse pour une transition numérique réussie
+                </SubTitle>
+              </motion.div>
+
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                custom={2}
+                variants={titleVariants}
+              >
+                <Description className={DMSansFont.className}>
+                  Des solutions web modernes et performantes pour faire de chaque
+                  projet un pilier de votre succès.
+                </Description>
+              </motion.div>
+
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                custom={3}
+                variants={titleVariants}
+              >
+                <CTAButton 
+                  onClick={scrollToContact}
+                  className={montserrat.className}
+                >
+                  Obtenez un devis gratuit
+                </CTAButton>
+              </motion.div>
+            </ContentArea>
+          </ContentWrapper>
+        </InnerSection>
+      </Section>
+    </>
   );
 };
 

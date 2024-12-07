@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import TabCarousel from '@/components/library/TabCarousel';
 import Image from 'next/image';
 import { SectionTitle } from '@/components/library/typography';
+import { NextSeo } from 'next-seo';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
 
@@ -338,17 +339,65 @@ const services = [
 ];
 
 const Services: React.FC = () => {
+    // Create a simplified version of services for the schema
+    const servicesForSchema = services.map(service => ({
+        title: service.title,
+        description: service.title === "Hébergement web" 
+            ? "Solution d'hébergement web suisse fiable et sécurisée pour votre site web ou application demandante."
+            : service.title === "Site web standard"
+            ? "Un site web professionnel et moderne pour votre entreprise, avec un design adapté à votre image."
+            : service.title === "Développement sur mesure"
+            ? "Des solutions web sur mesure pour répondre à vos besoins spécifiques, du site vitrine à l'application web complexe."
+            : "Un assistant IA personnalisé pour automatiser vos tâches et améliorer votre productivité."
+    }));
+
+    const servicesSchema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": servicesForSchema.map((service, index) => ({
+            "@type": "Service",
+            "position": index + 1,
+            "name": service.title,
+            "description": service.description,
+            "provider": {
+                "@type": "Organization",
+                "name": "Neuchatech",
+                "url": "https://neuchatech.ch"
+            },
+            "areaServed": {
+                "@type": "City",
+                "name": "Neuchâtel"
+            }
+        }))
+    };
+
     return (
-        <Section id="services">
-            <ContentWrapper>
-                <SectionTitle centered noUnderline>Nos Services</SectionTitle>
-                <TabCarousel
-                    tabs={services}
-                    interval={7000}
-                    swiperEffect="slide"
-                />
-            </ContentWrapper>
-        </Section>
+        <>
+            <NextSeo
+                title="Services Web Professionnels"
+                description="Développement web sur mesure, sites web standards, hébergement et assistants IA pour votre entreprise à Neuchâtel."
+                additionalMetaTags={[
+                    {
+                        name: 'keywords',
+                        content: 'développement web, site web standard, développement sur mesure, assistant IA, hébergement web, Neuchâtel'
+                    }
+                ]}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
+            />
+            <Section id="services">
+                <ContentWrapper>
+                    <SectionTitle centered noUnderline>Nos Services</SectionTitle>
+                    <TabCarousel
+                        tabs={services}
+                        interval={7000}
+                        swiperEffect="slide"
+                    />
+                </ContentWrapper>
+            </Section>
+        </>
     );
 };
 

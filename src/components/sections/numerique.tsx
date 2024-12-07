@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { SectionTitle } from '@/components/library/typography';
 import Image from 'next/image';
 import { jakarta } from '@/styles/theme';
+import { NextSeo } from 'next-seo';
 
 const Section = styled.section`
   overflow: hidden;
@@ -409,38 +410,88 @@ const Numerique: React.FC = () => {
     )
   ));
 
+  const numeriqueSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Pourquoi avoir un site web professionnel ?",
+    "description": "Découvrez l'importance d'avoir un site web professionnel pour votre entreprise avec des statistiques clés.",
+    "author": {
+      "@type": "Organization",
+      "name": "Neuchatech"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Neuchatech",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://neuchatech.ch/neuchatech_logo.webp"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://neuchatech.ch/#numerique"
+    },
+    "about": features.map(feature => ({
+      "@type": "Thing",
+      "name": feature.title,
+      "description": feature.content,
+      "additionalProperty": feature.stats.map(stat => ({
+        "@type": "PropertyValue",
+        "name": stat.text,
+        "value": stat.value,
+        "citation": stat.source
+      }))
+    }))
+  };
+
   return (
-    <Section>
-      <SectionTitle>
-        Pourquoi avoir un site web professionnel ?
-      </SectionTitle>
+    <>
+      <NextSeo
+        title="L'importance du numérique"
+        description="Comprendre l'importance d'avoir un site web professionnel pour votre entreprise. Statistiques et données clés sur l'impact du digital."
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: 'site web professionnel, importance numérique, statistiques web, présence en ligne, Neuchâtel'
+          }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(numeriqueSchema) }}
+      />
+      <Section>
+        <SectionTitle>
+          Pourquoi avoir un site web professionnel ?
+        </SectionTitle>
 
-      <ContentWrapper>
-        {features.map((feature, index) => (
-          <FeatureSection 
-            key={feature.title} 
-            feature={feature} 
-            index={index} 
-          />
-        ))}
+        <ContentWrapper>
+          {features.map((feature, index) => (
+            <FeatureSection 
+              key={feature.title} 
+              feature={feature} 
+              index={index} 
+            />
+          ))}
 
-        <SourcesSection>
-          <SourcesTitle>Sources</SourcesTitle>
-          <SourcesList>
-            {allSources.map((source, index) => (
-              <SourceItem 
-                key={index}
-                href={source}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {source.replace('https://', '')}
-              </SourceItem>
-            ))}
-          </SourcesList>
-        </SourcesSection>
-      </ContentWrapper>
-    </Section>
+          <SourcesSection>
+            <SourcesTitle>Sources</SourcesTitle>
+            <SourcesList>
+              {allSources.map((source, index) => (
+                <SourceItem 
+                  key={index}
+                  href={source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {source.replace('https://', '')}
+                </SourceItem>
+              ))}
+            </SourcesList>
+          </SourcesSection>
+        </ContentWrapper>
+      </Section>
+    </>
   );
 };
 

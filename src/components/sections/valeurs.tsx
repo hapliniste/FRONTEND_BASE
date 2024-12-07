@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Carousel from "@/components/library/carousel";
 import ImageCard from "@/components/library/imageCard";
 import { SectionTitle } from '@/components/library/typography';
+import { NextSeo } from 'next-seo';
 
 interface ValeurCardProps {
   title: string;
@@ -270,31 +271,54 @@ const cardContent: ValeurCardProps[] = [
 ];
 
 const Valeurs: React.FC = () => {
-  return (
-    <Section id="valeurs">
-      <SectionTitle>Nos Valeurs</SectionTitle>
-      
-      <DesktopCardContainer>
-        {cardContent.map((valeur, index) => (
-          <div key={index}>
-            <ImageCard
-              image={{
-                id: index,
-                icon: valeur.icon,
-                title: valeur.title,
-                content: valeur.content
-              }}
-            />
-          </div>
-        ))}
-      </DesktopCardContainer>
+  // Create a simplified version of values for the schema
+  const valeursForSchema = cardContent.map(valeur => ({
+    title: valeur.title,
+    description: valeur.title === "Relation de confiance"
+      ? "Nous sommes basés à Neuchâtel et établissons des relations de confiance à long terme avec nos clients."
+      : valeur.title === "Technologies solides et modernes"
+      ? "Nous utilisons les meilleures technologies pour offrir des fonctionnalités incroyables et une viabilité à long terme."
+      : "Votre projet vous appartient entièrement, avec un contrôle total sur votre solution."
+  }));
 
-      <MobileCardContainer>
-        <Carousel
-          slides={cardContent.map((valeur, index) => ({
-            content: (
+  const valeursSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Neuchatech",
+      "description": "Entreprise de développement web à Neuchâtel",
+      "knowsAbout": valeursForSchema.map(valeur => ({
+        "@type": "Thing",
+        "name": valeur.title,
+        "description": valeur.description
+      }))
+    }
+  };
+
+  return (
+    <>
+      <NextSeo
+        title="Nos Valeurs"
+        description="Découvrez nos valeurs : relation de confiance, technologies modernes, et transparence totale dans nos services web à Neuchâtel."
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: 'valeurs entreprise, confiance, technologies modernes, transparence, développement web Neuchâtel'
+          }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(valeursSchema) }}
+      />
+      <Section id="valeurs">
+        <SectionTitle>Nos Valeurs</SectionTitle>
+        
+        <DesktopCardContainer>
+          {cardContent.map((valeur, index) => (
+            <div key={index}>
               <ImageCard
-                key={index}
                 image={{
                   id: index,
                   icon: valeur.icon,
@@ -302,11 +326,29 @@ const Valeurs: React.FC = () => {
                   content: valeur.content
                 }}
               />
-            )
-          }))}
-        />
-      </MobileCardContainer>
-    </Section>
+            </div>
+          ))}
+        </DesktopCardContainer>
+
+        <MobileCardContainer>
+          <Carousel
+            slides={cardContent.map((valeur, index) => ({
+              content: (
+                <ImageCard
+                  key={index}
+                  image={{
+                    id: index,
+                    icon: valeur.icon,
+                    title: valeur.title,
+                    content: valeur.content
+                  }}
+                />
+              )
+            }))}
+          />
+        </MobileCardContainer>
+      </Section>
+    </>
   );
 };
 

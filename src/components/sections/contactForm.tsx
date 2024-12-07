@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { montserrat } from '@/styles/theme';
+import { NextSeo } from 'next-seo';
+import { trackFormSubmission } from '@/utils/analytics';
 
 // Layout Components
 const Section = styled.section`
@@ -311,6 +313,9 @@ const ContactForm: React.FC = () => {
     const formData = new FormData(event.currentTarget);
 
     try {
+      // Track form submission attempt
+      trackFormSubmission('contact_form_start');
+      
       const response = await fetch('/api/contact', {
         method: 'POST',
         body: formData,
@@ -318,11 +323,17 @@ const ContactForm: React.FC = () => {
 
       if (response.ok) {
         setStatus('success');
+        // Track successful submission
+        trackFormSubmission('contact_form_success');
       } else {
         setStatus('error');
+        // Track failed submission
+        trackFormSubmission('contact_form_error');
       }
     } catch (error) {
       setStatus('error');
+      // Track failed submission
+      trackFormSubmission('contact_form_error');
     }
   };
 
@@ -366,169 +377,235 @@ const ContactForm: React.FC = () => {
     }
   ];
 
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Neuchatech",
+    "description": "Contactez-nous pour vos projets web à Neuchâtel",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Neuchatech",
+      "url": "https://neuchatech.ch",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "areaServed": {
+          "@type": "City",
+          "name": "Neuchâtel"
+        },
+        "availableLanguage": ["French", "English"],
+        "contactOption": ["TollFree", "Email"],
+        "hoursAvailable": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      }
+    },
+    "potentialAction": {
+      "@type": "AskAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://neuchatech.ch/#contact",
+        "inLanguage": "fr-CH",
+        "actionPlatform": [
+          "http://schema.org/DesktopWebPlatform",
+          "http://schema.org/MobileWebPlatform"
+        ]
+      },
+      "result": {
+        "@type": "Message",
+        "name": "Contact Form Submission"
+      }
+    }
+  };
+
   return (
-    <Section id="contact">
-      <ContentWrapper>
-        <FormContainer>
-          <FormGrid>
-            {/* Left Column - Form */}
-            <div>
-              <Title className={montserrat.className}>Contactez-nous</Title>
-              <Subtitle>Nous serions ravis d&apos;en savoir plus sur votre projet !</Subtitle>
-              
-              <Form onSubmit={handleSubmit}>
-                <FormField>
-                  <Label htmlFor="name">Nom complet</Label>
-                  <Input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    required 
-                  />
-                </FormField>
+    <>
+      <NextSeo
+        title="Contact"
+        description="Contactez Neuchatech pour vos projets web. Développement sur mesure, sites web standards et assistants IA à Neuchâtel."
+        additionalMetaTags={[
+          {
+            name: 'keywords',
+            content: 'contact, devis, projet web, développement web, Neuchâtel'
+          }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
+      <Section id="contact">
+        <ContentWrapper>
+          <FormContainer>
+            <FormGrid>
+              {/* Left Column - Form */}
+              <div>
+                <Title className={montserrat.className}>Contactez-nous</Title>
+                <Subtitle>Nous serions ravis d&apos;en savoir plus sur votre projet !</Subtitle>
+                
+                <Form onSubmit={handleSubmit}>
+                  <FormField>
+                    <Label htmlFor="name">Nom complet</Label>
+                    <Input 
+                      type="text" 
+                      id="name" 
+                      name="name" 
+                      required 
+                    />
+                  </FormField>
 
-                <FormField>
-                  <Label htmlFor="email">Adresse email</Label>
-                  <Input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    required 
-                  />
-                </FormField>
+                  <FormField>
+                    <Label htmlFor="email">Adresse email</Label>
+                    <Input 
+                      type="email" 
+                      id="email" 
+                      name="email" 
+                      required 
+                    />
+                  </FormField>
 
-                <FormField>
-                  <Label htmlFor="phone" optional>Téléphone</Label>
-                  <Input 
-                    type="tel" 
-                    id="phone" 
-                    name="phone" 
-                  />
-                </FormField>
+                  <FormField>
+                    <Label htmlFor="phone" optional>Téléphone</Label>
+                    <Input 
+                      type="tel" 
+                      id="phone" 
+                      name="phone" 
+                    />
+                  </FormField>
 
-                <FormField>
-                  <Label optional>Service souhaité</Label>
-                  <ServiceOptions>
-                    {services.map(service => (
-                      <ServiceCard 
-                        key={service.id}
-                        selected={selectedService === service.id}
-                        onClick={() => setSelectedService(service.id)}
-                      >
-                        <ServiceTitle>{service.title}</ServiceTitle>
-                        <ServiceDescription>{service.description}</ServiceDescription>
-                        <input
-                          type="radio"
-                          name="service"
-                          value={service.id}
-                          checked={selectedService === service.id}
-                          onChange={() => setSelectedService(service.id)}
-                          style={{ display: 'none' }}
-                        />
-                      </ServiceCard>
-                    ))}
-                  </ServiceOptions>
-                </FormField>
-
-                <FormField>
-                  <Label htmlFor="message">Votre message</Label>
-                  <TextArea 
-                    id="message" 
-                    name="message" 
-                    required
-                    placeholder="Parlez-nous de votre projet..."
-                  />
-                </FormField>
-
-                <SubmitButton 
-                  type="submit" 
-                  disabled={status === 'submitting'}
-                >
-                  {status === 'submitting' ? 'Envoi en cours...' : 'Envoyer le message'}
-                </SubmitButton>
-
-                {status === 'success' && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    style={{ color: '#34C759', marginTop: '1rem' }}
-                  >
-                    Merci de nous avoir contactés ! Nous reviendrons vers vous rapidement.
-                  </motion.p>
-                )}
-
-                {status === 'error' && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    style={{ color: '#FF3B30', marginTop: '1rem' }}
-                  >
-                    Une erreur s&apos;est produite. Veuillez réessayer ou nous contacter directement.
-                  </motion.p>
-                )}
-              </Form>
-            </div>
-
-            {/* Right Column - Contact Info */}
-            <RightColumn>
-              <ContactInfo>
-                {!contactInfo ? (
-                  <RevealButton 
-                    onClick={handleRevealContact} 
-                    disabled={loadingContact}
-                  >
-                    {loadingContact ? (
-                      <>
-                        <span>Chargement...</span>
-                        <motion.span
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  <FormField>
+                    <Label optional>Service souhaité</Label>
+                    <ServiceOptions>
+                      {services.map(service => (
+                        <ServiceCard 
+                          key={service.id}
+                          selected={selectedService === service.id}
+                          onClick={() => setSelectedService(service.id)}
                         >
-                          ⟳
-                        </motion.span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Cliquez ici pour afficher nos coordonnées</span>
-                      </>
-                    )}
-                  </RevealButton>
-                ) : (
-                  <ContactDetails
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ContactItem>
-                      <ContactIcon>📍</ContactIcon>
-                      <ContactText>{contactInfo.address}</ContactText>
-                    </ContactItem>
-                    <ContactItem>
-                      <ContactIcon>📧</ContactIcon>
-                      <ContactText>{contactInfo.email}</ContactText>
-                    </ContactItem>
-                    <ContactItem>
-                      <ContactIcon>📞</ContactIcon>
-                      <ContactText>{contactInfo.phone}</ContactText>
-                    </ContactItem>
-                  </ContactDetails>
-                )}
-              </ContactInfo>
+                          <ServiceTitle>{service.title}</ServiceTitle>
+                          <ServiceDescription>{service.description}</ServiceDescription>
+                          <input
+                            type="radio"
+                            name="service"
+                            value={service.id}
+                            checked={selectedService === service.id}
+                            onChange={() => setSelectedService(service.id)}
+                            style={{ display: 'none' }}
+                          />
+                        </ServiceCard>
+                      ))}
+                    </ServiceOptions>
+                  </FormField>
 
-              <ImageContainer>
-                <Image
-                  src="https://placehold.co/600x1200/999999/666666.png?text=Photo+Professionnelle"
-                  alt="Photo professionnelle"
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  priority
-                />
-              </ImageContainer>
-            </RightColumn>
-          </FormGrid>
-        </FormContainer>
-      </ContentWrapper>
-    </Section>
+                  <FormField>
+                    <Label htmlFor="message">Votre message</Label>
+                    <TextArea 
+                      id="message" 
+                      name="message" 
+                      required
+                      placeholder="Parlez-nous de votre projet..."
+                    />
+                  </FormField>
+
+                  <SubmitButton 
+                    type="submit" 
+                    disabled={status === 'submitting'}
+                  >
+                    {status === 'submitting' ? 'Envoi en cours...' : 'Envoyer le message'}
+                  </SubmitButton>
+
+                  {status === 'success' && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      style={{ color: '#34C759', marginTop: '1rem' }}
+                    >
+                      Merci de nous avoir contactés ! Nous reviendrons vers vous rapidement.
+                    </motion.p>
+                  )}
+
+                  {status === 'error' && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      style={{ color: '#FF3B30', marginTop: '1rem' }}
+                    >
+                      Une erreur s&apos;est produite. Veuillez réessayer ou nous contacter directement.
+                    </motion.p>
+                  )}
+                </Form>
+              </div>
+
+              {/* Right Column - Contact Info */}
+              <RightColumn>
+                <ContactInfo>
+                  {!contactInfo ? (
+                    <RevealButton 
+                      onClick={handleRevealContact} 
+                      disabled={loadingContact}
+                    >
+                      {loadingContact ? (
+                        <>
+                          <span>Chargement...</span>
+                          <motion.span
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          >
+                            ⟳
+                          </motion.span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Cliquez ici pour afficher nos coordonnées</span>
+                        </>
+                      )}
+                    </RevealButton>
+                  ) : (
+                    <ContactDetails
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ContactItem>
+                        <ContactIcon>📍</ContactIcon>
+                        <ContactText>{contactInfo.address}</ContactText>
+                      </ContactItem>
+                      <ContactItem>
+                        <ContactIcon>📧</ContactIcon>
+                        <ContactText>{contactInfo.email}</ContactText>
+                      </ContactItem>
+                      <ContactItem>
+                        <ContactIcon>📞</ContactIcon>
+                        <ContactText>{contactInfo.phone}</ContactText>
+                      </ContactItem>
+                    </ContactDetails>
+                  )}
+                </ContactInfo>
+
+                <ImageContainer>
+                  <Image
+                    src="https://placehold.co/600x1200/999999/666666.png?text=Photo+Professionnelle"
+                    alt="Photo professionnelle"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </ImageContainer>
+              </RightColumn>
+            </FormGrid>
+          </FormContainer>
+        </ContentWrapper>
+      </Section>
+    </>
   );
 };
 

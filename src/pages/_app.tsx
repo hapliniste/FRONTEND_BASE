@@ -6,6 +6,10 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/utils/apolloClient";
 import { SessionProvider } from "next-auth/react";
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import { DefaultSeo } from 'next-seo';
+import seoConfig from '@/config/next-seo.config';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import { initScrollTracking } from '@/utils/analytics';
 
 import "normalize.css/normalize.css";
 
@@ -25,12 +29,19 @@ export default function App({ Component, pageProps }: AppProps<{}>) {
             "(prefers-color-scheme: dark)"
         ).matches;
         setCurrentTheme(isDarkMode ? darkTheme : lightTheme);
-        //console.log("Current prefered theme is: " + isDarkMode);
+    }, []);
+
+    // Initialize scroll tracking
+    useEffect(() => {
+        const cleanup = initScrollTracking();
+        return () => cleanup?.();
     }, []);
 
     return (
         <ApolloProvider client={apolloClient}>
             <SessionProvider session={pageProps.session}>
+                <DefaultSeo {...seoConfig} />
+                <GoogleAnalytics />
                 <ThemeProvider theme={currentTheme}>
                     <Main className={jakarta.className}>
                         <Component {...pageProps} />
