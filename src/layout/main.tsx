@@ -62,38 +62,24 @@ const Logo = styled.div<{ scrolled: boolean }>`
     cursor: pointer;
     opacity: ${(props) => (props.scrolled ? 1 : 0)};
     transition: all 0.3s ease;
-    //padding: ${({ theme }) => theme.spacing.small};
-    //border-radius: 99em;
-    //background-color: ${({ theme }) => theme.colors.backgrounds.default};
-    //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
 
-    
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 const LogoImage = styled.img<{ scrolled: boolean }>`
-position: relative;
-    //width: 16em;
+    position: relative;
     height: 3em;
     cursor: pointer;
     opacity: ${(props) => (props.scrolled ? 1 : 0)};
     transition: all 0.3s ease;
-    //padding: ${({ theme }) => theme.spacing.small};
-    //border-radius: 99em;
-    //background-color: ${({ theme }) => theme.colors.backgrounds.default};
-    //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
-
-    //width: 100%;
-    //height: 100%;
-    //object-fit: contain;
-    //border-radius: 99em;
-    //border-radius: 0.0em;
-    //background-color: ${({ theme }) => theme.colors.backgrounds.default};
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     transition: all 0.2s ease;
 
@@ -101,6 +87,10 @@ position: relative;
         background-color: ${({ theme }) => theme.colors.accent.light};
         transform: translateY(-1px);
         box-shadow: 0 4px 12px ${({ theme }) => `${theme.colors.accent.primary}30`};
+    }
+
+    @media (max-width: 768px) {
+        display: none;
     }
 `;
 

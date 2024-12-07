@@ -251,7 +251,7 @@ const cardContent: ValeurCardProps[] = [
     isEven: true
   },
   {
-    title: "L'excellence à un prix attractif",
+    title: "L'excellence à petit prix",
     content: (
       <>
         <p>
