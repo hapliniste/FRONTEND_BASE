@@ -6,6 +6,7 @@ import { Montserrat } from "next/font/google";
 import { AppConfig } from "@/utils/appConfig";
 import { HamburgerMenu } from "@/components/library/hamburgerMenu";
 import { motion } from 'framer-motion';
+import BackToTop from '@/components/library/BackToTop';
 
 const montserrat = Montserrat({ 
     subsets: ["latin"],
@@ -225,6 +226,7 @@ const Main = (props: IMainProps) => {
                         <StyledLink href="/">
                             <Logo scrolled={false}>
                                 <LogoImage
+                                    scrolled={false}
                                     src="/neuchatech_logo.webp"
                                     alt={AppConfig.title}
                                 />
@@ -284,6 +286,7 @@ const Main = (props: IMainProps) => {
                 </AppBarContent>
             </AppBar>
             <ContentWrapper>{props.children}</ContentWrapper>
+            <BackToTop />
         </MainWrapper>
     );
 };

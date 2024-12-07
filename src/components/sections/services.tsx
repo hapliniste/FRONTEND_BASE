@@ -258,6 +258,9 @@ const services = [
                         alt="Développement sur mesure"
                         fill
                         style={{ objectFit: 'cover' }}
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL={PLACEHOLDER_IMAGE}
                     />
                 </CardImageWrapper>
                 <CardBody
@@ -275,6 +278,7 @@ const services = [
                                 alt="Développement sur mesure icon"
                                 width={64}
                                 height={64}
+                                loading="lazy"
                             />
                         </CardIcon>
                         <CardTitle>Développement sur mesure</CardTitle>
@@ -334,6 +338,9 @@ const services = [
                         alt="Assistant IA"
                         fill
                         style={{ objectFit: 'cover' }}
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL={PLACEHOLDER_IMAGE}
                     />
                 </CardImageWrapper>
                 <CardBody
@@ -351,6 +358,7 @@ const services = [
                                 alt="Assistant IA icon"
                                 width={64}
                                 height={64}
+                                loading="lazy"
                             />
                         </CardIcon>
                         <CardTitle>Assistant IA managé</CardTitle>
@@ -417,6 +425,9 @@ const services = [
                         alt="Hébergement web"
                         fill
                         style={{ objectFit: 'cover' }}
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL={PLACEHOLDER_IMAGE}
                     />
                 </CardImageWrapper>
                 <CardBody

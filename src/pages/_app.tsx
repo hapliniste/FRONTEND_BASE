@@ -16,6 +16,7 @@ import "normalize.css/normalize.css";
 import Main from "@/layout/main";
 
 import { lightTheme, darkTheme } from "@/styles/theme";
+import PreloadResources from '@/components/library/PreloadResources';
 
 const jakarta = Plus_Jakarta_Sans({ 
   subsets: ['latin'],
@@ -42,6 +43,7 @@ export default function App({ Component, pageProps }: AppProps<{}>) {
             <SessionProvider session={pageProps.session}>
                 <DefaultSeo {...seoConfig} />
                 <GoogleAnalytics />
+                <PreloadResources />
                 <ThemeProvider theme={currentTheme}>
                     <Main className={jakarta.className}>
                         <Component {...pageProps} />

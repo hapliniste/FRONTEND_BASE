@@ -81,9 +81,8 @@ const Form = styled(motion.form)`
   gap: ${props => props.theme.spacing.medium};
 `;
 
-const FormField = styled.div`
-  display: flex;
-  flex-direction: column;
+const FormField = styled(motion.div)`
+  position: relative;
   margin-bottom: ${props => props.theme.spacing.medium};
 `;
 
@@ -109,64 +108,37 @@ const Label = styled.label<{ optional?: boolean }>`
   `}
 `;
 
-const Input = styled(motion.input)<{ optional?: boolean }>`
-  padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.large}`};
-  border: 2px solid ${props => props.theme.colors.borders.color};
-  border-radius: 999px;
-  font-size: 1rem;
+const Input = styled.input<{ $hasError?: boolean; optional?: boolean }>`
   width: 100%;
-  transition: all 0.2s ease;
+  padding: 0.75rem;
   box-sizing: border-box;
-  background: transparent;
-  color: ${props => props.theme.colors.text.primary};
-
-  @media (max-width: 768px) {
-    padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.medium}`};
-  }
-
-  &::placeholder {
-    color: ${props => props.theme.colors.text.secondary};
-    opacity: 0.7;
-  }
-
-  &:hover {
-    border-color: ${props => props.optional ? 
-      props.theme.colors.accent.primary : 
-      props.theme.colors.accent.primary};
-  }
+  border: 1px solid ${props => props.$hasError ? props.theme.colors.status.error : props.theme.colors.backgrounds.light};
+  border-radius: ${props => props.theme.borders.radius};
+  background: ${props => props.theme.colors.backgrounds.white};
+  transition: all 0.2s ease;
 
   &:focus {
-    border-color: ${props => props.theme.colors.accent.primary};
     outline: none;
-    box-shadow: 0 0 0 3px ${props => `${props.theme.colors.accent.primary}15`};
+    border-color: ${props => props.$hasError ? props.theme.colors.status.error : props.theme.colors.accent.primary};
+    box-shadow: 0 0 0 2px ${props => props.$hasError ? `${props.theme.colors.status.error}20` : `${props.theme.colors.accent.primary}20`};
   }
 `;
 
-const TextArea = styled(motion.textarea)`
-  padding: ${props => props.theme.spacing.medium};
-  border: 2px solid ${props => props.theme.colors.borders.color};
-  border-radius: ${props => props.theme.borders.radius};
-  font-size: 1rem;
-  min-height: 150px;
+const TextArea = styled.textarea<{ $hasError?: boolean }>`
   width: 100%;
-  transition: all 0.2s ease;
+  padding: 0.75rem;
   box-sizing: border-box;
-  background: transparent;
-  color: ${props => props.theme.colors.text.primary};
-
-  &::placeholder {
-    color: ${props => props.theme.colors.text.secondary};
-    opacity: 0.7;
-  }
-
-  &:hover {
-    border-color: ${props => props.theme.colors.accent.primary};
-  }
+  border: 1px solid ${props => props.$hasError ? props.theme.colors.status.error : props.theme.colors.backgrounds.light};
+  border-radius: ${props => props.theme.borders.radius};
+  background: ${props => props.theme.colors.backgrounds.white};
+  min-height: 150px;
+  resize: vertical;
+  transition: all 0.2s ease;
 
   &:focus {
-    border-color: ${props => props.theme.colors.accent.primary};
     outline: none;
-    box-shadow: 0 0 0 3px ${props => `${props.theme.colors.accent.primary}15`};
+    border-color: ${props => props.$hasError ? props.theme.colors.status.error : props.theme.colors.accent.primary};
+    box-shadow: 0 0 0 2px ${props => props.$hasError ? `${props.theme.colors.status.error}20` : `${props.theme.colors.accent.primary}20`};
   }
 `;
 
@@ -368,12 +340,25 @@ const formFieldVariants = {
   })
 };
 
+const ValidationMessage = styled(motion.span)`
+  color: ${props => props.theme.colors.status.error};
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+`;
+
 // Component Implementation
 const ContactForm: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string>('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [contactInfo, setContactInfo] = useState<{ email: string; phone: string; address: string } | null>(null);
   const [loadingContact, setLoadingContact] = useState(false);
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    message?: string;
+    phone?: string;
+  }>({});
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -520,6 +505,30 @@ const ContactForm: React.FC = () => {
     exit: { opacity: 0, y: -10 }
   };
 
+  const validateField = (name: string, value: string) => {
+    switch (name) {
+      case 'name':
+        return value.length < 2 ? 'Le nom doit contenir au moins 2 caractères' : '';
+      case 'email':
+        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Veuillez entrer une adresse email valide' : '';
+      case 'message':
+        return value.length < 10 ? 'Le message doit contenir au moins 10 caractères' : '';
+      case 'phone':
+        return value && !/^[+\d\s-()]{6,}$/.test(value) ? 'Veuillez entrer un numéro de téléphone valide' : '';
+      default:
+        return '';
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
+    }));
+  };
+
   return (
     <>
       <NextSeo
@@ -560,36 +569,79 @@ const ContactForm: React.FC = () => {
                   <motion.div variants={formFieldVariants} custom={0}>
                     <FormField>
                       <Label htmlFor="name">Nom complet</Label>
-                      <Input 
-                        type="text" 
-                        id="name" 
-                        name="name" 
-                        required 
+                      <Input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        onBlur={handleBlur}
+                        $hasError={!!errors.name}
+                        disabled={status === 'submitting'}
                       />
+                      <AnimatePresence>
+                        {errors.name && (
+                          <ValidationMessage
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                          >
+                            {errors.name}
+                          </ValidationMessage>
+                        )}
+                      </AnimatePresence>
                     </FormField>
                   </motion.div>
 
                   <motion.div variants={formFieldVariants} custom={1}>
                     <FormField>
                       <Label htmlFor="email">Adresse email</Label>
-                      <Input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required 
+                      <Input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        onBlur={handleBlur}
+                        $hasError={!!errors.email}
+                        disabled={status === 'submitting'}
                       />
+                      <AnimatePresence>
+                        {errors.email && (
+                          <ValidationMessage
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                          >
+                            {errors.email}
+                          </ValidationMessage>
+                        )}
+                      </AnimatePresence>
                     </FormField>
                   </motion.div>
 
                   <motion.div variants={formFieldVariants} custom={2}>
                     <FormField>
                       <Label htmlFor="phone" optional>Téléphone</Label>
-                      <Input 
-                        type="tel" 
-                        id="phone" 
+                      <Input
+                        type="tel"
+                        id="phone"
                         name="phone"
+                        placeholder="Votre téléphone (optionnel)"
                         optional
+                        onBlur={handleBlur}
+                        $hasError={!!errors.phone}
+                        disabled={status === 'submitting'}
                       />
+                      <AnimatePresence>
+                        {errors.phone && (
+                          <ValidationMessage
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                          >
+                            {errors.phone}
+                          </ValidationMessage>
+                        )}
+                      </AnimatePresence>
                     </FormField>
                   </motion.div>
 
@@ -598,7 +650,7 @@ const ContactForm: React.FC = () => {
                       <Label optional>Service souhaité</Label>
                       <ServiceOptions>
                         {services.map(service => (
-                          <ServiceCard 
+                          <ServiceCard
                             key={service.id}
                             selected={selectedService === service.id}
                             onClick={() => setSelectedService(service.id)}
@@ -625,12 +677,26 @@ const ContactForm: React.FC = () => {
                   <motion.div variants={formFieldVariants} custom={4}>
                     <FormField>
                       <Label htmlFor="message">Votre message</Label>
-                      <TextArea 
-                        id="message" 
-                        name="message" 
+                      <TextArea
+                        id="message"
+                        name="message"
                         required
                         placeholder="Parlez-nous de votre projet..."
+                        onBlur={handleBlur}
+                        $hasError={!!errors.message}
+                        disabled={status === 'submitting'}
                       />
+                      <AnimatePresence>
+                        {errors.message && (
+                          <ValidationMessage
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                          >
+                            {errors.message}
+                          </ValidationMessage>
+                        )}
+                      </AnimatePresence>
                     </FormField>
                   </motion.div>
 
@@ -640,12 +706,12 @@ const ContactForm: React.FC = () => {
                     initial="idle"
                     whileHover="hover"
                     whileTap="tap"
-                    animate={status === 'loading' ? 'loading' : 'idle'}
-                    disabled={status === 'loading' || status === 'success'}
+                    animate={status === 'submitting' ? 'loading' : 'idle'}
+                    disabled={status === 'submitting' || status === 'success'}
                   >
-                    {status === 'loading' ? 'Envoi en cours...' : 'Envoyer'}
+                    {status === 'submitting' ? 'Envoi en cours...' : 'Envoyer'}
                     <AnimatePresence>
-                      {status === 'loading' && (
+                      {status === 'submitting' && (
                         <LoadingSpinner
                           as={motion.div}
                           variants={spinnerVariants}
@@ -687,8 +753,8 @@ const ContactForm: React.FC = () => {
               <RightColumn>
                 <ContactInfo>
                   {!contactInfo ? (
-                    <RevealButton 
-                      onClick={handleRevealContact} 
+                    <RevealButton
+                      onClick={handleRevealContact}
                       disabled={loadingContact}
                     >
                       {loadingContact ? (
@@ -704,18 +770,18 @@ const ContactForm: React.FC = () => {
                       ) : (
                         <>
                           <span>Voir nos coordonnées</span>
-                          <svg 
-                            width="16" 
-                            height="16" 
-                            viewBox="0 0 16 16" 
-                            fill="none" 
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path 
-                              d="M6 12L10 8L6 4" 
-                              stroke="currentColor" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M6 12L10 8L6 4"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>
@@ -750,7 +816,10 @@ const ContactForm: React.FC = () => {
                     alt="Photo professionnelle"
                     fill
                     style={{ objectFit: 'cover' }}
-                    priority
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 1200'%3E%3Crect width='600' height='1200' fill='%23999999'/%3E%3C/svg%3E"
+                    priority={false}
                   />
                 </ImageContainer>
               </RightColumn>

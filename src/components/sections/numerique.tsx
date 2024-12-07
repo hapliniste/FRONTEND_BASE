@@ -458,6 +458,9 @@ const FeatureSection: React.FC<{ feature: Feature; index: number }> = ({ feature
               sizes="(max-width: 768px) 100vw, 50vw"
               style={{ objectFit: 'cover' }}
               priority={index === 0}
+              loading={index === 0 ? undefined : "lazy"}
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='1200' height='800' fill='%23999999'/%3E%3C/svg%3E"
             />
           </motion.div>
         </ImageSection>
@@ -603,3 +606,4 @@ const Numerique: React.FC = () => {
 };
 
 export default Numerique; 
+
