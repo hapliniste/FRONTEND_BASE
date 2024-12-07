@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Montserrat } from "next/font/google";
 import { AppConfig } from "@/utils/appConfig";
 import { HamburgerMenu } from "@/components/library/hamburgerMenu";
+import { motion } from 'framer-motion';
 
 const montserrat = Montserrat({ 
     subsets: ["latin"],
@@ -155,6 +156,8 @@ const NavButton = styled.button`
         transform: translateY(-1px);
         box-shadow: 0 4px 12px ${({ theme }) => `${theme.colors.accent.primary}30`};
     }
+
+    transition: all 0.2s ease;
 `;
 
 const ContentWrapper = styled.div`
@@ -166,6 +169,30 @@ const ContentWrapper = styled.div`
     background: ${(props) => props.theme.colors.backgrounds.default};
 `;
 
+const NavLink = styled(motion.a)`
+    color: ${props => props.theme.colors.text.primary};
+    text-decoration: none;
+    padding: ${props => `${props.theme.spacing.small} ${props.theme.spacing.medium}`};
+    border-radius: ${props => props.theme.borders.radius};
+    transition: all 0.2s ease;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: ${props => props.theme.colors.accent.primary};
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    &:hover::after {
+        width: 80%;
+    }
+`;
 
 
 const Main = (props: IMainProps) => {
@@ -225,13 +252,28 @@ const Main = (props: IMainProps) => {
                     </StyledLink>
                     <NavLinks scrolled={scrolled}>
                         <NavSection>
-                            <StyledLink href="/#services">
+                            <NavLink
+                                as={motion.a}
+                                href="/#services"
+                                whileHover={{ y: -2 }}
+                                whileTap={{ y: 0 }}
+                            >
                                 Services
-                            </StyledLink>
-                            <StyledLink href="/#valeurs">
+                            </NavLink>
+                            <NavLink
+                                as={motion.a}
+                                href="/#valeurs"
+                                whileHover={{ y: -2 }}
+                                whileTap={{ y: 0 }}
+                            >
                                 Notre Approche
-                            </StyledLink>
-                            <NavButton onClick={() => window.location.href = '/#contact'}>
+                            </NavLink>
+                            <NavButton
+                                as={motion.button}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => window.location.href = '/#contact'}
+                            >
                                 Nous Contacter
                             </NavButton>
                         </NavSection>

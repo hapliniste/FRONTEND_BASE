@@ -4,6 +4,7 @@ import Carousel from "@/components/library/carousel";
 import ImageCard from "@/components/library/imageCard";
 import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
+import { motion } from 'framer-motion';
 
 interface ValeurCardProps {
   title: string;
@@ -96,20 +97,7 @@ const CardImage = styled.div`
   font-size: 3rem;
 `;
 
-const CardContent = styled.div`
-  flex: 1;
-  padding: ${({theme}) => theme.spacing.medium};
 
-  @media (max-width: 768px) {
-    padding: ${({theme}) => `${theme.spacing.medium} ${theme.spacing.small}`};
-  }
-`;
-
-const CardTitle = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: ${({theme}) => theme.spacing.medium};
-  color: ${({theme}) => theme.colors.base.dark};
-`;
 
 const CardDescription = styled.p`
   font-size: ${({theme}) => theme.typography.fontSize};
@@ -174,6 +162,41 @@ const TechList = styled.ul`
     justify-content: space-evenly;
     gap: ${({theme}) => theme.spacing.small};
   }
+`;
+
+const CardIcon = styled(motion.div)`
+    font-size: 2em;
+    margin-bottom: ${({theme}) => theme.spacing.medium};
+    transition: all 0.3s ease;
+`;
+
+const CardTitle = styled(motion.h3)`
+    font-size: 1.5rem;
+    margin-bottom: ${({theme}) => theme.spacing.medium};
+    color: ${({theme}) => theme.colors.base.dark};
+`;
+
+const CardContent = styled(motion.div)`
+    flex: 1;
+    padding: ${({theme}) => theme.spacing.medium};
+
+    p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        color: ${({theme}) => theme.colors.text.secondary};
+    }
+
+    @media (max-width: 768px) {
+        padding: ${({theme}) => `${theme.spacing.medium} ${theme.spacing.small}`};
+    }
+`;
+
+const Card = styled(motion.div)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: ${({theme}) => theme.spacing.medium};
 `;
 
 const cardContent: ValeurCardProps[] = [

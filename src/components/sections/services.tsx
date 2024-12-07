@@ -6,6 +6,7 @@ import TabCarousel from '@/components/library/TabCarousel';
 import Image from 'next/image';
 import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
+import { motion } from 'framer-motion';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
 
@@ -65,16 +66,11 @@ const CardImageWrapper = styled.div`
     }
 `;
 
-const CardBody = styled.div`
+const CardBody = styled(motion.div)`
     padding: 2.5rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-
-    @media (max-width: 768px) {
-        padding: 1.25rem;
-    }
 `;
 
 const CardHeader = styled.div`
@@ -89,38 +85,28 @@ const CardHeader = styled.div`
     }
 `;
 
-const CardIcon = styled.div`
+const CardIcon = styled(motion.div)`
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100px;
     height: 100px;
-    background: ${({theme}) => `${theme.accentPrimary}12`};
+    background: ${({theme}) => `${theme.colors.accent.primary}12`};
     border-radius: 12px;
     padding: 1.25rem;
+    transition: all 0.3s ease;
 
-    @media (max-width: 768px) {
-        width: 70px;
-        height: 70px;
-        padding: 0.875rem;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+    &:hover {
+        transform: scale(1.05);
+        background: ${({theme}) => `${theme.colors.accent.primary}20`};
     }
 `;
 
-const CardTitle = styled.h3`
+const CardTitle = styled(motion.h3)`
     font-size: 1.75rem;
     font-weight: 600;
-    color: ${({theme}) => theme.baseDark};
+    color: ${({theme}) => theme.colors.text.primary};
     margin: 0;
-
-    @media (max-width: 768px) {
-        font-size: 1.5rem;
-    }
 `;
 
 const CardDescription = styled.p`
@@ -146,28 +132,30 @@ const FeaturesList = styled.ul`
     }
 `;
 
-const FeatureItem = styled.li`
+const FeatureItem = styled(motion.li)`
     display: flex;
     align-items: center;
     gap: 0.75rem;
     font-size: 1rem;
-    color: ${({theme}) => theme.baseMedium};
+    color: ${({theme}) => theme.colors.text.secondary};
     margin-bottom: 0.75rem;
-    
-    @media (max-width: 768px) {
-        font-size: 1rem;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
     
     &:before {
         content: "✓";
-        color: ${({theme}) => theme.accentPrimary};
+        color: ${({theme}) => theme.colors.accent.primary};
         font-weight: bold;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
+    }
+
+    &:hover:before {
+        opacity: 1;
+        transform: scale(1);
     }
 `;
 
-const PriceTag = styled.div`
+const PriceTag = styled(motion.div)`
     font-size: 1.5rem;
     font-weight: 600;
     color: ${({theme}) => theme.baseDark};
@@ -197,9 +185,16 @@ const services = [
                         priority
                     />
                 </CardImageWrapper>
-                <CardBody>
+                <CardBody
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <CardHeader>
-                        <CardIcon>
+                        <CardIcon
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
                             <Image
                                 src="/icon_website.png"
                                 alt="Site web standard icon"
@@ -213,12 +208,41 @@ const services = [
                     Parfait pour présenter votre entreprise, trouver de nouveaux clients et regrouper vos informations en un endroit accessible à tous.
                     </CardDescription>
                     <FeaturesList>
-                        <FeatureItem>Design moderne adapté à tous les appareils</FeatureItem>
-                        <FeatureItem>Optimisé pour le référencement (SEO)</FeatureItem>
-                        <FeatureItem>Mise à jour facile du contenu</FeatureItem>
-                        <FeatureItem>Options d&apos;hébergement suisse</FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            Design moderne adapté à tous les appareils
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            Optimisé pour le référencement (SEO)
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            Mise à jour facile du contenu
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            Options d&apos;hébergement suisse
+                        </FeatureItem>
                     </FeaturesList>
-                    <PriceTag>À partir de 500 CHF</PriceTag>
+                    <PriceTag
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        500 CHF
+                    </PriceTag>
                 </CardBody>
             </CardContainer>
         ),
@@ -236,9 +260,16 @@ const services = [
                         style={{ objectFit: 'cover' }}
                     />
                 </CardImageWrapper>
-                <CardBody>
+                <CardBody
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <CardHeader>
-                        <CardIcon>
+                        <CardIcon
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
                             <Image
                                 src="/icon_customdev.png"
                                 alt="Développement sur mesure icon"
@@ -253,12 +284,41 @@ const services = [
                         de l&apos;application métier à la plateforme collaborative.
                     </CardDescription>
                     <FeaturesList>
-                        <FeatureItem>Architecture moderne</FeatureItem>
-                        <FeatureItem>Intégration avec vos outils existants</FeatureItem>
-                        <FeatureItem>Sécurité et performance optimales</FeatureItem>
-                        <FeatureItem>Hébergement haute disponibilité</FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            Architecture moderne
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            Intégration avec vos outils existants
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            Sécurité et performance optimales
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            Hébergement haute disponibilité
+                        </FeatureItem>
                     </FeaturesList>
-                    <PriceTag>Sur devis</PriceTag>
+                    <PriceTag
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        Sur devis
+                    </PriceTag>
                 </CardBody>
             </CardContainer>
         ),
@@ -276,9 +336,16 @@ const services = [
                         style={{ objectFit: 'cover' }}
                     />
                 </CardImageWrapper>
-                <CardBody>
+                <CardBody
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <CardHeader>
-                        <CardIcon>
+                        <CardIcon
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
                             <Image
                                 src="/icon_assistant.png"
                                 alt="Assistant IA icon"
@@ -293,13 +360,48 @@ const services = [
                         aux questions de vos clients ou de votre équipe.
                     </CardDescription>
                     <FeaturesList>
-                        <FeatureItem>IA dernière génération</FeatureItem>
-                        <FeatureItem>Intégration de vos données</FeatureItem>
-                        <FeatureItem>Disponible 24/7</FeatureItem>
-                        <FeatureItem>Mises à jour automatiques</FeatureItem>
-                        <FeatureItem>Restez maître de vos données</FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            IA dernière génération
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            Intégration de vos données
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            Disponible 24/7
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            Mises à jour automatiques
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            Restez maître de vos données
+                        </FeatureItem>
                     </FeaturesList>
-                    <PriceTag>Dès 500 CHF + coûts d&apos;utilisation</PriceTag>
+                    <PriceTag
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        500 CHF + coûts d&apos;utilisation
+                    </PriceTag>
                 </CardBody>
             </CardContainer>
         ),
@@ -317,21 +419,59 @@ const services = [
                         style={{ objectFit: 'cover' }}
                     />
                 </CardImageWrapper>
-                <CardBody>
+                <CardBody
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <CardHeader>
-                        <CardIcon>☁️</CardIcon>
+                        <CardIcon
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            ☁️
+                        </CardIcon>
                         <CardTitle>Hébergement web</CardTitle>
                     </CardHeader>
                     <CardDescription>
                         Une solution d&apos;hébergement web suisse fiable et sécurisée pour votre site web ou application demandante. 
                     </CardDescription>
                     <FeaturesList>
-                        <FeatureItem>Serveurs en Suisse</FeatureItem>
-                        <FeatureItem>Certificat SSL pour une connexion sécurisée</FeatureItem>
-                        <FeatureItem>Sauvegardes automatiques</FeatureItem>
-                        <FeatureItem>Performant et extensible</FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            Serveurs en Suisse
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            Certificat SSL pour une connexion sécurisée
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            Sauvegardes automatiques
+                        </FeatureItem>
+                        <FeatureItem
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            Performant et extensible
+                        </FeatureItem>
                     </FeaturesList>
-                    <PriceTag>10 CHF / mois</PriceTag>
+                    <PriceTag
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        10 CHF / mois
+                    </PriceTag>
                 </CardBody>
             </CardContainer>
         ),

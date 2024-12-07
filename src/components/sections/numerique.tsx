@@ -36,7 +36,7 @@ const FeatureRow = styled(motion.div)<{ reverse?: boolean }>`
   }
 `;
 
-const ContentImageWrapper = styled.div<{ reverse?: boolean }>`
+const ContentImageWrapper = styled(motion.div)<{ reverse?: boolean }>`
   display: flex;
   flex-direction: column;
   
@@ -47,7 +47,7 @@ const ContentImageWrapper = styled.div<{ reverse?: boolean }>`
   }
 `;
 
-const ImageSection = styled.div`
+const ImageSection = styled(motion.div)`
   flex: 1.2;
   height: 400px;
   position: relative;
@@ -61,7 +61,7 @@ const ImageSection = styled.div`
   }
 `;
 
-const ContentSection = styled.div`
+const ContentSection = styled(motion.div)`
   flex: 1;
   max-width: 600px;
   padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
@@ -102,7 +102,7 @@ const BulletItem = styled.li`
   }
 `;
 
-const StatsList = styled.div`
+const StatsList = styled(motion.div)`
   display: flex;
   gap: ${props => props.theme.spacing.large};
   margin-top: ${props => props.theme.spacing.medium};
@@ -124,7 +124,7 @@ const StatItem = styled(motion.div)`
   min-width: 200px;
 `;
 
-const StatNumber = styled.span`
+const StatNumber = styled(motion.span)`
   font-size: 2.5rem;
   font-weight: 300;
   color: ${props => props.theme.colors.text.primary};
@@ -282,7 +282,103 @@ const features: Feature[] = [
   }
 ];
 
-// Updated AnimatedNumber component
+// Update the animation variants with correct easing curves
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.2,
+      ease: "easeOut"
+    }
+  }
+};
+
+const featureVariants = {
+  hidden: (index: number) => ({
+    opacity: 0,
+    x: index % 2 === 0 ? -100 : 100,
+  }),
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
+  }
+};
+
+const imageVariants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0.8,
+    y: 50
+  },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+      ease: "easeOut"
+    }
+  }
+};
+
+const contentVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 30 
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const statsListVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.4,
+      ease: "easeOut"
+    }
+  }
+};
+
+const statItemVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 20,
+    scale: 0.9
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  },
+  hover: {
+    scale: 1.05,
+    transition: {
+      duration: 0.3,
+      ease: "easeOut"
+    }
+  }
+};
+
+// Updated AnimatedNumber component with correct easing
 const AnimatedNumber: React.FC<{ value: string }> = ({ value }) => {
   const numberRef = React.useRef<HTMLSpanElement>(null);
   const { ref: inViewRef, inView } = useInView({ 
@@ -293,11 +389,10 @@ const AnimatedNumber: React.FC<{ value: string }> = ({ value }) => {
   React.useEffect(() => {
     const node = numberRef.current;
     if (node && inView) {
-      // Handle range values like "15-50%"
       if (value.includes('-')) {
         const [start, end] = value.split('-').map(v => parseInt(v));
         const controls = animate(0, end, {
-          duration: 2,
+          duration: 2.5,
           ease: "easeOut",
           onUpdate: (v) => {
             node.textContent = `${start}-${Math.round(v)}%`;
@@ -305,7 +400,6 @@ const AnimatedNumber: React.FC<{ value: string }> = ({ value }) => {
         });
         return () => controls.stop();
       } else {
-        // Handle regular percentage values
         const numberValue = parseInt(value);
         const controls = animate(0, numberValue, {
           duration: 2,
@@ -320,43 +414,42 @@ const AnimatedNumber: React.FC<{ value: string }> = ({ value }) => {
   }, [inView, value]);
 
   return (
-    <span ref={(el) => {
-      numberRef.current = el;
-      inViewRef(el);
-    }}>
+    <motion.span
+      ref={(el) => {
+        numberRef.current = el;
+        inViewRef(el);
+      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       {value.includes('-') ? value : '0%'}
-    </span>
+    </motion.span>
   );
 };
 
 const FeatureSection: React.FC<{ feature: Feature; index: number }> = ({ feature, index }) => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
-  const controls = useAnimation();
-
-  React.useEffect(() => {
-    if (inView) {
-      controls.start(`visible${index}`);
-    }
-  }, [inView, controls, index]);
+  const [ref, inView] = useInView({ 
+    threshold: 0.2, 
+    triggerOnce: true,
+    rootMargin: "0px 0px -10% 0px"
+  });
 
   return (
     <FeatureRow
       ref={ref}
+      custom={index}
+      variants={featureVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      variants={{
-        visible: { opacity: 1, x: 0 },
-        hidden: { opacity: 0, x: index % 2 === 0 ? -50 : 50 }
-      }}
-      transition={{ duration: 0.6 }}
     >
       <ContentImageWrapper reverse={index % 2 === 1}>
-        <ImageSection>
+        <ImageSection
+          variants={imageVariants}
+        >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
             style={{ width: '100%', height: '100%', position: 'relative' }}
+            variants={imageVariants}
           >
             <Image
               src={`https://placehold.co/1200x800/999999/666666.png?text=${feature.title.replace(/ /g, '+')}`}
@@ -369,24 +462,38 @@ const FeatureSection: React.FC<{ feature: Feature; index: number }> = ({ feature
           </motion.div>
         </ImageSection>
 
-        <ContentSection>
+        <ContentSection
+          variants={contentVariants}
+        >
           <FeatureTitle>{feature.title}</FeatureTitle>
           <FeatureText>{feature.content.mainText}</FeatureText>
           <BulletList>
             {feature.content.bulletPoints.map((point, bulletIndex) => (
-              <BulletItem key={bulletIndex}>{point}</BulletItem>
+              <motion.li
+                key={bulletIndex}
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ 
+                  duration: 0.5, 
+                  delay: 0.3 + bulletIndex * 0.1,
+                  ease: "easeOut"
+                }}
+              >
+                {point}
+              </motion.li>
             ))}
           </BulletList>
         </ContentSection>
       </ContentImageWrapper>
       
-      <StatsList>
+      <StatsList
+        variants={statsListVariants}
+      >
         {feature.stats.map((stat, statIndex) => (
           <StatItem
             key={stat.text}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: statIndex * 0.2 }}
+            variants={statItemVariants}
+            whileHover="hover"
           >
             <StatNumber>
               {stat.value.includes('%') ? (

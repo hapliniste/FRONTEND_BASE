@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { montserrat } from '@/styles/theme';
 import { NextSeo } from 'next-seo';
@@ -75,7 +75,7 @@ const Subtitle = styled.p`
 `;
 
 // Form Components
-const Form = styled.form`
+const Form = styled(motion.form)`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.medium};
@@ -109,17 +109,30 @@ const Label = styled.label<{ optional?: boolean }>`
   `}
 `;
 
-const Input = styled.input`
+const Input = styled(motion.input)<{ optional?: boolean }>`
   padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.large}`};
   border: 2px solid ${props => props.theme.colors.borders.color};
   border-radius: 999px;
   font-size: 1rem;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   box-sizing: border-box;
+  background: transparent;
+  color: ${props => props.theme.colors.text.primary};
 
   @media (max-width: 768px) {
     padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.medium}`};
+  }
+
+  &::placeholder {
+    color: ${props => props.theme.colors.text.secondary};
+    opacity: 0.7;
+  }
+
+  &:hover {
+    border-color: ${props => props.optional ? 
+      props.theme.colors.accent.primary : 
+      props.theme.colors.accent.primary};
   }
 
   &:focus {
@@ -129,15 +142,26 @@ const Input = styled.input`
   }
 `;
 
-const TextArea = styled.textarea`
+const TextArea = styled(motion.textarea)`
   padding: ${props => props.theme.spacing.medium};
   border: 2px solid ${props => props.theme.colors.borders.color};
   border-radius: ${props => props.theme.borders.radius};
   font-size: 1rem;
   min-height: 150px;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   box-sizing: border-box;
+  background: transparent;
+  color: ${props => props.theme.colors.text.primary};
+
+  &::placeholder {
+    color: ${props => props.theme.colors.text.secondary};
+    opacity: 0.7;
+  }
+
+  &:hover {
+    border-color: ${props => props.theme.colors.accent.primary};
+  }
 
   &:focus {
     border-color: ${props => props.theme.colors.accent.primary};
@@ -225,27 +249,38 @@ const ContactText = styled.span`
   text-align: left;
 `;
 
-const RevealButton = styled.button`
-  background: none;
+const RevealButton = styled(motion.button)`
+  background: transparent;
   border: none;
   color: ${props => props.theme.colors.accent.primary};
-  font-size: 1rem;
-  padding: 0;
+  font-size: 1.2rem;
+  padding: ${props => props.theme.spacing.medium};
   cursor: pointer;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: ${props => props.theme.spacing.small};
   margin: 0 auto;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-family: ${props => props.theme.typography.titleFontFamily};
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: ${props => props.theme.colors.accent.light};
-    text-decoration: underline;
   }
 
   &:disabled {
     opacity: 0.7;
     cursor: wait;
+  }
+
+  svg {
+    transition: transform 0.2s ease;
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover:not(:disabled) svg {
+    transform: translateX(4px);
   }
 `;
 
@@ -257,26 +292,46 @@ const ContactDetails = styled(motion.div)`
 `;
 
 // Button Components
-const SubmitButton = styled.button`
-  padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.large}`};
+const SubmitButton = styled(motion.button)`
   background: ${props => props.theme.colors.accent.primary};
-  color: ${props => props.theme.colors.basic.white};
+  color: white;
   border: none;
-  border-radius: 999px;
-  font-weight: 600;
+  border-radius: ${props => props.theme.borders.radius};
+  padding: ${props => `${props.theme.spacing.medium} ${props.theme.spacing.large}`};
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: ${props => props.theme.colors.accent.light};
-    transform: translateY(-2px);
-  }
+  width: 100%;
+  transition: background 0.3s ease;
+  position: relative;
+  overflow: hidden;
 
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
   }
+
+  &:hover:not(:disabled) {
+    background: ${props => props.theme.colors.accent.light};
+  }
+`;
+
+const StatusMessage = styled(motion.div)<{ $status: 'success' | 'error' }>`
+  color: ${props => props.$status === 'success' ? props.theme.colors.success : props.theme.colors.error};
+  margin-top: ${props => props.theme.spacing.medium};
+  text-align: center;
+  font-weight: 500;
+`;
+
+const LoadingSpinner = styled(motion.div)`
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  right: ${props => props.theme.spacing.medium};
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 // New image container
@@ -298,6 +353,20 @@ const RightColumn = styled.div`
   flex-direction: column;
   height: 100%;
 `;
+
+// Add form field animation variants
+const formFieldVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      delay: custom * 0.1,
+      ease: "easeOut"
+    }
+  })
+};
 
 // Component Implementation
 const ContactForm: React.FC = () => {
@@ -427,6 +496,30 @@ const ContactForm: React.FC = () => {
     }
   };
 
+  const buttonVariants = {
+    idle: { scale: 1 },
+    hover: { scale: 1.02 },
+    tap: { scale: 0.98 },
+    loading: { opacity: 0.8 }
+  };
+
+  const spinnerVariants = {
+    loading: {
+      rotate: 360,
+      transition: {
+        duration: 1,
+        repeat: Infinity,
+        ease: "linear"
+      }
+    }
+  };
+
+  const messageVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -10 }
+  };
+
   return (
     <>
       <NextSeo
@@ -452,96 +545,141 @@ const ContactForm: React.FC = () => {
                 <Title className={montserrat.className}>Contactez-nous</Title>
                 <Subtitle>Nous serions ravis d&apos;en savoir plus sur votre projet !</Subtitle>
                 
-                <Form onSubmit={handleSubmit}>
-                  <FormField>
-                    <Label htmlFor="name">Nom complet</Label>
-                    <Input 
-                      type="text" 
-                      id="name" 
-                      name="name" 
-                      required 
-                    />
-                  </FormField>
+                <Form
+                  onSubmit={handleSubmit}
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.1
+                      }
+                    }
+                  }}
+                >
+                  <motion.div variants={formFieldVariants} custom={0}>
+                    <FormField>
+                      <Label htmlFor="name">Nom complet</Label>
+                      <Input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required 
+                      />
+                    </FormField>
+                  </motion.div>
 
-                  <FormField>
-                    <Label htmlFor="email">Adresse email</Label>
-                    <Input 
-                      type="email" 
-                      id="email" 
-                      name="email" 
-                      required 
-                    />
-                  </FormField>
+                  <motion.div variants={formFieldVariants} custom={1}>
+                    <FormField>
+                      <Label htmlFor="email">Adresse email</Label>
+                      <Input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                      />
+                    </FormField>
+                  </motion.div>
 
-                  <FormField>
-                    <Label htmlFor="phone" optional>Téléphone</Label>
-                    <Input 
-                      type="tel" 
-                      id="phone" 
-                      name="phone" 
-                    />
-                  </FormField>
+                  <motion.div variants={formFieldVariants} custom={2}>
+                    <FormField>
+                      <Label htmlFor="phone" optional>Téléphone</Label>
+                      <Input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone"
+                        optional
+                      />
+                    </FormField>
+                  </motion.div>
 
-                  <FormField>
-                    <Label optional>Service souhaité</Label>
-                    <ServiceOptions>
-                      {services.map(service => (
-                        <ServiceCard 
-                          key={service.id}
-                          selected={selectedService === service.id}
-                          onClick={() => setSelectedService(service.id)}
-                        >
-                          <ServiceTitle>{service.title}</ServiceTitle>
-                          <ServiceDescription>{service.description}</ServiceDescription>
-                          <input
-                            type="radio"
-                            name="service"
-                            value={service.id}
-                            checked={selectedService === service.id}
-                            onChange={() => setSelectedService(service.id)}
-                            style={{ display: 'none' }}
-                          />
-                        </ServiceCard>
-                      ))}
-                    </ServiceOptions>
-                  </FormField>
+                  <motion.div variants={formFieldVariants} custom={3}>
+                    <FormField>
+                      <Label optional>Service souhaité</Label>
+                      <ServiceOptions>
+                        {services.map(service => (
+                          <ServiceCard 
+                            key={service.id}
+                            selected={selectedService === service.id}
+                            onClick={() => setSelectedService(service.id)}
+                            as={motion.label}
+                            whileHover={{ y: -4, scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <ServiceTitle>{service.title}</ServiceTitle>
+                            <ServiceDescription>{service.description}</ServiceDescription>
+                            <input
+                              type="radio"
+                              name="service"
+                              value={service.id}
+                              checked={selectedService === service.id}
+                              onChange={() => setSelectedService(service.id)}
+                              style={{ display: 'none' }}
+                            />
+                          </ServiceCard>
+                        ))}
+                      </ServiceOptions>
+                    </FormField>
+                  </motion.div>
 
-                  <FormField>
-                    <Label htmlFor="message">Votre message</Label>
-                    <TextArea 
-                      id="message" 
-                      name="message" 
-                      required
-                      placeholder="Parlez-nous de votre projet..."
-                    />
-                  </FormField>
+                  <motion.div variants={formFieldVariants} custom={4}>
+                    <FormField>
+                      <Label htmlFor="message">Votre message</Label>
+                      <TextArea 
+                        id="message" 
+                        name="message" 
+                        required
+                        placeholder="Parlez-nous de votre projet..."
+                      />
+                    </FormField>
+                  </motion.div>
 
-                  <SubmitButton 
-                    type="submit" 
-                    disabled={status === 'submitting'}
+                  <SubmitButton
+                    as={motion.button}
+                    variants={buttonVariants}
+                    initial="idle"
+                    whileHover="hover"
+                    whileTap="tap"
+                    animate={status === 'loading' ? 'loading' : 'idle'}
+                    disabled={status === 'loading' || status === 'success'}
                   >
-                    {status === 'submitting' ? 'Envoi en cours...' : 'Envoyer le message'}
+                    {status === 'loading' ? 'Envoi en cours...' : 'Envoyer'}
+                    <AnimatePresence>
+                      {status === 'loading' && (
+                        <LoadingSpinner
+                          as={motion.div}
+                          variants={spinnerVariants}
+                          animate="loading"
+                          exit={{ opacity: 0 }}
+                        />
+                      )}
+                    </AnimatePresence>
                   </SubmitButton>
 
-                  {status === 'success' && (
-                    <motion.p
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      style={{ color: '#34C759', marginTop: '1rem' }}
-                    >
-                      Merci de nous avoir contactés ! Nous reviendrons vers vous rapidement.
-                    </motion.p>
-                  )}
-
-                  {status === 'error' && (
-                    <motion.p
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      style={{ color: '#FF3B30', marginTop: '1rem' }}
-                    >
-                      Une erreur s&apos;est produite. Veuillez réessayer ou nous contacter directement.
-                    </motion.p>
-                  )}
+                  <AnimatePresence mode="wait">
+                    {status === 'success' && (
+                      <StatusMessage
+                        $status="success"
+                        variants={messageVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                      >
+                        Message envoyé avec succès !
+                      </StatusMessage>
+                    )}
+                    {status === 'error' && (
+                      <StatusMessage
+                        $status="error"
+                        variants={messageVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                      >
+                        Une erreur est survenue. Veuillez réessayer.
+                      </StatusMessage>
+                    )}
+                  </AnimatePresence>
                 </Form>
               </div>
 
@@ -565,7 +703,22 @@ const ContactForm: React.FC = () => {
                         </>
                       ) : (
                         <>
-                          <span>Cliquez ici pour afficher nos coordonnées</span>
+                          <span>Voir nos coordonnées</span>
+                          <svg 
+                            width="16" 
+                            height="16" 
+                            viewBox="0 0 16 16" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path 
+                              d="M6 12L10 8L6 4" 
+                              stroke="currentColor" 
+                              strokeWidth="2" 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round"
+                            />
+                          </svg>
                         </>
                       )}
                     </RevealButton>
