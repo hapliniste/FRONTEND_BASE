@@ -77,7 +77,7 @@ const MenuPopup = styled.div<{ isOpen: boolean }>`
     }
 `;
 
-const MobileLink = styled(Link)`
+const MobileLink = styled.div`
     display: block;
     padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
     font-size: 1rem;
@@ -85,11 +85,24 @@ const MobileLink = styled(Link)`
     color: ${({ theme }) => theme.colors.text.primary};
     transition: all 0.2s ease;
     border-radius: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     
     &:hover {
         background: ${({ theme }) => `${theme.colors.accent.primary}10`};
         color: ${({ theme }) => theme.colors.accent.primary};
     }
+`;
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
 `;
 
 const Divider = styled.div`
@@ -98,8 +111,15 @@ const Divider = styled.div`
     margin: ${({ theme }) => theme.spacing.xsmall} ${({ theme }) => theme.spacing.small};
 `;
 
+interface NavLink {
+    href?: string;
+    label: string;
+    icon?: React.ReactNode;
+    onClick?: () => void;
+}
+
 interface HamburgerMenuProps {
-    links: Array<{ href: string; label: string }>;
+    links: NavLink[];
 }
 
 export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
@@ -141,12 +161,22 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
             
             <MenuPopup ref={menuRef} isOpen={isOpen}>
                 {links.map((link, index) => (
-                    <React.Fragment key={link.href}>
-                        <MobileLink 
-                            href={link.href}
-                            onClick={handleClick}
-                        >
-                            {link.label}
+                    <React.Fragment key={link.label}>
+                        <MobileLink>
+                            {link.href ? (
+                                <StyledLink href={link.href} onClick={handleClick}>
+                                    {link.icon}
+                                    {link.label}
+                                </StyledLink>
+                            ) : (
+                                <div onClick={() => {
+                                    if (link.onClick) link.onClick();
+                                    handleClick();
+                                }}>
+                                    {link.icon}
+                                    {link.label}
+                                </div>
+                            )}
                         </MobileLink>
                         {index < links.length - 1 && <Divider />}
                     </React.Fragment>

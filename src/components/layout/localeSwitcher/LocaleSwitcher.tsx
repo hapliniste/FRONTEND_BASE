@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import * as Flags from 'country-flag-icons/react/3x2';
 
 const LocaleSwitcherWrapper = styled.div`
     position: relative;
@@ -10,46 +11,46 @@ const LocaleSwitcherWrapper = styled.div`
     z-index: 1000;
 `;
 
+const LocaleDropdownContainer = styled.div`
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 0.5rem);
+    z-index: 1000;
+`;
+
 const LocaleButton = styled(motion.button)`
-    padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
-    background: ${({ theme }) => theme.colors.backgrounds.default};
-    border: none;
-    border-radius: 99em;
-    color: ${({ theme }) => theme.colors.text.primary};
-    font-size: ${({ theme }) => theme.typography.fontSize};
-    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
-    min-width: 72px;
     justify-content: center;
-    
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    border-radius: 2px;
+    max-width: 2.5em;
+    max-height: 2.5em;//27px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
     &:hover {
-        color: ${({ theme }) => theme.colors.accent.primary};
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    &:after {
-        content: '▼';
-        font-size: 0.7em;
-        transition: transform 0.2s ease;
-    }
-
-    &[data-open="true"]:after {
-        transform: rotate(180deg);
+    svg {
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
     }
 `;
 
 const LocaleDropdown = styled(motion.div)`
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: 50%;
-    transform: translateX(-50%);
     background: ${({ theme }) => theme.colors.backgrounds.default};
-    border-radius: ${({ theme }) => theme.borders.radius};
-    padding: 0.5rem;
-    min-width: 72px;
+    border-radius: 1.25rem;
+    padding: ${({ theme }) => theme.spacing.small};
+    min-width: 180px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
 `;
@@ -57,17 +58,27 @@ const LocaleDropdown = styled(motion.div)`
 const LocaleItem = styled(motion.div)<{ $active?: boolean }>`
     padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
     cursor: pointer;
-    text-align: center;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     color: ${({ theme, $active }) => $active ? theme.colors.accent.primary : theme.colors.text.primary};
-    background: ${({ theme, $active }) => $active ? `${theme.colors.accent.primary}12` : 'transparent'};
-    border-radius: ${({ theme }) => theme.borders.radius};
-    font-weight: ${({ $active }) => $active ? '600' : '400'};
+    background: ${({ theme, $active }) => $active ? `${theme.colors.accent.primary}10` : 'transparent'};
+    border-radius: 0.75rem;
+    font-weight: ${({ $active }) => $active ? '500' : '400'};
     transition: all 0.2s ease;
     white-space: nowrap;
+    font-size: 1rem;
     
     &:hover {
-        background: ${({ theme }) => `${theme.colors.accent.primary}12`};
+        background: ${({ theme }) => `${theme.colors.accent.primary}10`};
         color: ${({ theme }) => theme.colors.accent.primary};
+    }
+
+    svg {
+        width: 24px;
+        height: 16px;
+        border-radius: 2px;
     }
 `;
 
@@ -75,14 +86,12 @@ const dropdownVariants = {
     hidden: { 
         opacity: 0,
         y: -10,
-        scale: 0.95,
-        x: "-50%"
+        scale: 0.95
     },
     visible: { 
         opacity: 1,
         y: 0,
         scale: 1,
-        x: "-50%",
         transition: {
             duration: 0.2,
             ease: "easeOut"
@@ -92,7 +101,6 @@ const dropdownVariants = {
         opacity: 0,
         y: -10,
         scale: 0.95,
-        x: "-50%",
         transition: {
             duration: 0.2,
             ease: "easeIn"
@@ -125,9 +133,17 @@ const LocaleSwitcher: React.FC = () => {
         set$isopen(!$isopen);
     };
 
-    const handleLocaleChange = (locale: string) => {
-        i18n.changeLanguage(locale);
-        router.push(asPath, asPath, { locale });
+    const handleLocaleChange = async (locale: string) => {
+        // Change the language in i18next
+        await i18n.changeLanguage(locale);
+        
+        // Update the URL without refreshing
+        router.push(router.asPath, router.asPath, { 
+            locale,
+            scroll: false,
+            shallow: true
+        });
+        
         set$isopen(false);
     };
 
@@ -147,39 +163,62 @@ const LocaleSwitcher: React.FC = () => {
 
     if (!locales) return null;
 
+    const getLocaleInfo = (locale: string): { name: string; Flag: React.ComponentType } => {
+        switch(locale) {
+            case 'fr':
+                return { name: 'Français', Flag: Flags.FR };
+            case 'en':
+                return { name: 'English', Flag: Flags.GB };
+            case 'de':
+                return { name: 'Deutsch', Flag: Flags.DE };
+            case 'it':
+                return { name: 'Italiano', Flag: Flags.IT };
+            default:
+                return { name: locale.toUpperCase(), Flag: Flags.GB };
+        }
+    };
+
+    const currentLocale = getLocaleInfo(i18n.language || 'fr');
+    const CurrentFlag = currentLocale.Flag;
+
     return (
-        <LocaleSwitcherWrapper>
+        <LocaleSwitcherWrapper ref={dropdownRef}>
             <LocaleButton 
                 onClick={toggleDropdown}
-                data-open={$isopen}
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 0.95 }}
             >
-                {i18n.language?.toUpperCase() || 'LANG'}
+                <CurrentFlag />
             </LocaleButton>
             <AnimatePresence>
                 {$isopen && (
-                    <LocaleDropdown
-                        ref={dropdownRef}
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                    >
-                        {locales.map((locale, index) => (
-                            <LocaleItem
-                                key={locale}
-                                $active={locale === i18n.language}
-                                onClick={() => handleLocaleChange(locale)}
-                                variants={itemVariants}
-                                custom={index}
-                                initial="hidden"
-                                animate="visible"
-                            >
-                                {locale.toUpperCase()}
-                            </LocaleItem>
-                        ))}
-                    </LocaleDropdown>
+                    <LocaleDropdownContainer>
+                        <LocaleDropdown
+                            variants={dropdownVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                        >
+                            {locales.map((locale, index) => {
+                                const localeInfo = getLocaleInfo(locale);
+                                const Flag = localeInfo.Flag;
+                                return (
+                                    <LocaleItem
+                                        key={locale}
+                                        $active={locale === i18n.language}
+                                        onClick={() => handleLocaleChange(locale)}
+                                        variants={itemVariants}
+                                        custom={index}
+                                        initial="hidden"
+                                        animate="visible"
+                                    >
+                                        <Flag />
+                                        {localeInfo.name}
+                                    </LocaleItem>
+                                );
+                            })}
+                        </LocaleDropdown>
+                    </LocaleDropdownContainer>
                 )}
             </AnimatePresence>
         </LocaleSwitcherWrapper>

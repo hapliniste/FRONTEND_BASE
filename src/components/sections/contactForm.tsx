@@ -397,6 +397,7 @@ const ContactForm: React.FC = () => {
       const response = await fetch('/api/contact-info');
       if (response.ok) {
         const data = await response.json();
+        console.log('contact info:', data);
         setContactInfo(data);
       } else {
         console.error('Failed to fetch contact info');
