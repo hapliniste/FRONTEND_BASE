@@ -7,6 +7,8 @@ import { AppConfig } from "@/utils/appConfig";
 import { HamburgerMenu } from "@/components/library/hamburgerMenu";
 import { motion } from 'framer-motion';
 import BackToTop from '@/components/library/BackToTop';
+import LocaleSwitcher from "@/components/layout/localeSwitcher/LocaleSwitcher";
+//import { withTranslation } from "@/utils/withTranslation";
 
 const montserrat = Montserrat({ 
     subsets: ["latin"],
@@ -111,7 +113,6 @@ const NavLinks = styled.nav<{ scrolled: boolean }>`
 `;
 
 const NavSection = styled.div`
-    //height: 2em;
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.spacing.medium};
@@ -119,6 +120,13 @@ const NavSection = styled.div`
     padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
     border-radius: 99em;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+`;
+
+const NavDivider = styled.div`
+    width: 1px;
+    height: 24px;
+    background: ${({ theme }) => `${theme.colors.accent.primary}12`};
+    margin: 0 ${({ theme }) => theme.spacing.small};
 `;
 
 const MobileMenuWrapper = styled.div`
@@ -244,13 +252,11 @@ const Main = (props: IMainProps) => {
             <AppBar scrolled={scrolled}>
                 <AppBarContent>
                     <StyledLink href="/">
-                        {/*<Logo scrolled={scrolled}>*/}
-                            <LogoImage
-                                scrolled={scrolled}
-                                src="/neuchatech_logo.webp"
-                                alt={AppConfig.title}
-                            />
-                        {/*</Logo>*/}
+                        <LogoImage
+                            scrolled={scrolled}
+                            src="/neuchatech_logo.webp"
+                            alt={AppConfig.title}
+                        />
                     </StyledLink>
                     <NavLinks scrolled={scrolled}>
                         <NavSection>
@@ -270,6 +276,8 @@ const Main = (props: IMainProps) => {
                             >
                                 Notre Approche
                             </NavLink>
+                            <NavDivider />
+                            <LocaleSwitcher />
                             <NavButton
                                 as={motion.button}
                                 whileHover={{ scale: 1.05 }}
@@ -281,6 +289,7 @@ const Main = (props: IMainProps) => {
                         </NavSection>
                     </NavLinks>
                     <MobileMenuWrapper>
+                        <LocaleSwitcher />
                         <HamburgerMenu links={navigationLinks} />
                     </MobileMenuWrapper>
                 </AppBarContent>
@@ -292,3 +301,5 @@ const Main = (props: IMainProps) => {
 };
 
 export default Main;
+
+//export const getStaticProps = withTranslation(['common']);

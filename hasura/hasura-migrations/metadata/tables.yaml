@@ -1,0 +1,35 @@
+- table:
+    name: accounts
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: userId
+- table:
+    name: sessions
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: userId
+- table:
+    name: users
+    schema: public
+  array_relationships:
+    - name: accounts
+      using:
+        foreign_key_constraint_on:
+          column: userId
+          table:
+            name: accounts
+            schema: public
+    - name: sessions
+      using:
+        foreign_key_constraint_on:
+          column: userId
+          table:
+            name: sessions
+            schema: public
+- table:
+    name: verification_tokens
+    schema: public

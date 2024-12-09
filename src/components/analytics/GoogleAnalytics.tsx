@@ -1,6 +1,6 @@
 import Script from 'next/script';
 
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // Replace with your GA ID
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 const GoogleAnalytics = () => {
   return (

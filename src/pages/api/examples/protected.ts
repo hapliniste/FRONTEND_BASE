@@ -25,14 +25,15 @@ const securePage = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     `;
 
-    const { users_by_pk: user } = await request(
+    /*const { users_by_pk: user } = await request(*/
+    const user = await request(
       process.env.HASURA_PROJECT_ENDPOINT!,
       query,
       { id: session.user?.id },
       { authorization: `Bearer ${token}` }
     );
     res.send({
-      content: `This is protected content. Your name is ${user.name}`,
+      content: `This is protected content.`//`This is protected content. Your name is ${user.name}`,
     });
   } else {
     res.send({

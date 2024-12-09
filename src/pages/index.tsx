@@ -9,6 +9,7 @@ import Processus from "@/components/sections/processus";
 import Numerique from "@/components/sections/numerique";
 import ContactForm from "@/components/sections/contactForm";
 import SpecialOffer from "@/components/library/specialOffer";
+import { withTranslation } from "@/utils/withTranslation";
 
 const SectionWrapper = styled.div<{ isFirst?: boolean }>`
     margin-top: ${props => props.isFirst ? props.theme.spacing.xxlarge : props.theme.spacing.large};
@@ -59,3 +60,5 @@ export default function Home() {
         </>
     );
 }
+
+export const getStaticProps = withTranslation();

@@ -1,0 +1,32 @@
+version: '3.9'
+name: "${APP_NAME}"
+services:
+  postgres:
+    image: postgres:13
+    container_name: "${APP_NAME}-postgres"
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+  graphql-engine:
+    image: hasura/graphql-engine:v2.16.1
+    container_name: ${APP_NAME}-hasura
+    ports:
+      - "${HASURA_PORT}:8080"
+    depends_on:
+      - "postgres"
+    restart: unless-stopped
+    volumes:
+      - ./hasura-migrations:/hasura-migrations
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@${APP_NAME}-postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET}
+volumes:
+  postgres_data:
+    name: ${APP_NAME}-postgres_data
