@@ -5,12 +5,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import styled from 'styled-components';
 
-interface SlideContent {
+export interface ISlideContent {
   content: React.ReactNode;
 }
 
-interface CarouselProps {
-  slides: SlideContent[];
+export interface ICarouselProps {
+  slides: ISlideContent[];
 }
 
 const StyledSwiper = styled(Swiper)`
@@ -35,14 +35,14 @@ const StyledSwiper = styled(Swiper)`
   }
 `;
 
-const Carousel: React.FC<CarouselProps> = ({ slides }) => {
+const Carousel: React.FC<ICarouselProps> = ({ slides }) => {
   return (
     <StyledSwiper
       slidesPerView={1.2}
       centeredSlides={true}
       spaceBetween={16}
       loop={true}
-      loopedSlides={slides.length}
+      slidesPerGroup={1}
       watchSlidesProgress={true}
       preventInteractionOnTransition={true}
       pagination={{

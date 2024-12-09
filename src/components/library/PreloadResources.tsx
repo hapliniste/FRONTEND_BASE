@@ -22,18 +22,6 @@ const PreloadResources: React.FC = () => {
         as="image"
         type="image/svg+xml"
       />
-      
-      {/* Add font preloads if using Google Fonts */}
-      <link
-        rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap"
-        as="style"
-      />
-      <link
-        rel="preload"
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-        as="style"
-      />
     </Head>
   );
 };

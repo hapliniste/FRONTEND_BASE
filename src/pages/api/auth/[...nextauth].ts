@@ -57,15 +57,15 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log("SIGNIN CALLBACK - User:", user);
+      /*console.log("SIGNIN CALLBACK - User:", user);
       console.log("SIGNIN CALLBACK - Account:", account);
-      console.log("SIGNIN CALLBACK - Profile:", profile);
+      console.log("SIGNIN CALLBACK - Profile:", profile);*/
       return true;
     },
     async jwt({ token, account, user }) {
-      console.log("JWT CALLBACK - Initial token:", token);
+      /*console.log("JWT CALLBACK - Initial token:", token);
       console.log("JWT CALLBACK - Account:", account);
-      console.log("JWT CALLBACK - User:", user);
+      console.log("JWT CALLBACK - User:", user);*/  
 
       token['https://hasura.io/jwt/claims'] = {
         'x-hasura-allowed-roles': ['user'],
@@ -74,12 +74,12 @@ export const authOptions: NextAuthOptions = {
         'x-hasura-user-id': token.sub,
       };
 
-      console.log("JWT CALLBACK - Modified token:", token);
+      /*console.log("JWT CALLBACK - Modified token:", token);*/
       return token;
     },
     session: async ({ session, token }) => {
-      console.log("SESSION CALLBACK - Initial session:", session);
-      console.log("SESSION CALLBACK - Token:", token);
+      /*console.log("SESSION CALLBACK - Initial session:", session);
+      console.log("SESSION CALLBACK - Token:", token);*/
 
       if (session?.user) {
         session.user.id = token.sub!;
@@ -90,13 +90,13 @@ export const authOptions: NextAuthOptions = {
           algorithm: 'HS256',
         });
         session.accessToken = encodedToken;
-        console.log("SESSION CALLBACK - Session modified successfully");
+        /*console.log("SESSION CALLBACK - Session modified successfully");*/
       } catch (error) {
-        console.error("SESSION CALLBACK - Error encoding token:", error);
+        /*console.error("SESSION CALLBACK - Error encoding token:", error);*/
         throw error;
       }
 
-      console.log("SESSION CALLBACK - Final session:", session);
+      /*console.log("SESSION CALLBACK - Final session:", session);*/  
       return session;
     },
   },

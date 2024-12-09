@@ -1,6 +1,7 @@
 import { useState, ReactNode } from 'react';
 import styled from 'styled-components';
-import { ArrowUpRight } from 'lucide-react'; // Make sure to install lucide-react
+import { ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
 
 export type Image = {
   id: number;
@@ -11,7 +12,7 @@ export type Image = {
   fullContent?: React.ReactNode;
 };
 
-const CardWrapper = styled.div`
+const BaseCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({theme}) => theme.colors.backgrounds.white};
@@ -24,11 +25,22 @@ const CardWrapper = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.03);
   width: 100%;
   max-width: 320px;
+  cursor: ${props => props.onClick ? 'pointer' : 'default'};
   
   @media (min-width: 768px) {
     max-width: none;
     padding: 2rem;
   }
+
+  &:hover {
+    transform: ${props => props.onClick ? 'translateY(-2px)' : 'none'};
+    box-shadow: ${props => props.onClick ? '0 4px 8px rgba(0, 0, 0, 0.05)' : '0 2px 4px rgba(0, 0, 0, 0.02)'};
+  }
+`;
+
+const CardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `;
 
 const CardHeader = styled.div`
@@ -134,13 +146,8 @@ const Divider = styled.div`
 `;
 
 const ImageCard = ({ image, onClick }: { image: Image; onClick?: () => void }) => {
-  const WrapperComponent = image.href ? CardWrapper.withComponent('a') : CardWrapper;
-  
-  return (
-    <WrapperComponent 
-      href={image.href} 
-      onClick={onClick}
-    >
+  const content = (
+    <>
       <CardHeader>
         <IconWrapper>
           <IconBackground>
@@ -154,7 +161,23 @@ const ImageCard = ({ image, onClick }: { image: Image; onClick?: () => void }) =
       </CardHeader>
       <Divider />
       <CardDescription>{image.content}</CardDescription>
-    </WrapperComponent>
+    </>
+  );
+
+  if (image.href) {
+    return (
+      <CardLink href={image.href}>
+        <BaseCardWrapper as="div" onClick={onClick}>
+          {content}
+        </BaseCardWrapper>
+      </CardLink>
+    );
+  }
+
+  return (
+    <BaseCardWrapper onClick={onClick}>
+      {content}
+    </BaseCardWrapper>
   );
 };
 

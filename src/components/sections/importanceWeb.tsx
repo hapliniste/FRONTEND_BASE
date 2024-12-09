@@ -176,7 +176,7 @@ const ImportanceWeb: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        L'importance d'une présence web
+        {`L'importance d'une présence web`}
       </SectionTitle>
       
       <StatsGrid ref={ref}>

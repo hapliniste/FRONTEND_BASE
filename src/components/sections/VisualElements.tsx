@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const FloatingElementsWrapper = styled.div`
   position: absolute;
@@ -115,17 +116,20 @@ const VisualElements: React.FC = () => {
         </BadgeCard>
 
         <TestimonialCard
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0, y: ['0%', '10%', '0%'] }}
-          transition={{
-            opacity: { duration: 0.5, delay: 0.2 },
-            x: { duration: 0.5, delay: 0.2 },
-            ...floatTransition,
-          }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           style={{ bottom: '25%', left: '10%' }}
         >
-          <img src="https://placehold.co/100" alt="Client" />
-          <p>"Service exceptionnel et résultat impressionnant!"</p>
+          <Image 
+              src="https://placehold.co/100" 
+              alt="Client" 
+              width={100} 
+              height={100} 
+              style={{ objectFit: 'cover' }}
+          />
+          <p>&quot;Service exceptionnel et résultat impressionnant!&quot;</p>
           <small>— Marie Dubois, Entreprise SA</small>
         </TestimonialCard>
       </LeftArea>

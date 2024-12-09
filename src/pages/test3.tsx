@@ -40,7 +40,7 @@ const Test3Page: React.FC = () => {
                 }
             });
         }
-    }, []);
+    }, [sessionData?.accessToken]);
 
     useEffect(() => {
         if (data?.users_by_pk?.name) {

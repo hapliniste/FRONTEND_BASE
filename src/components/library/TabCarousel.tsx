@@ -172,24 +172,25 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setIsInView(true);
-                        setIsAutoplay(true); // Start autoplay when in view
-                        setAnimationKey((prevKey) => prevKey + 1); // Restart animation
+                        setIsAutoplay(true);
+                        setAnimationKey((prevKey) => prevKey + 1);
                     } else {
                         setIsInView(false);
-                        setIsAutoplay(false); // Stop autoplay when out of view
+                        setIsAutoplay(false);
                     }
                 });
             },
-            { threshold: 0.8 } // Adjust threshold as needed
+            { threshold: 0.8 }
         );
 
-        if (carouselRef.current) {
-            observer.observe(carouselRef.current);
+        const currentRef = carouselRef.current;
+        if (currentRef) {
+            observer.observe(currentRef);
         }
 
         return () => {
-            if (carouselRef.current) {
-                observer.unobserve(carouselRef.current);
+            if (currentRef) {
+                observer.unobserve(currentRef);
             }
         };
     }, []);
@@ -267,6 +268,26 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                 return {};
         }
     };
+
+    useEffect(() => {
+        const currentRef = carouselRef.current;
+        
+        const handleScroll = () => {
+            if (currentRef) {
+                // ... scroll handling code
+            }
+        };
+
+        if (currentRef) {
+            currentRef.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
 
     return (
         <div ref={carouselRef}>

@@ -25,7 +25,7 @@ const ContentWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const FeatureRow = styled(motion.div)<{ reverse?: boolean }>`
+const FeatureRow = styled(motion.div)<{ $reverse?: boolean }>`
   display: flex;
   flex-direction: column;
   margin-bottom: ${props => props.theme.spacing.xlarge};
@@ -36,12 +36,12 @@ const FeatureRow = styled(motion.div)<{ reverse?: boolean }>`
   }
 `;
 
-const ContentImageWrapper = styled(motion.div)<{ reverse?: boolean }>`
+const ContentImageWrapper = styled(motion.div)<{ $reverse?: boolean }>`
   display: flex;
   flex-direction: column;
   
   @media (min-width: 768px) {
-    flex-direction: ${props => props.reverse ? 'row-reverse' : 'row'};
+    flex-direction: ${props => props.$reverse ? 'row-reverse' : 'row'};
     align-items: center;
     gap: ${props => props.theme.spacing.large};
   }
@@ -443,7 +443,7 @@ const FeatureSection: React.FC<{ feature: Feature; index: number }> = ({ feature
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
     >
-      <ContentImageWrapper reverse={index % 2 === 1}>
+      <ContentImageWrapper $reverse={index % 2 === 1}>
         <ImageSection
           variants={imageVariants}
         >

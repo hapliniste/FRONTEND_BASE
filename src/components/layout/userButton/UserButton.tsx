@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 import LoginModal from '@/components/userManagement/loginForm/LoginModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, LogOut, Loader } from 'lucide-react';
+import Image from 'next/image';
 
 const UserButtonWrapper = styled.div`
   position: relative;
@@ -13,25 +14,20 @@ const UserButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const UserAvatar = styled(motion.button)`
+const UserAvatarWrapper = styled(motion.button)`
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 99em;
-  cursor: pointer;
+  padding: 0;
   border: none;
-  background: ${({ theme }) => theme.colors.backgrounds.default};
-  color: ${({ theme }) => theme.colors.text.primary};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 99em;
-    object-fit: cover;
-  }
+  background: none;
+  cursor: pointer;
+  position: relative;
+  border-radius: 99em;
+  overflow: hidden;
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
 `;
 
 const UserDropdown = styled(motion.div)`
@@ -152,17 +148,22 @@ const UserButton: React.FC = () => {
     <UserButtonWrapper>
       {session ? (
         <>
-          <UserAvatar
+          <UserAvatarWrapper
             onClick={handleDropdownToggle}
             whileHover={{ y: -2 }}
             whileTap={{ y: 0 }}
           >
             {session.user?.image ? (
-              <img src={session.user.image} alt={session.user.name || 'User'} />
+              <StyledImage 
+                src={session.user.image} 
+                alt={session.user.name || 'User'} 
+                fill
+                sizes="2.5rem"
+              />
             ) : (
               <User size={20} />
             )}
-          </UserAvatar>
+          </UserAvatarWrapper>
           <AnimatePresence>
             {isDropdownOpen && (
               <UserDropdown

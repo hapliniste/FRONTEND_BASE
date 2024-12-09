@@ -10,7 +10,7 @@ import { DefaultSeo } from 'next-seo';
 import seoConfig from '@/config/next-seo.config';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 import { initScrollTracking } from '@/utils/analytics';
-//import "normalize.css/normalize.css";
+import "normalize.css/normalize.css";
 
 import Main from "@/layout/main";
 

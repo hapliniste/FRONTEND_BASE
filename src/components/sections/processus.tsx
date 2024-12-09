@@ -13,8 +13,21 @@ import { motion } from "framer-motion";
 import SpecialOffer from "../library/specialOffer";
 import { SectionTitle } from '@/components/library/typography';
 
+// Update the ProcessSteps type
+type StepStatus = 'completed' | 'bonus' | undefined;
+
+interface ProcessStep {
+  id: number;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  icon: string;
+  status?: StepStatus;
+  isClickable?: boolean;
+}
+
 // Process steps data
-const ProcessSteps = [
+const ProcessSteps: ProcessStep[] = [
   {
     id: 1,
     title: "Vous Nous Avez Trouvés",
@@ -107,14 +120,14 @@ const IconContainer = styled.div`
   }
 `;
 
-const LineSegment = styled(motion.div)<{ isAfterCompleted?: boolean }>`
+const LineSegment = styled(motion.div)<{ $isAfterCompleted?: boolean }>`
   position: absolute;
   top: 5rem;
   left: calc(50% - 4px);
   width: 8px;
   height: calc(100% - 5rem);
   margin-top: -0.5em;
-  background: ${props => props.isAfterCompleted ? 
+  background: ${props => props.$isAfterCompleted ? 
     `${props.theme.colors.status.success}` : 
     'white'
   };
@@ -137,21 +150,21 @@ const LineSegment = styled(motion.div)<{ isAfterCompleted?: boolean }>`
   }
 `;
 
-const TimelineCard = styled(motion.div)<{ status?: 'completed' | 'bonus'; isEmpty?: boolean }>`
+const TimelineCard = styled(motion.div)<{ $status?: StepStatus; $isEmpty?: boolean }>`
   background: white;
-  border-radius: ${props => props.isEmpty ? '999px' : '2rem'};
-  padding: ${props => props.isEmpty ? '1rem 2rem' : '1.75rem'};
+  border-radius: ${props => props.$isEmpty ? '999px' : '2rem'};
+  padding: ${props => props.$isEmpty ? '1rem 2rem' : '1.75rem'};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.03);
   margin: 0 0 2rem 0;
   transform: translateY(-2px);
 
-  ${props => props.status === 'completed' && css`
+  ${props => props.$status === 'completed' && css`
     background: ${props.theme.colors.status.successLight};
   `}
 
   @media (max-width: 768px) {
-    margin: 0 0 1rem 0;  // Réduire la marge sur mobile
+    margin: 0 0 1rem 0;
   }
 `;
 
@@ -358,7 +371,7 @@ const Processus: React.FC = () => {
                 </TimelineIcon>
                 {index < ProcessSteps.length - 1 && (
                   <LineSegment
-                    isAfterCompleted={step.status === 'completed'}
+                    $isAfterCompleted={step.status === 'completed'}
                     initial={{ scaleY: 0, originY: 0 }}
                     whileInView={{ scaleY: 1 }}
                     viewport={{ once: true }}
@@ -369,7 +382,8 @@ const Processus: React.FC = () => {
               {step.isClickable ? (
                 <ClickableCard
                   onClick={scrollToContact}
-                  status={step.status}
+                  $status={step.status}
+                  $isEmpty={!step.subtitle && !step.description}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   animate={{ 
@@ -415,13 +429,12 @@ const Processus: React.FC = () => {
                 </ClickableCard>
               ) : (
                 <TimelineCard
-                  status={step.status}
-                  isEmpty={!step.subtitle && !step.description}
+                  $status={step.status}
+                  $isEmpty={!step.subtitle && !step.description}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                  onClick={step.isClickable ? scrollToContact : undefined}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <CardTitle>
                     <span className="mobile-icon">{step.icon}</span>

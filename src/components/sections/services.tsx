@@ -309,13 +309,13 @@ const services = [
                         >
                             Sécurité et performance optimales
                         </FeatureItem>
-                        <FeatureItem
+                        {/*<FeatureItem
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.4 }}
                         >
                             Hébergement haute disponibilité
-                        </FeatureItem>
+                        </FeatureItem>*/}
                     </FeaturesList>
                     <PriceTag
                         whileHover={{ scale: 1.02 }}
@@ -540,7 +540,7 @@ const Services: React.FC = () => {
             />
             <Section id="services">
                 <ContentWrapper>
-                    <SectionTitle centered noUnderline>Nos Services</SectionTitle>
+                    <SectionTitle $centered $noUnderline>Nos Services</SectionTitle>
                     <TabCarousel
                         tabs={services}
                         interval={7000}

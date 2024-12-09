@@ -2,9 +2,17 @@ import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
 
 interface SectionTitleProps {
-  centered?: boolean;
-  noUnderline?: boolean;
+  $centered?: boolean;
+  $noUnderline?: boolean;
 }
+
+interface TitleSpanProps {
+  $noUnderline?: boolean;
+}
+
+const TitleSpan = styled.span<TitleSpanProps>`
+    color: ${({ theme }) => theme.colors.accent.primary};
+`;
 
 export const SectionTitle = styled(motion.h2)<SectionTitleProps>`
   font-size: ${({theme}) => theme.typography.sectionTitle.fontSize.mobile};
@@ -19,13 +27,13 @@ export const SectionTitle = styled(motion.h2)<SectionTitleProps>`
   margin-right: auto;
   padding: 0 2rem;
   
-  ${props => props.centered ? css`
+  ${props => props.$centered ? css`
     text-align: center;
   ` : css`
     text-align: left;
   `}
   
-  ${props => !props.noUnderline && css`
+  ${props => !props.$noUnderline && css`
     &::after {
       content: '';
       position: absolute;
@@ -46,7 +54,7 @@ export const SectionTitle = styled(motion.h2)<SectionTitleProps>`
     padding: 0 1rem;
     margin-bottom: 3rem;
     
-    ${props => !props.noUnderline && css`
+    ${props => !props.$noUnderline && css`
       &::after {
         left: 1rem;
         width: ${({theme}) => theme.typography.sectionTitle.underline.width};
@@ -60,8 +68,8 @@ export const SectionTitleContent: React.FC<{ children: React.ReactNode; noUnderl
   <TitleSpan $noUnderline={noUnderline}>{children}</TitleSpan>
 );
 
-SectionTitle.defaultProps = {
-  children: (props: SectionTitleProps & { children: React.ReactNode }) => (
-    <SectionTitleContent noUnderline={props.noUnderline}>{props.children}</SectionTitleContent>
-  )
-}; 
+export const StyledSectionTitle: React.FC<SectionTitleProps & { children: React.ReactNode }> = ({ children, $noUnderline, ...props }) => (
+  <SectionTitle {...props}>
+    <SectionTitleContent noUnderline={$noUnderline}>{children}</SectionTitleContent>
+  </SectionTitle>
+); 
