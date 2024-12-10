@@ -34,23 +34,23 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
   jwt: {
     encode: ({ secret, token }) => {
-      console.log("JWT ENCODE - Input token:", token);
+      //console.log("JWT ENCODE - Input token:", token);
       const encodedToken = jsonwebtoken.sign(token!, secret, {
         algorithm: 'HS256',
       });
-      console.log("JWT ENCODE - Encoded successfully");
+      //console.log("JWT ENCODE - Encoded successfully");
       return encodedToken;
     },
     decode: async ({ secret, token }) => {
-      console.log("JWT DECODE - Starting decode");
+      //console.log("JWT DECODE - Starting decode");
       try {
         const decodedToken = jsonwebtoken.verify(token!, secret, {
           algorithms: ['HS256'],
         });
-        console.log("JWT DECODE - Decoded successfully");
+        //console.log("JWT DECODE - Decoded successfully");
         return decodedToken as JWT;
       } catch (error) {
-        console.error("JWT DECODE - Error:", error);
+        //console.error("JWT DECODE - Error:", error);
         throw error;
       }
     },

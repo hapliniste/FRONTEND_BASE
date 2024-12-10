@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { NextSeo } from 'next-seo';
@@ -18,11 +18,13 @@ const montserrat = Montserrat({
 import { DM_Sans } from '@next/font/google';
 const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] });
 
+import Temoignages from './temoignages';
+
 // Layout Components
-const Section = styled.section`
+const Section = styled.section<{ isHalfSize?: boolean }>`
   position: relative;
   width: 100%;
-  height: 50vh;
+  height: ${props => props.isHalfSize ? '50vh' : '100vh'};
   background-color: ${(props) => props.theme.colors.backgrounds.default};
   overflow: hidden;
   padding-top: ${props => props.theme.spacing.xlarge};
@@ -145,8 +147,49 @@ const CTAButton = styled.button`
   }
 `;
 
+const BackgroundLayer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+`;
+
+const ContentLayer = styled.div<{ isHalfSize?: boolean }>`
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    width: ${props => props.isHalfSize ? '50%' : '100%'};
+`;
+
 const Hero: React.FC = () => {
   const contactRef = useRef<HTMLElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mobileQuery = window.matchMedia('(max-width: 768px)');
+      const tabletQuery = window.matchMedia('(min-width: 769px) and (max-width: 1024px)');
+      
+      // Set initial values
+      setIsMobile(mobileQuery.matches);
+      setIsTablet(tabletQuery.matches);
+
+      // Add listeners
+      const mobileHandler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+      const tabletHandler = (e: MediaQueryListEvent) => setIsTablet(e.matches);
+      
+      mobileQuery.addEventListener('change', mobileHandler);
+      tabletQuery.addEventListener('change', tabletHandler);
+
+      return () => {
+        mobileQuery.removeEventListener('change', mobileHandler);
+        tabletQuery.removeEventListener('change', tabletHandler);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     contactRef.current = document.getElementById('contact');
@@ -197,63 +240,70 @@ const Hero: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}
       />
-      <Section>
-        <InnerSection>
-          <ContentWrapper>
-            <ContentArea>
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                custom={0}
-                variants={titleVariants}
-              >
-                <Title className={titleFont.className}>
-                  <LogoTitle src="/neuchatech_logo.webp" alt="Neuchatech" />
-                  donne vie à vos
-                  <br />
-                  <span className="gradient">projets numériques</span>
-                </Title>
-              </motion.div>
-
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                custom={1}
-                variants={titleVariants}
-              >
-                <SubTitle className={montserrat.className}>
-                  Votre partenaire suisse pour une transition numérique réussie
-                </SubTitle>
-              </motion.div>
-
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                custom={2}
-                variants={titleVariants}
-              >
-                <Description className={DMSansFont.className}>
-                  Des solutions web modernes et performantes pour faire de chaque
-                  projet un pilier de votre succès.
-                </Description>
-              </motion.div>
-
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                custom={3}
-                variants={titleVariants}
-              >
-                <CTAButton 
-                  onClick={scrollToContact}
-                  className={montserrat.className}
+      <Section isHalfSize={isTablet}>
+        {!isMobile && (
+          <BackgroundLayer>
+            <Temoignages isHalfSize={isTablet} />
+          </BackgroundLayer>
+        )}
+        <ContentLayer isHalfSize={isTablet}>
+          <InnerSection>
+            <ContentWrapper>
+              <ContentArea>
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  custom={0}
+                  variants={titleVariants}
                 >
-                  Obtenez un devis gratuit
-                </CTAButton>
-              </motion.div>
-            </ContentArea>
-          </ContentWrapper>
-        </InnerSection>
+                  <Title className={titleFont.className}>
+                    <LogoTitle src="/neuchatech_logo.webp" alt="Neuchatech" />
+                    donne vie à vos
+                    <br />
+                    <span className="gradient">projets numériques</span>
+                  </Title>
+                </motion.div>
+
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  custom={1}
+                  variants={titleVariants}
+                >
+                  <SubTitle className={montserrat.className}>
+                    Votre partenaire suisse pour une transition numérique réussie
+                  </SubTitle>
+                </motion.div>
+
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  custom={2}
+                  variants={titleVariants}
+                >
+                  <Description className={DMSansFont.className}>
+                    Des solutions web modernes et performantes pour faire de chaque
+                    projet un pilier de votre succès.
+                  </Description>
+                </motion.div>
+
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  custom={3}
+                  variants={titleVariants}
+                >
+                  <CTAButton 
+                    onClick={scrollToContact}
+                    className={montserrat.className}
+                  >
+                    Obtenez un devis gratuit
+                  </CTAButton>
+                </motion.div>
+              </ContentArea>
+            </ContentWrapper>
+          </InnerSection>
+        </ContentLayer>
       </Section>
     </>
   );
