@@ -1,0 +1,460 @@
+SEO: A Year in Review
+As we look back on 2023 there have been some important updates that will shape SEO strategies in 2024 and beyond.
+
+Let’s recap the key changes and trends.
+
+EEAT – First-hand Experience Is Now More Important Than Ever
+With the EEAT guideline updated in 2023, first-hand experience has become a central ranking factor. This shift prioritizes the importance of authentic, experience-based content over generic information.
+
+Latest Algorithm Updates – Increased Importance of Author Entities
+Another major development was the increased focus on author entities in the latest algorithm updates.
+
+Google is now more adept at recognizing and valuing the authors behind content.
+
+This means that content linked to recognized and knowledgeable authors gains an extra layer of trust and credibility, influencing rankings more than ever.
+
+Marketers Use AI Tools to Save Time
+2023 also saw a surge in marketers using AI tools. These tools have become valuable for streamlining SEO tasks from ideation to generating content.
+
+AI Tools Offer Search Capabilities
+Despite the growing capabilities of AI tools in offering search functionalities, we haven’t seen the change in people’s search behavior. People still rely on search engines like Google for their queries.
+
+Most importantly, we haven’t seen a decrease in organic traffic due to these AI tools.
+
+Now let’s talk about SEO trends coming up in 2024.
+
+1. AI Boosts Scale, but Also Make It More Important to Provide Original Value
+While AI is shaking the world, we see it both as an opportunity and a threat.
+
+Let us explain.
+
+AI is good at creating generic content that is based on existing content from the SERP.
+
+The real threat is in generic content flooding the internet because of AI.
+
+Think about it – if everyone starts relying solely on AI for content creation, we’re going to see a lot of the same thing, over and over.
+
+This is also true on an individual scale, for your own website.
+
+As a content creator, you now face the risk of overusing AI to fill your blog with content where most of the writing is based on something that’s already been published elsewhere.
+
+Even the AI writing companies realize this. Take Jarvis as an example. After raising a hefty sum, one of their first moves was to hire a bunch of freelance writers to create content for their own website.
+
+This sends a clear message – even a company at the forefront of AI writing technology acknowledges the irreplaceable value of human writers.
+
+It’s clear that you can’t just rely on AI alone for content, human creativity and insights are essential.
+
+And there’s another interesting fact. Despite the rise of AI in content creation, the demand for, and rates of, senior writers have increased.
+
+How to Use AI to Boost Scale
+AI is like a writing assistant with various skills. Here are some ways to use AI’s assistance to boost scale:
+
+Ask AI to act as an editor and help you in applying an established voice and tone to the draft
+Summarize information that’s already known
+Make existing copy shorter
+Turn lengthy paragraph into bullet points
+Make a table out of the information you already have
+Create top-level outlines (more on that below)
+Let’s go through the process of drafting top-level outlines. The kind that lays the foundation but doesn’t get into the details.
+
+Then you, the expert, can step in and flesh out the details, adding the unique insights and depth that only a human touch can provide.
+
+Or you can give those outlines to writers or subject matter experts to use as a skeleton and build from there.
+
+But even when using ChatGPT for outlining content, you need to be highly specific in your prompts.
+
+For example:
+
+ChatGPT – Article Outline – Prompt
+The example of the highly specific prompt we gave ChatGPT to generate an article outline.
+ChatGPT – Generated Article Outline
+The example of top-level outline ChatGPT generated when we gave it a highly specific prompt.
+Here’s the thing, though. If you lean too much on AI for these outlines, there’s a risk of missing out on some really valuable points.
+
+Maybe there’s a key aspect or a unique angle you would have thought of that the AI just skips over. You don’t want to limit your creativity by sticking to what the AI suggests.
+
+To conclude, you could say that it’s not AI that will take the jobs of SEOs. The power lies in the combination of human and machine. So it’s the SEOs who use AI well who will win over other SEOs.
+
+2. First-hand Experience Is the Differentiator of Quality Content that AI Couldn’t Write
+First-hand experience in content satisfies users’ queries and aligns with what search engines now prioritize – authenticity and depth.
+
+Since Google updated its EEAT guidelines in December 2022, first-hand experience became one of the factors that determine a content’s trustworthiness.
+
+It’s about giving your readers what they really want, which is often a deep dive into specific, lived experiences.
+
+In fact, first-hand experience is the new differentiator between generic and high-quality content.
+
+Take, for instance, an article on alternative data from someone who’s worked in a hedge fund. Their real-world experience injects a unique value into the content, way beyond just a basic overview.
+
+Focusing on first-hand experiences is all about showcasing what you know and have experienced personally, which resonates more with users.
+
+Think about it like you now need to focus on publishing content that AI couldn’t write. So content about something you’ve done yourself, your opinion, your interpretation of data, a study based on data you’ve colleced, or something else that couldn’t be auto-generated.
+
+And this approach isn’t just confined to written content.
+
+Take how people search on platforms like YouTube, TikTok, or Reddit.
+
+They’re often looking for that personal, human touch – real opinions, real experiences.
+
+It’s a stark contrast to traditional search engines where results might feel more impersonal or generic.
+
+How to Double-down on First-hand Experiences
+Now you may be wondering how to double-down on first-hand experiences.
+
+“Document, don’t create.” – as Gary Vaynerchuk would say.
+
+The idea is that, instead of creating content from scratch, you simply document what you’re already doing.
+
+What if I don’t have hands-on experience on topics I want to write about? – You may wonder.
+
+In that case, you can interview a subject matter expert (SME) and base your content on their insights.
+
+“Make collecting insights from SMEs into a core step in creating content for SEO.”
+
+SMEs can actually help you in two ways.
+
+First, they provide you with unique, valuable insights.
+
+And second, they help you increase your content’s authority and distribution.
+
+This leads us to the next SEO trend to focus on in 2024 – author entities.
+
+3. Author Entities Hold More Value than Ever
+The biggest challenge now is how search engines like Google are going to adapt to the surge of AI-generated content.
+
+We’ve already seen instances, like with Sports Illustrated, where credible sites got caught creating fake writer profiles to publish AI articles.
+
+This raises a big question for search engines. If they rely solely on the site’s authority, they risk giving a pass to low-quality, AI-generated content.
+
+Google’s likely response?
+
+Ramping up efforts to identify and evaluate AI-written content.
+
+When content is linked to a recognized author with relevant experience and knowledge, it gains an extra layer of trust and authority.
+
+So, establishing authors as experts in their field enhances the credibility of the content and aligns with Google’s preference for content created by knowledgeable and reputable individuals.
+
+It’s like putting a face and a story behind the information, which further solidifies the trustworthiness and relevance of your content in the eyes of both users and search engines.
+
+How to Use Author Entities
+Here’s how to leverage author entities for SEO in 2024:
+
+Create author pages on your site. Include details about their background, areas of expertise, links to the posts they’ve published, and links to their social media.
+Have the same authors publish on other sites, too. This will grow the author’s footprint, and make it even easier for Google and the readers to understand that the author is real.
+Add the SMEs or expert writers into the byline, then co-distribute with them. Add credibility and make it even more obvious that expert humans are behind the content.
+Encourage experts who have created successful guest posts for you to return a few more times
+Publish on behalf of authors who are well established
+This very article is an example of everything above, but especially the practie of establishing author entities.
+
+We’re bringing back Brian Dean as one of the authors, one of the biggest names in SEO and the previous owner of Backlinko. So that part is obvious.
+
+But Brian chimed in on the trends in collaboration with Branko Kral, someone who’s published on several big marketing blogs, and who has an author page on this one for the purpose of publishing here regularly.
+
+4. SGE May Shift Users’ Search Behavior, but It Isn’t Stealing All of Your Traffic
+Google’s rolling out AI-powered SERP snippets, or as they call it, search generative experience (SGE).
+
+It means users will be able to ask extensive questions and the AI will generate an answer to their queries based on existing content on the web.
+
+Like the example below. Ask Google a complex question like “what’s better for a family with kids under 3 and a dog, Bryce Canyon or Arches” and you’ll get a quick summary of why each place can be a good option. Plus, you have an option to open related human-written content to learn about other people’s experiences and recommendations.
+
+Google SERP with SGE
+SGE provides a quick summary to answer your complex search query and recommends human-written content that you can open and read more about other people’s experiences.
+And you may be wondering whether that’s going to steal your traffic.
+
+The short answer is no.
+
+Why? Because SGE summarizes a quick answer, but it still directs the searchers to the best-ranking content for more information.
+
+And people will keep opening full articles because they dig trustworthy content.
+
+They want the real deal, especially when it comes to queries like product reviews or picking the best vacation spots.
+
+They’re not going to settle for some AI-generated snippet when they need the inside scoop.
+
+Think about it. If you’re planning a trip or buying something new, you want to read experiences from people who’ve actually been there, done that. You want the first-hand details, the pros and cons – the kind of insights only a real person can provide.
+
+So, while SGE might shift the way we search a bit, it’s not the end of the world for your traffic.
+
+Keep focusing on creating content that’s legit and full of real experiences. That’s what keeps people coming back and what makes Google rank your site.
+
+It even looks like Google might be its own biggest competition if it gets SGE right, especially if Google is able to figure out how to adapt the advertising business to SGE.
+
+But here’s the deal: it doesn’t feel like Google’s rolling out SGE because it’s game-changing. We feel that it’s more like they’re trying to keep up with the tech crowd.
+
+How to Optimize for SGE
+So, what does this mean for us in the SEO world? Basically, don’t freak out and overhaul your whole SEO strategy for SGE.
+
+The basics of SEO haven’t really changed. Keep making reputable content, get those solid links, and most importantly, create content that provides real value to your audience.
+
+Remember the hype about voice search a while back? Everyone thought it was going to be huge, but it turned out to be more hype than anything. People do use voice search, but ranking for it works more or less the same as ranking for text search.
+
+SGE might be heading the same way.
+
+Sure, it’s good to keep an eye on the new thing, but your main focus should still be nailing that top spot on Google.
+
+“If you rank on top positions, Google’s AI will scrape you and SGE will likely include your content in its snippet.”
+
+5. SEOs Now Focus on Optimizing for User Signals Directly
+During Google’s big antitrust case, they had to reveal some of the patents their search algorithms use.
+
+Turns out, Google leans heavily on user signals to rank content, not just deep content analysis. They’re really good at figuring out if users are happy with what they find.
+
+They’re actually better at understanding how users feel about your content, than at understanding your content itself
+
+This means SEO is shifting more towards optimizing for user engagement and satisfaction.
+
+A while back, there was a glasses company that annoyed customers on purpose so they would write a lot about the company and generate backlinks.
+
+And it worked really well until Google found out about their strategy. They immediately killed the site rankings and built something that can instantly identify sentiments around the brand.
+
+Now Google is analyzing how users engage with a page to determine its relevance and usefulness.
+
+They’ve got systems to sniff out when links are negative and can penalize accordingly.
+
+This tells us that while user signals are super important, it’s not just what’s on your site that counts. It’s also about the sentiment and reactions your brand generates across the web.
+
+A great example of this is the page ranking #1 for “QR code scanner” which has no content but only a functional QR code scanner.
+
+Google SERP – QR Code Scanner
+#1 result on Google for the keyword “QR code scanner” satisfies the user intent even though the page has no content. The page could be criticized from the SEO perspective, but users engage with it, share it, and Google picks up on it.
+QR Code Scan
+Example that user intent is an important ranking factor. The page that ranks #1 on Google for the keyword “QR code scanner” has no content; it’s just a functioning QR code scanner.
+This highlights the importance of optimizing your page for user intent, showing that user signals (like bounce rate) are key to ranking success.
+
+So we can say that successful SEO strategies in the future will need to focus more on how well they cater to user needs and expectations, even beyond traditional content.
+
+How to Optimize for User Signals
+“Optimizing for user signals comes down to optimizing your page so that users spend time interacting with your page. Ideally, they’ll even want to share it further.”
+
+Here are a few tips to keep users engaged:
+
+Monitor user engagement metrics like time on page, bounce rate, clicks on buttons, or interactions with features. These give you a clear picture of how users are interacting with your site. Then you can adjust your page accordingly.
+Match content to user intent. Align your content with exactly what users are searching for — no more, no less. If they’re looking for a quick answer, don’t bury it under a wall of text. Make it easy for them to find the answers.
+Add visual elements like videos and infographics. These elements are engaging and take time to consume the material.
+Add elements that prompt user interaction like comment sections, polls, and quizzes.
+6. Matching Search Intent Is Growing in Importance
+Matching search intent has always been a big ranking factor. And it’s only getting more important.
+
+In fact, search intent is now the focus of Google’s most recent quality rating guidelines.
+
+Let’s take a look at why getting this right matters.
+
+Imagine you’re searching for “best running shoes.” You click on a link expecting to see a list of top sneakers for running. But instead, you land on a product page selling a specific pair of running shoes.
+
+That’s a classic example of matching the keyword but totally missing the mark on intent.
+
+Now, what will you do in this scenario as a searcher?
+
+Most likely, you’ll leave the page and open another one that satisfies your search intent.
+
+You leaving that first page increases its bounce rate, which is an indicator for Google algorithm that it didn’t meet your search intent.
+
+This means Google algorithm will prioritize other pages that match search intent.
+
+How to Optimize for Search Intent
+Optimizing your content for search intent starts from identifying it.
+
+One easy way to do this is by using the Semrush Keyword Magic Tool. Enter your target keyword in the tool and find out the user intent behind each related keyword.
+
+Keyword Search Intent
+Identify search intent of any keyword with Semrush’s Keyword Magic Tool. The “Intent” column shows you whether the keyword across it is informational, navigational, commercial, or transactional.
+Alternatively, you can search your desired keyword and analyze top SERP results. See what type of content ranks on the first page and what intent they satisfy.
+
+Once you understand what the search intent of your target keyword is, it’s time to create content that will answer the search query and resonate with your target audience.
+
+7. UX Continues to Grow as a Key Factor in SEO Strategies
+We talked about user signals. And one factor that powers positive user signals is user experience (UX).
+
+Site speed, ease of navigation, and how a user interacts with your site are the elements that Google algorithm considers when they rank websites.
+
+Core web vitals became a ranking factor in 2021 assessing the UX of your website. It’s a set of three specific web page experience metrics that Google considers super important:
+
+Largest contentful paint (LCP)
+First input delay (FID)
+Cumulative layout shift (CLS)
+But in March 2024, Interaction to Next Paint (INP) replaces FID.
+
+Core Web Vitals Are Part Of Google's Overall Evaluation Of "Page Experience"
+Core Web Vitals are part of Google’s overall evaluation of page experience. In March 2024, interaction to next paint (INP) replaces first input delay (FID).
+INP is similar to FID, but more advanced.
+
+It considers all page interactions like:
+
+Clicking with a mouse
+Tapping on a device with a touchscreen
+Pressing a key on either a physical or onscreen keyboard
+Meanwhile, FID only accounts for the first interaction.
+
+How to Optimize UX
+Optimizing UX means making your site as easy and intuitive to navigate as possible. This includes:
+
+Improving site speed
+Limiting popups and being intentional about the ones you keep
+Outlining your page in a way that’s easy to navigate
+Making your CTAs or any monetization contextually relevant
+Only linking to content that’s truly helpful to the reader
+8. Narrow Topical Relevance and Genuine Backlinks Fuel Domain Authority
+Domain authority used to be all about links.
+
+Not anymore.
+
+Today, Google also evaluates your site based on topical relevance.
+
+Topical relevance is about how focused and authoritative your content is on a specific subject.
+
+But it’s not just about creating a bunch of content on a topic.
+
+It’s about showing you’re an authority in that space.
+
+Now, this doesn’t mean that backlinks don’t matter anymore.
+
+They do.
+
+But it’s the quality of those links that really counts now. We’re talking about links that come from genuinely relevant and authoritative sources in your niche. The links to your site that people click on a lot.
+
+For example, imagine you’re a chef specializing in Italian cuisine. If your website is filled with content that deeply explores Italian cooking, from regional recipes to traditional cooking techniques, and has backlinks from other cooking websites, Google sees you as an expert in that field.
+
+How to Increase Topical Domain Authority
+
+Relationship-based link building is what you need to pursue in any link building effort.
+
+“The best links in 2024 and on will be relationship-based.”
+
+Here are the ways to do it:
+
+Guest posts: Guest-publish and distribute content that has a chance to rank. It’s a great example of relationship-based links. It’s when real experts work together to bring in traffic that results in a stream of clicks to the links in the post.
+Triangular link exchanges: Exchange links with legit sites that are topically relevant to your content. Look out for websites that have content managers who genuinely evaluate whether the placed links are going to be useful to the reader.
+Link magnets: Create pages about statistics you’ve collected yourself, studies you’ve conducted, free tools, templates, and other original resources that are valuable enough to naturally get people to want to link to you.
+Website portfolios: Build a few sites to cover different aspects of your industry and only publish links that are genuinely useful to the reader.
+9. Social Networks and AI Chats Are a New Form of Competition to Search Engines
+Since AI chats like ChatGPT and Bard came out, people are wondering if they will replace search engines like Google.
+
+But there’s no real threat of that happening anytime soon.
+
+In fact, despite the fact that ChatGPT was the biggest, fastest growing app in history, it didn’t really change the number of people that use Google.
+
+“We don’t see AI in terms of a third app, like ChatGPT or a different type of large language model, changing how people search for things on Google. At least in 2024.”
+
+And there’s a solid reason.
+
+It takes a lot to change people’s behavior.
+
+Most people are used to googling things. It’s even in the lexicon. We literally just say we google stuff.
+
+Social media platforms are also competing with search engines.
+
+Many young people use TikTok to find good restaurants or vacation spots.
+
+They’re even turning to TikTok when they want to know how to do something.
+
+But here’s the thing. Neither TikTok, nor ChatGPT can match the depth and authority of a search engine like Google. Especially for more serious queries.
+
+For example, you wouldn’t turn to TikTok or ChatGPT for advice on your 401k. For that, you need reliable, expert sources. And Google is a great place to find trustworthy, accurate information.
+
+How to Adapt to Alternative Searches
+As we already mentioned, people’s search behavior isn’t going to change in the nearest future.
+
+But if you want to stay on top of the SEO trends, we recommend you:
+
+Leverage TikTok and optimize your captions if TikTok is where your audience spends time
+Include explainer images and build a YouTube presence for searches where Google embeds visual results
+Use a wealth of schema markup to help Google get the most out of your content for whenever it tries to emulate the experience of finding information on TikTok or Instagram
+10. Local Search Results Are Richer and More Mature
+Local search has become a mature area of SEO. In fact, 98% of consumers found local businesses on the internet in 2022, up from 90% in 2019.
+
+Local search experiences are getting more sophisticated, involving things like:
+
+Local search ads: Businesses are increasingly using targeted advertising within local search results.
+Review management: Businesses are focusing on not just getting reviews but managing them effectively. This involves actively encouraging customers to leave reviews, responding to these reviews, and using the feedback to improve their products and services.
+Ratings: Along with reviews, overall star ratings are gaining more weight in local search algorithms. A higher average rating can boost a business’s ranking in local search results, making it more visible to potential customers.
+Schema coverage: Schema markup is a type of code that helps search engines understand the content on your website. It makes the information more accessible to potential customers and can improve a site’s visibility in local searches.
+Additionally, social media platforms like TikTok are emerging as local search competitors.
+
+TikTok search is especially popular among Gen Z when looking for local restaurants.
+
+How to Optimize for Local Search
+
+Optimizing for local search involves a combination of traditional SEO practices and specific local strategies.
+
+Let’s take a look at what you should focus on in 2024:
+
+Make your Google Business Profile (GBP) lively: Your GBP is often the first impression customers have of your business. So make sure you optimize it – choose the right business category, add a well-crafted description, upload appealing photos, and add business hours.
+Build a system for encouraging 5-star reviews: 76% of consumers read reviews before making a decision. So encourage your customers to leave reviews. Meanwhile, you should actively engage with them – thank customers for positive reviews and offer a solution when someone leaves a negative note. We also highly recommend tools that help you scale 5-star reviews and user-generated content.
+Implement local business schema: Use schema markup to help search engines better understand and index your site. This means including specific information like business hours, location, services offered, and reviews on your website.
+Be present on social media: If your audience is active on platforms like TikTok, Instagram, and Snapchat, make sure you are too. Include your business details like location and business hours, and actively publish content that would attract your customers.
+11. Voice and Visual Search Are More Mature
+Based on how things are trending, voice and visual searches are definitely maturing.
+
+Here’s what you need to know.
+
+Voice Search
+Voice search has grown up a bit since the early days of Siri and Alexa.
+
+It’s mostly used for:
+
+Quick fact checks: E.g., “What’s the capital of France?” or “How old is the Eiffel Tower?”
+Local business searches: People frequently ask “Where’s the nearest coffee shop?” or “List of Italian restaurants near me.”
+Hands-free help: People use voice search when their hands are occupied. For example, during cooking they might ask “How to make caesar dressing?” or while driving, “Navigate to the closest gas station.”
+A while back, we at Backlinko tried figuring out what makes content rank for voice search.
+
+Turns out, it was more hype than anything else.
+
+Most voice searches just pull the top Google result.
+
+How to Optimize for Voice Search
+So, the best strategy for search engines to include your content in voice search?
+
+“Nail your SEO for Google’s traditional search. If you rank high there, you’re likely covered for voice search too.”
+
+Visual Search
+Once you start using it, you’ll quickly notice that visual search is super helpful for:
+
+Shopping
+Directions
+Identifying landmarks
+Local business reviews
+Translation
+Recipes
+Nutrition information
+Lots more
+
+This covers Google Lens searches, as well as uploading an image to Google’s search field.
+
+How to Optimize for Visual Search
+A while ago we conducted one of the first visual search ranking factors studies.
+
+Here are some of the highlights from that research:
+
+Make your website mobile-friendly. 9 out of 10 Google Lens results came from a site that passed Google’s mobile-friendly test. Considering that basically 100% of Google Lens searches are done on mobile devices, it makes sense that Google would prefer mobile-friendly websites.
+Use traditional image SEO techniques (like optimizing image filenames and alt text). They seem to also help with Google Lens rankings.
+Include text along with the image on your page. Google tends to pull Google Lens image results from pages with quite a bit of text (1,600 words on average).
+What Will Be the Future of SEO in the Next 5 to 10 Years?
+In the next five to ten years, the evolution of SEO will continue to be steady. Not dramatic.
+
+We may be wrong. But here’s why we are not giving you a hype-y conclusion.
+
+We’ve seen major innovations in tech in the past 10-15 years, including:
+
+GenAI enjoying unprecedented adoption rates since fall 2022
+Machine learning being used in algorithms that have been teaching themselves for at least several years now
+And even SEO research tools that make data accessible to the masses
+Or content tools that help us measure, automate, and scale our efforts
+Still, from the side of users, search engine usage hasn’t changed much.
+
+Sure, AI is shifting the search experience, but it takes a lot of time to change people’s behavior.
+
+For that reason, it’s unlikely that people will fully switch from using Google to using ChatGPT, Bard, or any other generative AI tools.
+
+It also seems to be a story of a growing market, where the new tool makes the pie larger, instead of just eating away from the existing slices. Email hasn’t died either, there’s a good chance you still use it a few times a day even if you prefer Slack.
+
+From the side of the users, the algorithm changes seem to be consistent with only subtle changes in user behavior so far.
+
+We’d like to propose that the search engines refine how they identify a good website with good content; search engines have not been trying to change the definition of good websites and good content.
+
+Take E-E-A-T. It has been an exercise in refining how Google identifies whether you follow first principles of SEO. Not an exercise in re-defining SEO.
+
+In 2004, you’d rank at the top if you published an article that was built on first-hand experience of an authoritative expert, used engaging visuals that make the readers stick, presented information so original that it deserves links from quality sites in your niche, and leveraged distribution within a vocal community.
+
+If you also had the article on a site with a related content cluster, domain that your niche knows and likes, clean information architecture, wealth of schema, and blazing load times, you were golden.
+
+In 2024, the same holds true.

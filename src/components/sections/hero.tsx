@@ -24,7 +24,7 @@ import Temoignages from './temoignages';
 const Section = styled.section<{ isHalfSize?: boolean }>`
   position: relative;
   width: 100%;
-  height: ${props => props.isHalfSize ? '50vh' : '100vh'};
+  height: ${props => props.isHalfSize ? '60vh' : '50vh'};
   background-color: ${(props) => props.theme.colors.backgrounds.default};
   overflow: hidden;
   padding-top: ${props => props.theme.spacing.xlarge};
@@ -64,7 +64,7 @@ const ContentArea = styled.div`
   padding: ${props => props.theme.spacing.large};
   border-radius: ${props => props.theme.borders.radius};
   background: ${props => props.theme.colors.backgrounds.default};
-  box-shadow: 0 0 100px 100px ${props => props.theme.colors.backgrounds.default};
+  box-shadow: 0 0 50px 50px ${props => props.theme.colors.backgrounds.default};
   
   @media (max-width: 768px) {
     text-align: center;
@@ -241,11 +241,12 @@ const Hero: React.FC = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}
       />
       <Section isHalfSize={isTablet}>
-        {!isMobile && (
+        {/*!isMobile && (
           <BackgroundLayer>
             <Temoignages isHalfSize={isTablet} />
           </BackgroundLayer>
-        )}
+        )*/
+        }
         <ContentLayer isHalfSize={isTablet}>
           <InnerSection>
             <ContentWrapper>

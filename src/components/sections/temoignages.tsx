@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Text, PerspectiveCamera, useTexture } from "@react-three/drei";
+import { Text, PerspectiveCamera, Html } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
+import { useTheme } from "styled-components";
 
 // Configuration constants
 const SCROLL_SPEED = 0.5;
@@ -20,6 +21,35 @@ const MOMENTUM_FRICTION = 0.98;
 const AUTO_SCROLL_SPEED = -0.8;
 const TRANSITION_DURATION = 1500;
 const BUFFER_MULTIPLIER = 3; // How many screens worth of items to keep in DOM
+
+// Configuration constants for layout
+const LAYOUT_CONFIG = {
+    center: {
+        width: 8,     // Width of center area to avoid
+        height: 5,    // Height of center area to avoid
+        offsetX: -2.5,   // Horizontal offset of center area
+        offsetY: 1    // Vertical offset of center area (positive moves it up)
+    },
+    spacing: {
+        minDistance: 2,   // Minimum distance between cards
+        maxAttempts: 5,  // Max attempts to find non-colliding position
+        distribution: {
+            minRadius: 7,    // Base minimum distance from center
+            maxRadius: 9,   // Base maximum distance from center
+            yScale: 0.4,    // Scale factor for vertical distribution (makes it more elliptical)
+            responsive: {
+                breakpoint: 12,  // Width at which base values are meant for
+                minScale: 1,     // Minimum scale factor for smaller screens
+                maxScale: 1.5     // Maximum scale factor for larger screens
+            }
+        }
+    }
+};
+/*
+ minRadius: 6,    // Minimum distance from center
+            maxRadius: 7,   // Maximum distance from center
+            yScale: 0.4     // Scale factor for vertical distribution (makes it more elliptical)
+*/
 
 interface Testimonial {
     id: string;
@@ -44,6 +74,25 @@ const testimonials: Testimonial[] = [
         featured: true
     },
     {
+        id: 'client-2',
+        type: 'client',
+        author: {
+            name: "Thomas D.",
+        },
+        content: "+45% de conversions en 3 mois",
+        featured: true
+    },
+    {
+        id: 'client-3',
+        type: 'client',
+        author: {
+            name: "Sophie M.",
+            company: "Boutique en Ligne",
+        },
+        content: "Notre e-commerce a doublé ses ventes",
+        featured: true
+    },
+    {
         id: 'value-1',
         type: 'value',
         content: "Innovation et excellence technique",
@@ -56,12 +105,13 @@ const testimonials: Testimonial[] = [
         featured: false
     },
     {
-        id: 'client-2',
+        id: 'client-4',
         type: 'client',
         author: {
-            name: "Thomas D.",
+            name: "Jean-Pierre R.",
+            company: "Cabinet JR",
         },
-        content: "+45% de conversions en 3 mois",
+        content: "Une refonte qui a modernisé notre image",
         featured: true
     },
     {
@@ -73,13 +123,7 @@ const testimonials: Testimonial[] = [
     {
         id: 'feature-2',
         type: 'feature',
-        content: "Design moderne et responsive",
-        featured: false
-    },
-    {
-        id: 'value-3',
-        type: 'value',
-        content: "Solutions sur mesure",
+        content: "Sécurité et performance",
         featured: false
     }
 ];
@@ -99,22 +143,24 @@ interface TestimonialPosition {
 const Section = styled.section`
     position: relative;
     overflow: hidden;
-    height: 100%;
     width: 100%;
-    
+    min-height: 600px; // Default for desktop
+    display: flex;
+    align-items: center;
+    padding: 4rem 0;
+
     @media (max-width: 1024px) {
+        min-height: unset;
         height: auto;
-        min-height: 80px;
-        margin: 0;
         padding: 0;
     }
 `;
 
-const CanvasContainer = styled.div<{ isHalfSize: boolean }>`
+const CanvasContainer = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    width: ${props => props.isHalfSize ? '50%' : '100%'};
+    width: 100%;
     height: 100%;
     z-index: 1;
     
@@ -127,7 +173,7 @@ const CarouselContainer = styled(motion.div)`
     position: relative;
     width: 100%;
     overflow: hidden;
-    padding: 0;
+    padding: 1rem 0;
     z-index: 2;
     touch-action: pan-y pinch-zoom;
     background: ${props => props.theme.colors.backgrounds.default};
@@ -173,100 +219,176 @@ const AuthorInfo = styled.div`
     opacity: 0.8;
 `;
 
-// Three.js Components
+const Card = styled.div`
+    width: 180px;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    //border-top: 2px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    //border-radius: 10px;
+    backdrop-filter: blur(10px);
+    transform-origin: center center;
+`;
+
+const CardText = styled.div`
+    color: black;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+`;
+
+const AuthorText = styled.div`
+    color: black;
+    font-size: 12px;
+    margin-top: 0.5rem;
+    text-align: center;
+    opacity: 0.7;
+`;
+
 const TestimonialText = ({ position, text, author, type }: { position: THREE.Vector3, text: string, author?: string, type: string }) => {
     const { camera } = useThree();
     const groupRef = useRef<THREE.Group>();
-    const [hovered, setHovered] = useState(false);
+    const time = useRef(Math.random() * 100);
     
-    const { scale } = useSpring({
-        scale: hovered ? 1.2 : 1,
-        config: { tension: 300, friction: 10 }
-    });
-
-    useFrame(() => {
+    useFrame((state) => {
         if (groupRef.current) {
+            // Face the camera
             groupRef.current.quaternion.copy(camera.quaternion);
+            
+            // Gentle floating motion
+            time.current += 0.005;
+            groupRef.current.position.y = position.y + Math.sin(time.current) * 0.3;
         }
     });
 
     return (
-        <animated.group
+        <group
             ref={groupRef}
             position={position}
-            scale={scale}
-            onPointerOver={() => setHovered(true)}
-            onPointerOut={() => setHovered(false)}
+            scale={0.5}
         >
-            <Text
-                color={type === 'client' ? '#000000' : '#333333'}
-                fontSize={0.5}
-                maxWidth={10}
-                lineHeight={1.2}
-                textAlign="center"
-                anchorX="center"
-                anchorY="middle"
+            <Html
+                transform
+                occlude
+                style={{
+                    transition: 'all 0.2s',
+                    opacity: 1
+                }}
             >
-                {text}
-            </Text>
-            {author && (
-                <Text
-                    position={[0, -0.6, 0]}
-                    color="#666666"
-                    fontSize={0.3}
-                    maxWidth={10}
-                    lineHeight={1}
-                    textAlign="center"
-                    anchorX="center"
-                    anchorY="middle"
-                >
-                    {author}
-                </Text>
-            )}
-        </animated.group>
+                <Card>
+                    <CardText>{text}</CardText>
+                    {author && (
+                        <AuthorText>{author}</AuthorText>
+                    )}
+                </Card>
+            </Html>
+        </group>
     );
 };
 
 const TestimonialsScene = () => {
     const testimonialRefs = useRef<TestimonialPosition[]>([]);
     const { size, viewport } = useThree();
-    const isHalfSize = size.width < viewport.width;
+
+    // Calculate scale based on viewport width
+    const getDistributionScale = () => {
+        const { breakpoint, minScale, maxScale } = LAYOUT_CONFIG.spacing.distribution.responsive;
+        const scale = viewport.width / breakpoint;
+        return Math.max(minScale, Math.min(maxScale, scale));
+    };
+
+    const checkCollision = (pos: { x: number, y: number }, existingPositions: { x: number, y: number }[]) => {
+        return existingPositions.some(existing => {
+            const dx = existing.x - pos.x;
+            const dy = existing.y - pos.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < LAYOUT_CONFIG.spacing.minDistance;
+        });
+    };
+
+    const isInCenterArea = (x: number, y: number) => {
+        const { width, height, offsetX, offsetY } = LAYOUT_CONFIG.center;
+        const scale = getDistributionScale();
+        return Math.abs(x - offsetX) < (width * scale)/2 && 
+               Math.abs(y - offsetY) < (height * scale)/2;
+    };
+
+    const getRandomPosition = (index: number, existingPositions: { x: number, y: number }[]) => {
+        let position;
+        let attempts = 0;
+        const scale = getDistributionScale();
+        const { minRadius, maxRadius, yScale } = LAYOUT_CONFIG.spacing.distribution;
+
+        // Keep trying positions until we find one without collision and not in center
+        do {
+            // Generate angle and radius
+            const angle = (index / testimonials.length) * Math.PI * 2 + Math.random() * 0.5;
+            const scaledMinRadius = minRadius * scale;
+            const scaledMaxRadius = maxRadius * scale;
+            const radius = scaledMinRadius + Math.random() * (scaledMaxRadius - scaledMinRadius);
+
+            // Calculate base position
+            const baseX = Math.cos(angle) * radius;
+            const baseY = Math.sin(angle) * radius * yScale;
+
+            // Add some noise
+            const noise = 1.2 * scale;
+            const xNoise = (Math.random() - 0.5) * noise;
+            const yNoise = (Math.random() - 0.5) * noise;
+
+            const candidateX = baseX + xNoise + LAYOUT_CONFIG.center.offsetX * scale;
+            const candidateY = baseY + yNoise + LAYOUT_CONFIG.center.offsetY * scale;
+
+            // Only accept position if it's not in center area
+            if (!isInCenterArea(candidateX, candidateY)) {
+                position = {
+                    x: candidateX,
+                    y: candidateY,
+                    z: -3 + Math.random() * 2
+                };
+            }
+            attempts++;
+        } while (
+            (!position || checkCollision(position, existingPositions)) && 
+            attempts < LAYOUT_CONFIG.spacing.maxAttempts
+        );
+
+        // If we couldn't find a valid position, force one at a safe distance
+        if (!position) {
+            const angle = (index / testimonials.length) * Math.PI * 2;
+            const radius = LAYOUT_CONFIG.spacing.distribution.maxRadius * scale;
+            position = {
+                x: Math.cos(angle) * radius + LAYOUT_CONFIG.center.offsetX * scale,
+                y: Math.sin(angle) * radius * LAYOUT_CONFIG.spacing.distribution.yScale + LAYOUT_CONFIG.center.offsetY * scale,
+                z: -3 + Math.random() * 2
+            };
+        }
+
+        return position;
+    };
 
     useEffect(() => {
-        // Initialize testimonial positions
-        testimonialRefs.current = testimonials.map(() => ({
-            x: (Math.random() - 0.5) * (isHalfSize ? 5 : 10),
-            y: (Math.random() - 0.5) * 10,
-            z: Math.random() * (DEPTH_RANGE.MAX - DEPTH_RANGE.MIN) + DEPTH_RANGE.MIN,
-            vx: (Math.random() - 0.5) * 0.02,
-            vy: (Math.random() - 0.5) * 0.02,
-            vz: (Math.random() - 0.5) * 0.01,
-            text: testimonials[0].content,
-            author: testimonials[0].author?.name,
-            type: testimonials[0].type
-        }));
-    }, [isHalfSize]);
-
-    useFrame((state) => {
-        testimonialRefs.current.forEach((testimonial) => {
-            // Update positions
-            testimonial.x += testimonial.vx;
-            testimonial.y += testimonial.vy;
-            testimonial.z += testimonial.vz;
-
-            // Bounce off boundaries
-            const bounds = isHalfSize ? 5 : 10;
-            if (Math.abs(testimonial.x) > bounds) testimonial.vx *= -1;
-            if (Math.abs(testimonial.y) > 5) testimonial.vy *= -1;
-            if (testimonial.z < DEPTH_RANGE.MIN || testimonial.z > DEPTH_RANGE.MAX) testimonial.vz *= -1;
+        const positions: { x: number, y: number }[] = [];
+        testimonialRefs.current = testimonials.map((testimonial, index) => {
+            const pos = getRandomPosition(index, positions);
+            positions.push({ x: pos.x, y: pos.y });
+            return {
+                ...pos,
+                vx: 0,
+                vy: 0,
+                vz: 0,
+                text: testimonial.content,
+                author: testimonial.author?.name,
+                type: testimonial.type
+            };
         });
-    });
+    }, [viewport.width]); // Re-layout when viewport width changes
 
     return (
         <>
-            <fog attach="fog" args={[FOG_COLOR, FOG_NEAR, FOG_FAR]} />
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[10, 10, 5]} intensity={1} />
+            <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+            <ambientLight intensity={1} />
+            
             {testimonialRefs.current.map((testimonial, index) => (
                 <TestimonialText
                     key={index}
@@ -302,7 +424,7 @@ const containerVariants = {
     }
 };
 
-const Temoignages: React.FC<{ isHalfSize?: boolean }> = ({ isHalfSize = false }) => {
+const Temoignages: React.FC = () => {
     const carouselRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
@@ -508,9 +630,8 @@ const Temoignages: React.FC<{ isHalfSize?: boolean }> = ({ isHalfSize = false })
 
     return (
         <Section>
-            <CanvasContainer isHalfSize={isHalfSize}>
-                <Canvas>
-                    <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+            <CanvasContainer>
+                <Canvas gl={{ alpha: true }}>
                     <TestimonialsScene />
                 </Canvas>
             </CanvasContainer>
@@ -547,7 +668,7 @@ const Temoignages: React.FC<{ isHalfSize?: boolean }> = ({ isHalfSize = false })
                                     <AuthorInfo>
                                         {item.author.name}
                                         {item.author.company && (
-                                            <span> · {item.author.company}</span>
+                                            <span> - {item.author.company}</span>
                                         )}
                                     </AuthorInfo>
                                 </>
