@@ -38,3 +38,21 @@ next-env.d.ts
 
 # local only
 *.local.*
+
+# Specific temp directories
+.tmp/
+.temp/
+
+# Common system files to ignore
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo

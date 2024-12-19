@@ -19,15 +19,17 @@ import { DM_Sans } from '@next/font/google';
 const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] });
 
 import Temoignages from './temoignages';
+import Float3DCard from '../library/Float3DCard';
+import SimpleCard from '../cards/SimpleCard';
 
 // Layout Components
 const Section = styled.section<{ isHalfSize?: boolean }>`
   position: relative;
   width: 100%;
-  height: ${props => props.isHalfSize ? '60vh' : '50vh'};
+  height: ${props => props.isHalfSize ? '60vh' : '70vh'};
   background-color: ${(props) => props.theme.colors.backgrounds.default};
   overflow: hidden;
-  padding-top: ${props => props.theme.spacing.xlarge};
+  //padding-top: ${props => props.theme.spacing.xlarge};
   
   @media (max-width: 768px) {
     height: auto;
@@ -43,28 +45,62 @@ const InnerSection = styled.div`
   display: flex;
   align-items: center;
   
-  @media (min-width: 1024px) {
+  @media (min-width: 105rem) {
     padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
+    background-color: #504540;
   }
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
-  max-width: ${props => props.theme.sizes.maxWidth};
+  //max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
   position: relative;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.xlarge};
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+`;
+
+const CardContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  .canvas-container {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    //width: 60%;
+    height: 100%;
+    //left: 30%;
+
+    //background-color: #504540;
+    
+    @media (max-width: 105rem) {
+      display: none;
+    }
+  }
 `;
 
 const ContentArea = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
+  margin-left: 8%;
   text-align: left;
   position: relative;
   padding: ${props => props.theme.spacing.large};
   border-radius: ${props => props.theme.borders.radius};
   background: ${props => props.theme.colors.backgrounds.default};
   box-shadow: 0 0 50px 50px ${props => props.theme.colors.backgrounds.default};
+  z-index: 2;
   
   @media (max-width: 768px) {
     text-align: center;
@@ -78,17 +114,17 @@ const ContentArea = styled.div`
 // Typography Components
 const Title = styled.h1`
   color: ${(props) => props.theme.colors.text.primary};
-  font-size: 3.5rem;
+  font-size: 5rem;
   font-weight: 700;
   margin: 0;
-  line-height: 1.2;
-  white-space: nowrap;
+  line-height: 1.1;
+  //white-space: nowrap;
 
   .gradient {
     background: ${(props) => props.theme.colors.accent.gradient};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    white-space: nowrap;
+    //white-space: nowrap;
   }
 
   @media (max-width: 768px) {
@@ -99,9 +135,9 @@ const Title = styled.h1`
 
 const SubTitle = styled.h2`
   color: ${(props) => props.theme.colors.text.primary};
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 400;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
@@ -110,13 +146,14 @@ const SubTitle = styled.h2`
 
 const Description = styled.p`
   color: ${(props) => props.theme.colors.text.secondary};
-  font-size: 1.125rem;
-  margin-top: 1.5rem;
-  max-width: 80%;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  max-width: 90%;
+  line-height: 1.4;
 
   @media (max-width: 768px) {
     max-width: 100%;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 `;
 
@@ -131,19 +168,25 @@ const LogoTitle = styled.img`
 
 const CTAButton = styled.button`
   display: inline-block;
-  margin-top: 2rem;
-  padding: 1rem 2.5rem;
+  margin-top: 3rem;
+  padding: 1.25rem 3rem;
   background-color: ${(props) => props.theme.colors.accent.primary};
   color: ${(props) => props.theme.colors.basic.white};
   border: none;
   border-radius: 99rem;
   font-weight: 600;
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.accent.light};
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+    padding: 1rem 2.5rem;
   }
 `;
 
@@ -160,7 +203,7 @@ const ContentLayer = styled.div<{ isHalfSize?: boolean }>`
     position: relative;
     z-index: 2;
     height: 100%;
-    width: ${props => props.isHalfSize ? '50%' : '100%'};
+    //width: ${props => props.isHalfSize ? '50%' : '100%'};
 `;
 
 const Hero: React.FC = () => {
@@ -250,6 +293,15 @@ const Hero: React.FC = () => {
         <ContentLayer isHalfSize={isTablet}>
           <InnerSection>
             <ContentWrapper>
+              <CardContainer>
+                <Float3DCard
+                  enableHover={true}
+                  enableDrag={true}
+                  hoverIntensity={0.3}
+                >
+                  <SimpleCard />
+                </Float3DCard>
+              </CardContainer>
               <ContentArea>
                 <motion.div
                   initial="hidden"
