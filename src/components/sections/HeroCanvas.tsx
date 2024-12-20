@@ -34,18 +34,11 @@ const CanvasContainer = styled.div<{ isHalfSize?: boolean }>`
   height: ${props => props.isHalfSize ? '50vh' : '60vh'};
   position: relative;
   background: none;
-  transition: height 0.3s ease-in-out;
   z-index: 0;
-  padding: 0 8%;
-  
-  @media (max-width: 1024px) {
-    padding: 0 5%;
-  }
   
   @media (max-width: 768px) {
     height: 70vh;
     min-height: 500px;
-    padding: 0 1rem;
   }
 `;
 
@@ -58,37 +51,53 @@ const HeroLayout = styled.div`
   gap: 4rem;
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 8%;
 
   @media (max-width: 1024px) {
     justify-content: center;
     gap: 2rem;
+    padding: 0 5%;
+    max-width: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 0rem;
   }
 `;
 
 const HeroContent = styled(motion.div)`
-  flex: 1;
-  max-width: 600px;
+  flex: 0 1 800px;
   text-align: left;
   background: transparent;
   border-radius: ${props => props.theme.borders.radius};
   position: relative;
   display: grid;
   gap: 2rem;
+  margin-right: auto;
+
+  @media (max-width: 1400px) {
+    flex: 0 1 700px;
+  }
 
   @media (max-width: 768px) {
     text-align: center;
     max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
   }
 `;
 
 const CardWrapper = styled(motion.div)`
-  flex: 1;
+  flex: 0 1 700px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   animation: float 6s ease-in-out infinite;
   height: 100%;
-  max-width: 600px;
+
+  @media (max-width: 1400px) {
+    flex: 0 1 600px;
+  }
 
   @keyframes float {
     0% {
@@ -112,6 +121,27 @@ const Title = styled.h1`
   font-size: clamp(2.5rem, 5vw, 5rem);
   line-height: 1.1;
   margin: 0;
+  display: grid;
+  gap: 0.2rem;
+
+  img {
+    height: 1em;
+    margin-bottom: 0.2rem;
+  }
+
+  @media (max-width: 768px) {
+    text-align: center;
+    gap: 0.2rem;
+    
+    img {
+      display: block;
+      margin: 0 auto 0.2rem;
+    }
+  }
+`;
+
+const TitleText = styled.div`
+  white-space: nowrap;
 `;
 
 const SubTitle = styled.h2`
@@ -129,6 +159,11 @@ const Description = styled.p`
   max-width: 90%;
   line-height: 1.4;
   opacity: 0.9;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin: 2rem auto 0;
+  }
 `;
 
 const GradientText = styled.span`
@@ -281,7 +316,7 @@ const Scene: React.FC<SceneProps> = ({ isMobile, isTablet }) => {
         style={{
           width: '100%',
           height: '100%',
-          transform: `scale(${isMobile ? 0.4 : isTablet ? 0.45 : 0.5})`,
+          transform: `scale(${isMobile ? 0.8 : isTablet ? 0.65 : 0.55})`,
         }}
         center
       >
@@ -301,10 +336,8 @@ const Scene: React.FC<SceneProps> = ({ isMobile, isTablet }) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5 }}
-                      style={{ height: '1em', marginRight: '0.5rem', verticalAlign: 'baseline', position: 'relative', top: '0.15em' }} 
                     />
-                    donne vie à vos
-                    <br />
+                    <TitleText>donne vie à vos</TitleText>
                     <GradientText>
                       projets numériques
                     </GradientText>
