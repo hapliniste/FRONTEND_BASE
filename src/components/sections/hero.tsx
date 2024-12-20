@@ -21,6 +21,8 @@ const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] });
 import Temoignages from './temoignages';
 import Float3DCard from '../library/Float3DCard';
 import SimpleCard from '../cards/SimpleCard';
+import Float3DButton from '../library/Float3DButton';
+import HeroCanvas from './HeroCanvas';
 
 // Layout Components
 const Section = styled.section<{ isHalfSize?: boolean }>`
@@ -168,7 +170,6 @@ const LogoTitle = styled.img`
 
 const CTAButton = styled.button`
   display: inline-block;
-  margin-top: 3rem;
   padding: 1.25rem 3rem;
   background-color: ${(props) => props.theme.colors.accent.primary};
   color: ${(props) => props.theme.colors.basic.white};
@@ -178,15 +179,23 @@ const CTAButton = styled.button`
   font-size: 1.8rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin: 0;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.accent.light};
-    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {
     font-size: 1.4rem;
     padding: 1rem 2.5rem;
+  }
+`;
+
+const CTAContainer = styled.div`
+  margin-top: 3rem;
+  
+  @media (max-width: 768px) {
+    margin-top: 2rem;
   }
 `;
 
@@ -273,6 +282,12 @@ const Hero: React.FC = () => {
     }
   };
 
+  /*
+  We should use a single canva for the hero and put all the content in it.
+  As we can render components with Drei, we should be able to use an orthographic camera and render it like a normal react component.
+  This would allow us more flexibility and make the placement of the 3D components easier.
+  */
+
   return (
     <>
       <NextSeo
@@ -283,81 +298,7 @@ const Hero: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}
       />
-      <Section isHalfSize={isTablet}>
-        {/*!isMobile && (
-          <BackgroundLayer>
-            <Temoignages isHalfSize={isTablet} />
-          </BackgroundLayer>
-        )*/
-        }
-        <ContentLayer isHalfSize={isTablet}>
-          <InnerSection>
-            <ContentWrapper>
-              <CardContainer>
-                <Float3DCard
-                  enableHover={true}
-                  enableDrag={true}
-                  hoverIntensity={0.3}
-                >
-                  <SimpleCard />
-                </Float3DCard>
-              </CardContainer>
-              <ContentArea>
-                <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  custom={0}
-                  variants={titleVariants}
-                >
-                  <Title className={titleFont.className}>
-                    <LogoTitle src="/neuchatech_logo.webp" alt="Neuchatech" />
-                    donne vie à vos
-                    <br />
-                    <span className="gradient">projets numériques</span>
-                  </Title>
-                </motion.div>
-
-                <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  custom={1}
-                  variants={titleVariants}
-                >
-                  <SubTitle className={montserrat.className}>
-                    Votre partenaire suisse pour une transition numérique réussie
-                  </SubTitle>
-                </motion.div>
-
-                <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  custom={2}
-                  variants={titleVariants}
-                >
-                  <Description className={DMSansFont.className}>
-                    Des solutions web modernes et performantes pour faire de chaque
-                    projet un pilier de votre succès.
-                  </Description>
-                </motion.div>
-
-                <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  custom={3}
-                  variants={titleVariants}
-                >
-                  <CTAButton 
-                    onClick={scrollToContact}
-                    className={montserrat.className}
-                  >
-                    Obtenez un devis gratuit
-                  </CTAButton>
-                </motion.div>
-              </ContentArea>
-            </ContentWrapper>
-          </InnerSection>
-        </ContentLayer>
-      </Section>
+      <HeroCanvas />
     </>
   );
 };
