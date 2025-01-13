@@ -556,7 +556,7 @@ const Numerique: React.FC = () => {
 
   return (
     <>
-      <NextSeo
+      {/*<NextSeo
         title="L'importance du numérique"
         description="Comprendre l'importance d'avoir un site web professionnel pour votre entreprise. Statistiques et données clés sur l'impact du digital."
         additionalMetaTags={[
@@ -565,7 +565,7 @@ const Numerique: React.FC = () => {
             content: 'site web professionnel, importance numérique, statistiques web, présence en ligne, Neuchâtel'
           }
         ]}
-      />
+      />*/}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(numeriqueSchema) }}

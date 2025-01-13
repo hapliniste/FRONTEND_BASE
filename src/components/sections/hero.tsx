@@ -290,10 +290,10 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <NextSeo
+      {/*<NextSeo
         title="Accueil"
         description="Solutions web professionnelles à Neuchâtel. Développement de sites web, applications et assistants IA pour votre entreprise."
-      />
+      />*/}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}

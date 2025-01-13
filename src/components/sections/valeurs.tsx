@@ -321,7 +321,7 @@ const Valeurs: React.FC = () => {
 
   return (
     <>
-      <NextSeo
+      {/*<NextSeo
         title="Nos Valeurs"
         description="Découvrez nos valeurs : relation de confiance, technologies modernes, et transparence totale dans nos services web à Neuchâtel."
         additionalMetaTags={[
@@ -330,7 +330,7 @@ const Valeurs: React.FC = () => {
             content: 'valeurs entreprise, confiance, technologies modernes, transparence, développement web Neuchâtel'
           }
         ]}
-      />
+      />*/}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(valeursSchema) }}

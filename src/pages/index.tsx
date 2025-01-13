@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Head from "next/head";
+import { NextSeo } from 'next-seo';
 
 import Hero from "@/components/sections/hero";
 import Valeurs from "@/components/sections/valeurs";
@@ -56,6 +57,31 @@ export default function Home() {
 
     return (
         <>
+            <NextSeo
+                title="Neuchatech | Agence Web à Neuchâtel"
+                description="Neuchatech propose des solutions web et numériques sur mesure pour les entreprises à Neuchâtel. Développement sur mesure, sites web standards, assistants IA et conseil en transformation digitale."
+                openGraph={{
+                    type: "website",
+                    //locale: "fr_CH",
+                    url: "https://neuchatech.ch",
+                    title: "Neuchatech | Agence Web à Neuchâtel",
+                    description: "Solutions web et numériques sur mesure à Neuchâtel",
+                    site_name: "Neuchatech",
+                    images: [
+                        {
+                            url: "https://neuchatech.ch/neuchatech_logo.webp",
+                            width: 1200,
+                            height: 200,
+                            alt: "Neuchatech - Solutions Web à Neuchâtel",
+                        }
+                    ]
+                }}
+                twitter={{
+                    handle: "@neuchatech",
+                    site: "@neuchatech",
+                    cardType: "summary_large_image",
+                }}
+            />
             <Hero />
             {isMobile && <Temoignages />}
             <SectionWrapper isSecond>

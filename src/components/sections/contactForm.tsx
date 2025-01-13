@@ -532,7 +532,7 @@ const ContactForm: React.FC = () => {
 
   return (
     <>
-      <NextSeo
+      {/*<NextSeo
         title="Contact"
         description="Contactez Neuchatech pour vos projets web. Développement sur mesure, sites web standards et assistants IA à Neuchâtel."
         additionalMetaTags={[
@@ -541,7 +541,7 @@ const ContactForm: React.FC = () => {
             content: 'contact, devis, projet web, développement web, Neuchâtel'
           }
         ]}
-      />
+      />*/}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
