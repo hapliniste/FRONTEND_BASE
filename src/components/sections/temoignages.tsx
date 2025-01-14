@@ -290,48 +290,43 @@ const TestimonialsScene = () => {
     const testimonialRefs = useRef<TestimonialPosition[]>([]);
     const { size, viewport } = useThree();
 
-    // Calculate scale based on viewport width
-    const getDistributionScale = () => {
+    const getDistributionScale = useCallback(() => {
         const { breakpoint, minScale, maxScale } = LAYOUT_CONFIG.spacing.distribution.responsive;
         const scale = viewport.width / breakpoint;
         return Math.max(minScale, Math.min(maxScale, scale));
-    };
+    }, [viewport.width]);
 
-    const checkCollision = (pos: { x: number, y: number }, existingPositions: { x: number, y: number }[]) => {
+    const checkCollision = useCallback((pos: { x: number, y: number }, existingPositions: { x: number, y: number }[]) => {
         return existingPositions.some(existing => {
             const dx = existing.x - pos.x;
             const dy = existing.y - pos.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             return distance < LAYOUT_CONFIG.spacing.minDistance;
         });
-    };
+    }, []);
 
-    const isInCenterArea = (x: number, y: number) => {
+    const isInCenterArea = useCallback((x: number, y: number) => {
         const { width, height, offsetX, offsetY } = LAYOUT_CONFIG.center;
         const scale = getDistributionScale();
         return Math.abs(x - offsetX) < (width * scale)/2 && 
                Math.abs(y - offsetY) < (height * scale)/2;
-    };
+    }, [getDistributionScale]);
 
-    const getRandomPosition = (index: number, existingPositions: { x: number, y: number }[]) => {
+    const getRandomPosition = useCallback((index: number, existingPositions: { x: number, y: number }[]) => {
         let position;
         let attempts = 0;
         const scale = getDistributionScale();
         const { minRadius, maxRadius, yScale } = LAYOUT_CONFIG.spacing.distribution;
 
-        // Keep trying positions until we find one without collision and not in center
         do {
-            // Generate angle and radius
             const angle = (index / testimonials.length) * Math.PI * 2 + Math.random() * 0.5;
             const scaledMinRadius = minRadius * scale;
             const scaledMaxRadius = maxRadius * scale;
             const radius = scaledMinRadius + Math.random() * (scaledMaxRadius - scaledMinRadius);
 
-            // Calculate base position
             const baseX = Math.cos(angle) * radius;
             const baseY = Math.sin(angle) * radius * yScale;
 
-            // Add some noise
             const noise = 1.2 * scale;
             const xNoise = (Math.random() - 0.5) * noise;
             const yNoise = (Math.random() - 0.5) * noise;
@@ -339,7 +334,6 @@ const TestimonialsScene = () => {
             const candidateX = baseX + xNoise + LAYOUT_CONFIG.center.offsetX * scale;
             const candidateY = baseY + yNoise + LAYOUT_CONFIG.center.offsetY * scale;
 
-            // Only accept position if it's not in center area
             if (!isInCenterArea(candidateX, candidateY)) {
                 position = {
                     x: candidateX,
@@ -353,7 +347,6 @@ const TestimonialsScene = () => {
             attempts < LAYOUT_CONFIG.spacing.maxAttempts
         );
 
-        // If we couldn't find a valid position, force one at a safe distance
         if (!position) {
             const angle = (index / testimonials.length) * Math.PI * 2;
             const radius = LAYOUT_CONFIG.spacing.distribution.maxRadius * scale;
@@ -365,7 +358,7 @@ const TestimonialsScene = () => {
         }
 
         return position;
-    };
+    }, [getDistributionScale, isInCenterArea, checkCollision]);
 
     useEffect(() => {
         const positions: { x: number, y: number }[] = [];
@@ -382,7 +375,7 @@ const TestimonialsScene = () => {
                 type: testimonial.type
             };
         });
-    }, [viewport.width]); // Re-layout when viewport width changes
+    }, [getRandomPosition, viewport.width]);
 
     return (
         <>
@@ -519,7 +512,7 @@ const Temoignages: React.FC = () => {
 
             return needsUpdate ? newItems : prevItems;
         });
-    }, []);
+    }, [testimonials]);
 
     const setPosition = useCallback(() => {
         if (!carouselRef.current) return;
@@ -527,7 +520,7 @@ const Temoignages: React.FC = () => {
         updatePool();
     }, [updatePool]);
 
-    const animation = () => {
+    const animation = useCallback(() => {
         if (isDragging.current) return;
 
         const now = Date.now();
@@ -539,11 +532,9 @@ const Temoignages: React.FC = () => {
             const momentumProgress = Math.min(timeSinceMomentum / MOMENTUM_DURATION, 1);
             
             if (momentumProgress < 1) {
-                // Apply consistent friction regardless of direction
                 const frictionFactor = Math.pow(MOMENTUM_FRICTION, deltaTime / 16);
                 velocity.current *= frictionFactor;
 
-                // Only blend with auto-scroll if we're moving slower than it
                 const currentSpeed = Math.abs(velocity.current);
                 const autoScrollSpeed = Math.abs(AUTO_SCROLL_SPEED / deltaTime);
 
@@ -555,19 +546,17 @@ const Temoignages: React.FC = () => {
 
                 currentTranslate.current += velocity.current * deltaTime;
             } else {
-                // Momentum phase complete
                 momentumStartTime.current = 0;
                 velocity.current = AUTO_SCROLL_SPEED / deltaTime;
                 currentTranslate.current += AUTO_SCROLL_SPEED;
             }
         } else {
-            // Normal auto-scroll
             currentTranslate.current += AUTO_SCROLL_SPEED;
         }
 
         setPosition();
         animationRef.current = requestAnimationFrame(animation);
-    };
+    }, [setPosition]);
 
     const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
         isDragging.current = true;
@@ -626,7 +615,11 @@ const Temoignages: React.FC = () => {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, []);
+    }, [animation]);
+
+    useEffect(() => {
+        updatePool();
+    }, [updatePool]);
 
     return (
         <Section>

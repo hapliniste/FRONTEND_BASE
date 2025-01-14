@@ -1,28 +1,22 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, Suspense } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { NextSeo } from 'next-seo';
-
+import dynamic from 'next/dynamic';
 import { Outfit } from 'next/font/google';
-const titleFont = Outfit({
+
+// Optimize font loading
+const outfit = Outfit({
   subsets: ['latin'],
-  weight: ['700'],
+  display: 'swap',
+  preload: true,
+  weight: ['700']
 });
 
-import { Montserrat } from 'next/font/google';
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700']
+// Dynamically import HeroCanvas with no SSR
+const DynamicHeroCanvas = dynamic(() => import('./HeroCanvas'), {
+    ssr: false
 });
-
-import { DM_Sans } from '@next/font/google';
-const DMSansFont = DM_Sans({ subsets: ['latin'], weight: ['400'] });
-
-import Temoignages from './temoignages';
-import Float3DCard from '../library/Float3DCard';
-import SimpleCard from '../cards/SimpleCard';
-import Float3DButton from '../library/Float3DButton';
-import HeroCanvas from './HeroCanvas';
 
 // Layout Components
 const Section = styled.section<{ isHalfSize?: boolean }>`
@@ -120,13 +114,12 @@ const Title = styled.h1`
   font-weight: 700;
   margin: 0;
   line-height: 1.1;
-  //white-space: nowrap;
+  font-family: ${outfit.style.fontFamily};  // Use the optimized font
 
   .gradient {
     background: ${(props) => props.theme.colors.accent.gradient};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    //white-space: nowrap;
   }
 
   @media (max-width: 768px) {
@@ -298,7 +291,19 @@ const Hero: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}
       />
-      <HeroCanvas />
+      <Section>
+        <Suspense fallback={
+          <div style={{ 
+            width: '100%', 
+            height: '60vh',
+            background: 'linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s linear infinite',
+          }} />
+        }>
+          <DynamicHeroCanvas />
+        </Suspense>
+      </Section>
     </>
   );
 };

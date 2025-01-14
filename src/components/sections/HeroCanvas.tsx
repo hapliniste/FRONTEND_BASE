@@ -7,6 +7,7 @@ import SimpleCard from '../cards/SimpleCard';
 import Float3DButton from '../library/Float3DButton';
 import { Vector3, Group } from 'three';
 import { OrthographicCamera as ThreeOrthographicCamera } from 'three';
+import Image from 'next/image';
 
 // Import fonts
 import { Outfit } from 'next/font/google';
@@ -29,12 +30,11 @@ const DMSansFont = DM_Sans({
 });
 
 // Styled Components
-const CanvasContainer = styled.div<{ isHalfSize?: boolean }>`
+const CanvasContainer = styled.div`
   width: 100%;
-  height: ${props => props.isHalfSize ? '50vh' : '60vh'};
+  height: 60vh;
   position: relative;
-  background: none;
-  z-index: 0;
+  background: ${({ theme }) => theme.colors.backgrounds.default};
   
   @media (max-width: 768px) {
     height: 70vh;
@@ -49,19 +49,15 @@ const HeroLayout = styled.div`
   width: 100%;
   height: 100%;
   gap: 4rem;
-  max-width: 1400px;
+  max-width: ${({ theme }) => theme.sizes.maxWidth};
   margin: 0 auto;
-  padding: 0 8%;
+  padding: 0 ${({ theme }) => theme.spacing.section.paddingX.desktop};
 
   @media (max-width: 1024px) {
     justify-content: center;
     gap: 2rem;
-    padding: 0 5%;
+    padding: 0 ${({ theme }) => theme.spacing.section.paddingX.mobile};
     max-width: none;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0 0rem;
   }
 `;
 
@@ -69,7 +65,7 @@ const HeroContent = styled(motion.div)`
   flex: 0 1 800px;
   text-align: left;
   background: transparent;
-  border-radius: ${props => props.theme.borders.radius};
+  border-radius: ${({ theme }) => theme.borders.radius};
   position: relative;
   display: grid;
   gap: 2rem;
@@ -117,7 +113,7 @@ const CardWrapper = styled(motion.div)`
 `;
 
 const Title = styled.h1`
-  color: ${props => props.theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.text.primary};
   font-size: clamp(2.5rem, 5vw, 5rem);
   line-height: 1.1;
   margin: 0;
@@ -145,7 +141,7 @@ const TitleText = styled.div`
 `;
 
 const SubTitle = styled.h2`
-  color: ${props => props.theme.colors.text.secondary};
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: clamp(1.25rem, 2.5vw, 2rem);
   font-weight: 400;
   margin-top: 1.5rem;
@@ -153,7 +149,7 @@ const SubTitle = styled.h2`
 `;
 
 const Description = styled.p`
-  color: ${props => props.theme.colors.text.secondary};
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: clamp(1rem, 1.5vw, 1.25rem);
   margin-top: 2rem;
   max-width: 90%;
@@ -191,12 +187,8 @@ const CTAButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 1rem 2.5rem;
-  background: linear-gradient(
-    90deg,
-    ${props => props.theme.colors.accent.primary} 0%,
-    ${props => props.theme.colors.accent.light} 100%
-  );
-  color: ${props => props.theme.colors.basic.white};
+  background: ${({ theme }) => theme.colors.accent.gradient};
+  color: ${({ theme }) => theme.colors.basic.white};
   border: none;
   border-radius: 3rem;
   font-weight: 600;
@@ -207,29 +199,9 @@ const CTAButton = styled.button`
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      ${props => props.theme.colors.accent.light} 0%,
-      ${props => props.theme.colors.accent.primary} 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-
-    &::before {
-      opacity: 1;
-    }
   }
 
   span {
@@ -293,6 +265,26 @@ const SplitWords: React.FC<SplitWordsProps> = ({ children, variants, className }
   );
 };
 
+const CameraSetup = () => {
+  const { camera, size } = useThree();
+
+  useEffect(() => {
+    if (camera instanceof ThreeOrthographicCamera) {
+      const frustumSize = 50;
+      const aspect = size.width / size.height;
+      camera.left = -frustumSize * aspect / 2;
+      camera.right = frustumSize * aspect / 2;
+      camera.top = frustumSize / 2;
+      camera.bottom = -frustumSize / 2;
+      camera.position.set(0, 0, 100);
+      camera.zoom = 1;
+      camera.updateProjectionMatrix();
+    }
+  }, [camera, size]);
+
+  return null;
+};
+
 interface SceneProps {
   isMobile: boolean;
   isTablet: boolean;
@@ -302,94 +294,98 @@ const Scene: React.FC<SceneProps> = ({ isMobile, isTablet }) => {
   const groupRef = useRef<Group>(null);
   const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
-  const { camera } = useThree();
+  const { size } = useThree();
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
+  const handleButtonClick = () => {
+    console.log('3D button clicked');
+  };
+
+  // Calculate scale based on viewport size - increased values
+  const scale = isMobile ? 1.2 : isTablet ? 1.5 : 2;
+  const contentScale = `scale(${scale})`;
+
   return (
-    <>
+    <group ref={groupRef}>
+      <CameraSetup />
       <Html
         transform
         position={[0, 0, 0]}
         style={{
           width: '100%',
           height: '100%',
-          transform: `scale(${isMobile ? 0.8 : isTablet ? 0.65 : 0.55})`,
+          transform: contentScale,
+          transformOrigin: 'center center',
         }}
         center
       >
-        <HeroLayout>
-          <ThemeProvider theme={theme}>
-            <AnimatePresence>
-              {isVisible && (
-                <HeroContent
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <Title className={titleFont.className}>
-                    <motion.img 
-                      src="/neuchatech_logo.webp" 
-                      alt="Neuchatech"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <TitleText>donne vie à vos</TitleText>
-                    <GradientText>
-                      projets numériques
-                    </GradientText>
-                  </Title>
-                  <SubTitle className={montserrat.className}>
-                    Votre partenaire suisse pour une transition numérique réussie
-                  </SubTitle>
-                  <Description className={DMSansFont.className}>
-                    Des solutions web modernes et performantes pour faire de chaque
-                    projet un pilier de votre succès.
-                  </Description>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.8 }}
-                  >
-                    <CTAButton 
-                      className={montserrat.className}
-                      onClick={() => {
-                        const contactSection = document.getElementById('contact');
-                        if (contactSection) {
-                          contactSection.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                    >
-                      <span>Obtenez un devis gratuit</span>
-                    </CTAButton>
-                  </motion.div>
-                </HeroContent>
-              )}
-            </AnimatePresence>
-
-            {!isMobile && !isTablet && (
-              <CardWrapper
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-              >
-                <SimpleCard />
-              </CardWrapper>
-            )}
-          </ThemeProvider>
-        </HeroLayout>
+        <ThemeProvider theme={theme}>
+          <HeroLayout>
+            <HeroContent
+              initial="hidden"
+              animate="visible"
+              variants={containerVariants}
+            >
+              <Title className={titleFont.className}>
+                <Image 
+                  src="/neuchatech_logo.webp"
+                  alt="Neuchatech Logo"
+                  width={200}
+                  height={200}
+                  style={{ width: '100%', height: 'auto' }}
+                />
+                <TitleText>
+                  <SplitWords variants={wordVariants}>
+                    Solutions Web Professionnelles
+                  </SplitWords>
+                </TitleText>
+              </Title>
+              <SubTitle>
+                Développement web sur mesure à Neuchâtel
+              </SubTitle>
+              <Description>
+                Nous créons des solutions web innovantes et performantes pour votre entreprise.
+                Du site vitrine à l&apos;application complexe, nous vous accompagnons dans votre transformation digitale.
+              </Description>
+              <CTAButton>
+                <span>Commencer un projet</span>
+              </CTAButton>
+            </HeroContent>
+          </HeroLayout>
+        </ThemeProvider>
       </Html>
-    </>
+      <Float3DButton 
+        position={new Vector3(10, 0, 0)}  // Moved button further out to match new scale
+        onClick={handleButtonClick}
+        floatIntensity={0.5}
+        rotationIntensity={0.2}
+        hoverIntensity={0.3}
+      >
+        <ThemeProvider theme={theme}>
+          <div style={{
+            padding: '1rem 2rem',
+            background: theme.colors.accent.primary,
+            color: theme.colors.basic.white,
+            borderRadius: theme.borders.radius,
+            fontSize: '1.2rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+          }}>
+            Découvrir
+          </div>
+        </ThemeProvider>
+      </Float3DButton>
+    </group>
   );
 };
 
 const HeroCanvas: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -403,50 +399,19 @@ const HeroCanvas: React.FC = () => {
   }, []);
 
   return (
-    <CanvasContainer isHalfSize={isTablet}>
+    <CanvasContainer>
       <Canvas
-        ref={canvasRef}
         orthographic
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-        gl={{
-          alpha: true,
-          antialias: true,
-        }}
         camera={{
-          position: [0, 0, 1000],
-          near: 0.1,
+          position: [0, 0, 100],
+          near: 1,
           far: 2000,
-          zoom: 8,
-          left: -50,
-          right: 50,
-          top: 50,
-          bottom: -50,
-        }}
-        onCreated={({ gl, camera }) => {
-          gl.setPixelRatio(window.devicePixelRatio);
-          const orthoCam = camera as ThreeOrthographicCamera;
-          orthoCam.zoom = 8;
-          orthoCam.updateProjectionMatrix();
-        }}
-        onResize={({ camera }) => {
-          const orthoCam = camera as ThreeOrthographicCamera;
-          const aspect = window.innerWidth / window.innerHeight;
-          const viewportWidth = 100;
-          const viewportHeight = viewportWidth / aspect;
-          orthoCam.left = -viewportWidth / 2;
-          orthoCam.right = viewportWidth / 2;
-          orthoCam.top = viewportHeight / 2;
-          orthoCam.bottom = -viewportHeight / 2;
-          orthoCam.zoom = 8;
-          orthoCam.updateProjectionMatrix();
+          zoom: 1
         }}
       >
+        <Scene isMobile={isMobile} isTablet={isTablet} />
         <Environment preset="warehouse" />
         <ambientLight intensity={1} />
-        <Scene isMobile={isMobile} isTablet={isTablet} />
       </Canvas>
     </CanvasContainer>
   );

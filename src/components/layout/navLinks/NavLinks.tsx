@@ -10,12 +10,12 @@ const NavLinksWrapper = styled.div`
 
 const NavLink = styled(Link)`
   text-decoration: none;
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.colors.text.primary};
   &:hover {
-    color: ${({ theme }) => theme.accentColor};
+    color: ${({ theme }) => theme.colors.accent.primary};
   }
   &:visited {
-    color: ${({ theme }) => theme.visitedColor};
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 `;
 

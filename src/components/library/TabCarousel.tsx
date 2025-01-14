@@ -24,9 +24,11 @@ interface TabCarouselProps {
 
 const TabBar = styled.div`
     display: flex;
+    width: 100%;
+    height: 40px;
     border-radius: 999px; /* Pill shape */
     overflow: hidden;
-    background-color: ${({ theme }) => theme.tabBarBackground || '#f0f0f0'};
+    background-color: ${({ theme }) => theme.colors.backgrounds.default};
     margin-bottom: 1.5rem;
     position: relative;
     
@@ -36,56 +38,23 @@ const TabBar = styled.div`
     }
 `;
 
-const TabButton = styled.button.attrs<{ isActive: boolean }>((props) => ({
-    'aria-selected': props.isActive,
-    role: 'tab',
-}))<{ isActive: boolean; accentColor: string }>`
+const TabButton = styled.button<{ isActive: boolean }>`
     flex: 1;
-    padding: 0.75rem 1.5rem;
-    background-color: ${({ isActive, theme }) => (isActive ? theme.colors.accent.primary : 'transparent')};
-    color: ${({ isActive, theme }) => (isActive ? theme.textOnAccent || '#fff' : theme.textColor || '#000')};
+    height: 100%;
     border: none;
+    background: ${({ isActive, theme }) =>
+        isActive ? theme.colors.accent.primary : 'transparent'};
+    color: ${({ isActive, theme }) =>
+        isActive ? theme.colors.basic.white : theme.colors.text.primary};
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
     position: relative;
-    transition: background-color 0.3s, color 0.3s;
-    overflow: hidden;
+    z-index: 1;
 
-    .tab-text {
-        font-size: 1rem;
-    }
-
-    .tab-icon {
-        display: none;
-        font-size: 1.5rem;
-        
-        img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-        }
-    }
-
-    &:not(:first-child) {
-        border-left: 1px solid ${({ theme }) => theme.borderColor || '#ddd'};
-    }
-
-    @media (max-width: 768px) {
-        padding: 0.75rem;
-
-        .tab-text {
-            display: none;
-        }
-
-        .tab-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tab-icon img {
-            width: 100%;
-            height: 1.75em;
-        }
+    &:hover {
+        background: ${({ isActive, theme }) =>
+            isActive ? theme.colors.accent.primary : theme.colors.text.secondary}20;
     }
 `;
 
@@ -118,11 +87,10 @@ const ProgressOverlay = styled.div<{ isAnimating: boolean; interval: number }>`
 `;
 
 const TabContent = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
+    border-radius: ${({ theme }) => theme.borders.radius};
+    padding: 1rem;
+    margin-top: 1rem;
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -297,30 +265,9 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                         key={index}
                         isActive={index === currentTab}
                         onClick={() => handleTabClick(index)}
-                        accentColor={tab.accentColor || '#0070f3'}
                     >
-                        {index === currentTab && (
-                            <ProgressOverlay
-                                key={animationKey}
-                                isAnimating={isAnimating}
-                                interval={interval}
-                            />
-                        )}
-                        <span className="tab-icon" aria-hidden="true">
-                            {typeof tab.icon === 'string' && tab.icon.endsWith('.png') ? (
-                                <Image
-                                    src={tab.icon}
-                                    alt={`${tab.title} icon`}
-                                    width={128}
-                                    height={128}
-                                />
-                            ) : (
-                                tab.icon
-                            )}
-                        </span>
-                        <span className="tab-text">
-                            {tab.title}
-                        </span>
+                        <div className="tab-text">{tab.title}</div>
+                        <div className="tab-icon">{tab.icon}</div>
                     </TabButton>
                 ))}
             </TabBar>

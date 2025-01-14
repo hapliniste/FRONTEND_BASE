@@ -61,14 +61,14 @@ const ProcessSteps = [
 // Styled Components
 
 const Section = styled.section`
-  background: ${(props) => props.theme.backgroundColor};
+  background: ${(props) => props.theme.colors.backgrounds.default};
   padding: 4rem 2rem;
   text-align: center;
 `;
 
 const SectionTitle = styled.h2`
   font-size: 2.5rem;
-  color: ${(props) => props.theme.baseDark};
+  color: ${(props) => props.theme.colors.text.primary};
   margin-bottom: 3rem;
   text-transform: uppercase;
 `;
@@ -95,7 +95,7 @@ const StepsContainer = styled.div`
     transform: translateX(-50%);
     width: 4px;
     height: calc(100% - 75px);
-    background: ${(props) => props.theme.borderColor || "#ddd"};
+    background: ${(props) => props.theme.colors.text.secondary}20;
     z-index: 0;
 
     @media (max-width: 768px) {
@@ -107,8 +107,8 @@ const StepsContainer = styled.div`
 `;
 
 const StepCard = styled(motion.div)<{ completed: boolean }>`
-  background: white;
-  border-radius: 8px;
+  background: ${(props) => props.theme.colors.backgrounds.white};
+  border-radius: ${(props) => props.theme.borders.radius};
   padding: 1.5rem;
   width: 18%;
   min-width: 250px;
@@ -137,13 +137,13 @@ const IconWrapper = styled.div`
 
 const StepTitle = styled.h3`
   font-size: 1.25rem;
-  color: ${(props) => props.theme.accentPrimary};
+  color: ${(props) => props.theme.colors.accent.primary};
   margin-bottom: 0.75rem;
 `;
 
 const StepDescription = styled.p`
   font-size: 1rem;
-  color: ${(props) => props.theme.textColor};
+  color: ${(props) => props.theme.colors.text.secondary};
 `;
 
 const Checkbox = styled.div`
@@ -161,7 +161,7 @@ const LineConnector = styled(motion.div)`
   transform: translateX(-50%);
   width: 4px;
   height: calc(100% - 75px);
-  background: ${(props) => props.theme.borderColor || "#ddd"};
+  background: ${(props) => props.theme.colors.text.secondary}20;
   z-index: 0;
 
   @media (max-width: 768px) {
@@ -174,9 +174,9 @@ const LineConnector = styled(motion.div)`
 const LimitedOffer = styled(motion.div)`
   margin-top: 3rem;
   padding: 2rem;
-  background: ${(props) => props.theme.accentPrimary};
-  color: white;
-  border-radius: 8px;
+  background: ${(props) => props.theme.colors.accent.primary};
+  color: ${(props) => props.theme.colors.basic.white};
+  border-radius: ${(props) => props.theme.borders.radius};
   position: relative;
   animation: fadeIn 1s ease-in-out;
 
@@ -200,16 +200,16 @@ const OfferText = styled.p`
 const ContactButton = styled.a`
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background: white;
-  color: ${(props) => props.theme.accentPrimary};
-  border-radius: 4px;
+  background: ${(props) => props.theme.colors.basic.white};
+  color: ${(props) => props.theme.colors.accent.primary};
+  border-radius: ${(props) => props.theme.borders.radius};
   text-decoration: none;
   font-weight: bold;
   transition: background 0.3s, color 0.3s;
 
   &:hover {
-    background: ${(props) => props.theme.accentPrimary};
-    color: white;
+    background: ${(props) => props.theme.colors.accent.primary};
+    color: ${(props) => props.theme.colors.basic.white};
   }
 `;
 

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Head from "next/head";
 import { NextSeo } from 'next-seo';
-
+import dynamic from 'next/dynamic';
 import Hero from "@/components/sections/hero";
+import ServicesLoading from '@/components/sections/services.loading';
 import Valeurs from "@/components/sections/valeurs";
-import Services from "@/components/sections/services";
 import Processus from "@/components/sections/processus";
 import Numerique from "@/components/sections/numerique";
 import ContactForm from "@/components/sections/contactForm";
@@ -39,6 +39,11 @@ const OfferWrapper = styled.div`
         padding: 0 8%;
     }
 `;
+
+const DynamicServices = dynamic(() => import('@/components/sections/services'), {
+    loading: () => <ServicesLoading />,
+    ssr: false // This will prevent the large bundle from blocking initial page load
+});
 
 export default function Home() {
     const [isMobile, setIsMobile] = useState(false);
@@ -85,7 +90,7 @@ export default function Home() {
             <Hero />
             {isMobile && <Temoignages />}
             <SectionWrapper isSecond>
-                <Services />
+                <DynamicServices />
             </SectionWrapper>
             <SectionWrapper>
                 <Valeurs />

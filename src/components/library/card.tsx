@@ -11,8 +11,8 @@ export interface ICardProps {
 }
 
 const CardWrapper = styled.div`
-  background-color: ${(props) => props.theme.white};
-  border-radius: 1rem;
+  background-color: ${(props) => props.theme.colors.basic.white};
+  border-radius: ${(props) => props.theme.borders.radius};
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -21,12 +21,12 @@ const CardWrapper = styled.div`
   align-items: center;
   text-align: center;
   width: 100%;
-  height: 400px; // Fixed height
-  max-width: 350px; // Increased max-width
+  height: 400px;
+  max-width: 350px;
   margin: 0 auto;
 
   @media (max-width: 768px) {
-    height: 350px; // Slightly smaller on mobile
+    height: 350px;
     padding: 1.5rem;
   }
 
@@ -45,25 +45,25 @@ const CardHeader = styled.div`
 const CardIcon = styled.div`
   width: 80px;
   height: 80px;
-  background-color: ${(props) => props.theme.accentPrimary};
+  background-color: ${(props) => props.theme.colors.accent.primary};
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.white};
+  color: ${(props) => props.theme.colors.basic.white};
   font-size: 2rem;
   margin-bottom: 1rem;
 `;
 
 const CardTitle = styled.h3`
-  color: ${(props) => props.theme.baseDark};
+  color: ${(props) => props.theme.colors.text.primary};
   margin-bottom: 0.5rem;
   font-family: ${titleFont.style.fontFamily};
   font-size: 1.5rem;
 `;
 
 const CardContent = styled.p`
-  color: ${(props) => props.theme.baseMedium};
+  color: ${(props) => props.theme.colors.text.secondary};
   font-size: 1rem;
   line-height: 1.6;
   flex-grow: 1;

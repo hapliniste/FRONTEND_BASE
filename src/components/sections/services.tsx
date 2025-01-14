@@ -1,6 +1,6 @@
 // pages/services.tsx
 
-import React from 'react';
+import React, { useEffect, useRef, Suspense, lazy } from 'react';
 import styled from 'styled-components';
 import TabCarousel from '@/components/library/TabCarousel';
 import Image from 'next/image';
@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Float3DCard from '@/components/library/Float3DCard';
 import { Space_Grotesk } from 'next/font/google';
+import Hls from 'hls.js';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
 
@@ -389,132 +390,219 @@ const ServiceCard = ({ title, description, features, price, media }: Omit<Servic
     );
 };
 
+const VideoSkeleton = styled.div`
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+    
+    @keyframes shimmer {
+        to {
+            background-position: 200% 0;
+        }
+    }
+`;
+
+// Separate HLS Video component
+const HLSVideo: React.FC<{ src: string; className?: string }> = ({ src, className }) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            const video = videoRef.current;
+            const loadVideo = async () => {
+                const Hls = (await import('hls.js')).default;
+                if (Hls.isSupported()) {
+                    const hls = new Hls({
+                        debug: false,
+                        enableWorker: true,
+                        lowLatencyMode: true,
+                        backBufferLength: 90,
+                        // Try to use modern codecs if supported
+                        preferManagedMediaSource: false,
+                        enableSoftwareAES: true
+                    });
+
+                    hls.on(Hls.Events.ERROR, (event, data) => {
+                        if (data.fatal) {
+                            switch (data.type) {
+                                case Hls.ErrorTypes.NETWORK_ERROR:
+                                    // Try to recover network error
+                                    hls.startLoad();
+                                    break;
+                                case Hls.ErrorTypes.MEDIA_ERROR:
+                                    // Try to recover media error
+                                    hls.recoverMediaError();
+                                    break;
+                                default:
+                                    // Cannot recover
+                                    hls.destroy();
+                                    break;
+                            }
+                        }
+                    });
+
+                    hls.loadSource(src);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        video.play().catch(() => {
+                            console.log('Playback failed, probably due to autoplay restrictions');
+                        });
+                    });
+                }
+                // Fallback for Safari
+                else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = src;
+                    video.addEventListener('loadedmetadata', () => {
+                        video.play().catch(() => {
+                            console.log('Playback failed, probably due to autoplay restrictions');
+                        });
+                    });
+                }
+                // If neither HLS.js nor native HLS is supported
+                else {
+                    console.warn('HLS is not supported in this browser');
+                    // Try to get the direct video URL by replacing .m3u8 with _000.ts
+                    const fallbackSrc = src.replace('.m3u8', '_000.ts');
+                    video.src = fallbackSrc;
+                    video.play().catch(() => {
+                        console.log('Fallback playback failed');
+                    });
+                }
+            };
+            loadVideo();
+
+            // Cleanup
+            return () => {
+                video.pause();
+                video.src = '';
+                video.load();
+            };
+        }
+    }, [src]);
+
+    return (
+        <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className={className}
+        />
+    );
+};
+
+// Lazy load the HLS video component
+const LazyHLSVideo = lazy(() => 
+    Promise.resolve({
+        default: HLSVideo
+    })
+);
+
+// Video wrapper component with Suspense
+const VideoWrapper: React.FC<{ src: string }> = ({ src }) => {
+    return (
+        <Suspense fallback={<VideoSkeleton />}>
+            <LazyHLSVideo src={src} />
+        </Suspense>
+    );
+};
+
+// Lazy load TabCarousel
+const LazyTabCarousel = lazy(() => import('@/components/library/TabCarousel'));
+
+// Lazy load Image component
+const LazyImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
+    return (
+        <Suspense fallback={<VideoSkeleton />}>
+            <Image
+                src={src}
+                alt={alt}
+                fill
+                style={{ objectFit: 'cover' }}
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL={PLACEHOLDER_IMAGE}
+            />
+        </Suspense>
+    );
+};
+
 const services: Tab[] = [
     {
         title: "Site standard",
         icon: "/icon_website.png",
         content: (
-            <ServiceCard
-                title="Site standard"
-                description="Un site web professionnel et moderne pour présenter votre entreprise et attirer de nouveaux clients."
-                features={[
-                    "Design moderne et responsive",
-                    "Optimisé pour le référencement (SEO)",
-                    "Mise à jour facile du contenu",
-                    "Hébergement suisse inclus"
-                ]}
-                price="500 CHF"
-                media={
-                    <>
-                        {/* 3D Card version (commented out)
-                        <DesktopView>
-                            <Float3DCard
-                                enableHover={true}
-                                enableDrag={false}
-                                hoverIntensity={0.3}
-                                margin="4.5rem"
-                            >
-                                <div style={{
-                                    position: 'relative',
-                                    width: '200px',
-                                    height: '430px',
-                                    borderRadius: '1rem',
-                                    overflow: 'hidden',
-                                    border: '4px solid #1a1a1a',
-                                    backgroundColor: '#1a1a1a',
-                                }}>
-                                    <video
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'fill',
-                                            position: 'absolute',
-                                            top: '0px',
-                                            left: '0',
-                                        }}
-                                    >
-                                        <source src="/portfolio/hero_avocat01.webm" type="video/webm" />
-                                    </video>
-                                </div>
-                            </Float3DCard>
-                        </DesktopView>
-                        */}
-
-                        {/* Direct video version */}
+            <Suspense fallback={<VideoSkeleton />}>
+                <ServiceCard
+                    title="Site standard"
+                    description="Un site web professionnel et moderne pour présenter votre entreprise et attirer de nouveaux clients."
+                    features={[
+                        "Design moderne et responsive",
+                        "Optimisé pour le référencement (SEO)",
+                        "Mise à jour facile du contenu",
+                        "Prix les plus bas du marché"
+                    ]}
+                    price="500 CHF"
+                    media={
                         <MobileView style={{ display: 'block' }}>
-                            <video
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                            >
-                                <source src="/portfolio/heroRestaurant_01.webm" type="video/webm" />
-                            </video>
+                            <VideoWrapper src="/portfolio/restaurant/restaurant.m3u8" />
                         </MobileView>
-                    </>
-                }
-            />
+                    }
+                />
+            </Suspense>
         )
     },
     {
         title: "Développement sur mesure",
         icon: "/icon_customdev.png",
         content: (
-            <ServiceCard
-                title="Développement sur mesure"
-                description="Des solutions web sur mesure pour répondre à vos besoins spécifiques, du site vitrine à l'application web complexe."
-                features={[
-                    "Architecture moderne",
-                    "Intégration avec vos outils existants",
-                    "Sécurité et performance optimales"
-                ]}
-                price="Sur devis"
-                media={
-                    <Image
-                        src={PLACEHOLDER_IMAGE}
-                        alt="Développement sur mesure"
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        loading="lazy"
-                        placeholder="blur"
-                        blurDataURL={PLACEHOLDER_IMAGE}
-                    />
-                }
-            />
+            <Suspense fallback={<VideoSkeleton />}>
+                <ServiceCard
+                    title="Développement sur mesure"
+                    description="Des solutions web sur mesure pour répondre à vos besoins spécifiques, du site vitrine à l'application web complexe."
+                    features={[
+                        "Architecture moderne",
+                        "Intégration avec vos outils existants",
+                        "Sécurité et performance optimales",
+                        "Solutions métier sur toutes les plateformes"
+                    ]}
+                    price="Sur devis"
+                    media={
+                        <LazyImage
+                            src={PLACEHOLDER_IMAGE}
+                            alt="Développement sur mesure"
+                        />
+                    }
+                />
+            </Suspense>
         )
     },
     {
         title: "Assistant IA managé",
         icon: "/icon_assistant.png",
         content: (
-            <ServiceCard
-                title="Assistant IA managé"
-                description="Un assistant virtuel intelligent, ayant accès à vos données pour répondre aux questions de vos clients ou de votre équipe."
-                features={[
-                    "IA dernière génération",
-                    "Intégration de vos données",
-                    "Disponible 24/7",
-                    "Mises à jour automatiques",
-                    "Restez maître de vos données"
-                ]}
-                price="500 CHF + coûts d'utilisation"
-                media={
-                    <AIVideoView>
-                        <video
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                        >
-                            <source src="/portfolio/assistantIA_01.webm" type="video/webm" />
-                        </video>
-                    </AIVideoView>
-                }
-            />
+            <Suspense fallback={<VideoSkeleton />}>
+                <ServiceCard
+                    title="Assistant IA managé"
+                    description="Un assistant virtuel intelligent, ayant accès à vos données pour répondre aux questions de vos clients ou de votre équipe."
+                    features={[
+                        "IA dernière génération",
+                        "Intégration de vos données",
+                        "Disponible 24/7",
+                        "Mises à jour automatiques",
+                        "Restez maître de vos données"
+                    ]}
+                    price="à partir de500 CHF + coûts d'utilisation"
+                    media={
+                        <AIVideoView>
+                            <VideoWrapper src="/portfolio/assistantIA/assistantIA.m3u8" />
+                        </AIVideoView>
+                    }
+                />
+            </Suspense>
         )
     },
     {
@@ -526,9 +614,9 @@ const services: Tab[] = [
                 description="Une solution d'hébergement web suisse fiable et sécurisée pour votre site ou application."
                 features={[
                     "Serveurs en Suisse",
-                    "Certificat SSL inclus",
+                    "Chiffrement SSL",
                     "Sauvegardes automatiques",
-                    "Support technique réactif"
+                    //"Support technique local"
                 ]}
                 price="10 CHF / mois"
                 media={
@@ -540,6 +628,27 @@ const services: Tab[] = [
 ];
 
 const Services: React.FC = () => {
+    const [isVisible, setIsVisible] = React.useState(false);
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
     // Create a simplified version of services for the schema
     const servicesForSchema = services.map(service => ({
         title: service.title,
@@ -588,14 +697,18 @@ const Services: React.FC = () => {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
             />
-            <Section id="services">
+            <Section id="services" ref={sectionRef}>
                 <ContentWrapper>
                     <SectionTitle $centered $noUnderline>Nos Services</SectionTitle>
-                    <TabCarousel
-                        tabs={services}
-                        interval={7000}
-                        swiperEffect="slide"
-                    />
+                    <Suspense fallback={<VideoSkeleton />}>
+                        {isVisible && (
+                            <LazyTabCarousel
+                                tabs={services}
+                                interval={7000}
+                                swiperEffect="slide"
+                            />
+                        )}
+                    </Suspense>
                 </ContentWrapper>
             </Section>
         </>

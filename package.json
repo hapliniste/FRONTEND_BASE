@@ -1,6 +1,6 @@
 {
-  "name": "nextech-website",
-  "version": "0.1.0",
+  "name": "neuchatech-website",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest",
     "codegen": "graphql-codegen --config codegen.ts",
-    "codegen:watch": "graphql-codegen --config codegen.ts --watch"
+    "codegen:watch": "graphql-codegen --config codegen.ts --watch",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -24,7 +25,7 @@
     "framer-motion": "^11.9.0",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
-    "gsap": "^3.12.2",
+    "hls.js": "^1.5.19",
     "i18next": "^23.10.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
@@ -49,6 +50,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -59,6 +61,7 @@
     "@types/react-dom": "18.0.11",
     "@types/styled-components": "^5.1.26",
     "@types/uuid": "^9.0.1",
+    "cross-env": "^7.0.3",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jest-styled-components": "^7.1.1",

@@ -56,21 +56,20 @@ const HamburgerIcon = styled.div<{ isOpen: boolean }>`
     }
 `;
 
-const MenuPopup = styled.div<{ isOpen: boolean }>`
+const MenuDropdown = styled.div<{ isOpen: boolean }>`
     display: none;
     position: absolute;
-    top: calc(${props => props.theme.sizes.appBarHeight} - 0.5rem);
+    top: 4rem;
     right: ${({ theme }) => theme.spacing.medium};
     width: 240px;
     background: ${props => props.theme.colors.backgrounds.default};
     border-radius: 1.25rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     opacity: ${props => props.isOpen ? 1 : 0};
-    transform: translateY(${props => props.isOpen ? '0' : '-10px'});
-    transition: all 0.3s ease;
+    transform: translateY(${props => props.isOpen ? '0' : '-1rem'});
     pointer-events: ${props => props.isOpen ? 'auto' : 'none'};
-    padding: ${({ theme }) => theme.spacing.small};
-    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
 
     @media (max-width: 768px) {
         display: block;
@@ -107,7 +106,7 @@ const StyledLink = styled(Link)`
 
 const Divider = styled.div`
     height: 1px;
-    background: ${props => `${props.theme.colors.borders.color}40`};
+    background: ${props => `${props.theme.colors.text.secondary}20`};
     margin: ${({ theme }) => theme.spacing.xsmall} ${({ theme }) => theme.spacing.small};
 `;
 
@@ -159,7 +158,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
                 <HamburgerIcon isOpen={isOpen} />
             </HamburgerButton>
             
-            <MenuPopup ref={menuRef} isOpen={isOpen}>
+            <MenuDropdown ref={menuRef} isOpen={isOpen}>
                 {links.map((link, index) => (
                     <React.Fragment key={link.label}>
                         <MobileLink>
@@ -181,7 +180,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
                         {index < links.length - 1 && <Divider />}
                     </React.Fragment>
                 ))}
-            </MenuPopup>
+            </MenuDropdown>
         </>
     );
 }; 
