@@ -55,10 +55,18 @@ const Scene: React.FC<{
   const parseSize = (size: string | number | undefined): number => {
     if (typeof size === 'number') return size;
     if (!size) return 0;
-    if (size.endsWith('px')) return parseInt(size) / 100;
-    if (size.endsWith('%')) return parseInt(size) / 100;
-    if (size.endsWith('rem')) return parseInt(size) * 16 / 100;
-    return parseInt(size) / 100;
+    
+    // Handle rem values with decimals
+    if (size.endsWith('rem')) {
+        const remValue = parseFloat(size); // Using parseFloat instead of parseInt
+        return remValue * 16 / 100;
+    }
+    
+    // Handle other units
+    if (size.endsWith('px')) return parseFloat(size) / 100;
+    if (size.endsWith('%')) return parseFloat(size) / 100;
+    
+    return parseFloat(size) / 100;
   };
 
   const parsedMargin = parseSize(margin || '1rem');
@@ -113,7 +121,7 @@ const Scene: React.FC<{
   useFrame((state, delta) => {
     if (groupRef.current && enableHover) {
       const springStrength = 0.2;
-      const dampening = 0.8;
+      const dampening = 0.3;
 
       if (!enableDrag) {
         // Calculate spring force (attraction to target)
@@ -121,8 +129,8 @@ const Scene: React.FC<{
         const dy = targetRotation.current.y - groupRef.current.rotation.y;
 
         // Calculate spring force (attraction to center when no target)
-        const centerForceX = -groupRef.current.rotation.x * 0.1;
-        const centerForceY = -groupRef.current.rotation.y * 0.1;
+        const centerForceX = -groupRef.current.rotation.x * 0.05;
+        const centerForceY = -groupRef.current.rotation.y * 0.05;
 
         // Update velocity with spring physics
         velocity.current.x += (dx * springStrength + centerForceX);
@@ -141,8 +149,8 @@ const Scene: React.FC<{
         const dx = targetRotation.current.x - baseRotation.x;
         const dy = targetRotation.current.y - baseRotation.y;
         
-        groupRef.current.rotation.x += dx * 0.1;
-        groupRef.current.rotation.y += dy * 0.1;
+        groupRef.current.rotation.x += dx * 0.05;
+        groupRef.current.rotation.y += dy * 0.05;
       }
     }
   });
@@ -200,18 +208,18 @@ const Scene: React.FC<{
       azimuth={[-Math.PI / 4, Math.PI / 4]}
     >
       <Float
-        floatIntensity={0.2}
-        rotationIntensity={0.3}
-        speed={2}
+        floatIntensity={0.1}
+        rotationIntensity={0.2}
+        speed={1.5}
       >
         {content}
       </Float>
     </PresentationControls>
   ) : (
     <Float
-      floatIntensity={0.2}
-      rotationIntensity={0.3}
-      speed={2}
+      floatIntensity={0.1}
+      rotationIntensity={0.2}
+      speed={1.5}
     >
       {content}
     </Float>
