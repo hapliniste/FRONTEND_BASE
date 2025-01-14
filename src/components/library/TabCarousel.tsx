@@ -12,8 +12,7 @@ import Image from 'next/image';
 interface Tab {
     title: string;
     content: React.ReactNode;
-    accentColor?: string;
-    icon?: string;
+    icon?: string | React.ReactNode;
 }
 
 interface TabCarouselProps {
@@ -266,8 +265,28 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                         isActive={index === currentTab}
                         onClick={() => handleTabClick(index)}
                     >
-                        <div className="tab-text">{tab.title}</div>
-                        <div className="tab-icon">{tab.icon}</div>
+                        {index === currentTab && (
+                            <ProgressOverlay
+                                key={animationKey}
+                                isAnimating={isAnimating}
+                                interval={interval}
+                            />
+                        )}
+                        <span className="tab-icon" aria-hidden="true">
+                            {typeof tab.icon === 'string' && tab.icon.endsWith('.png') ? (
+                                <Image
+                                    src={tab.icon}
+                                    alt={`${tab.title} icon`}
+                                    width={128}
+                                    height={128}
+                                />
+                            ) : (
+                                tab.icon
+                            )}
+                        </span>
+                        <span className="tab-text">
+                            {tab.title}
+                        </span>
                     </TabButton>
                 ))}
             </TabBar>
