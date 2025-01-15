@@ -5,6 +5,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { JWT } from 'next-auth/jwt';
 import { HasuraAdapter } from 'next-auth-hasura-adapter';
 import * as jsonwebtoken from 'jsonwebtoken';
+import { Server } from 'http';
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -101,5 +102,10 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
+// Increase max listeners
+if (process.env.NODE_ENV === 'development') {
+  Server.prototype.setMaxListeners(20);
+}
 
 export default NextAuth(authOptions);

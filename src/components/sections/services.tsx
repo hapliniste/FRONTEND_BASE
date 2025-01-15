@@ -9,7 +9,6 @@ import { NextSeo } from 'next-seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 //import Float3DCard from '@/components/library/Float3DCard';
-import { Space_Grotesk } from 'next/font/google';
 //import type Hls from 'hls.js';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
@@ -111,50 +110,18 @@ const MediaContainer = styled(motion.div)`
     }
 `;
 
-const DesktopView = styled.div`
-    display: none;
-    width: 100%;
-    height: 100%;
-    
-    @media (min-width: 768px) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-`;
-
-const MobileView = styled.div`
+const VideoView = styled.div`
     display: block;
     width: 100%;
     height: 100%;
     overflow: hidden;
     border: 0;
-    
-    @media (min-width: 768px) {
-        display: none;
-    }
 
     video {
         width: 102%;
         height: 102%;
         object-fit: cover;
-        object-position: center 60%;
-        border: 0;
-    }
-`;
-
-const AIVideoView = styled.div`
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border: 0;
-
-    video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center 35%;
+        transform: scale(1.01);
         border: 0;
     }
 `;
@@ -184,13 +151,8 @@ const CardIcon = styled(motion.div)`
     transition: all 0.3s ease;
 `;
 
-const spaceGrotesk = Space_Grotesk({ 
-    subsets: ['latin'],
-    weight: ['700']
-});
-
 const CardTitle = styled(motion.h3)`
-    font-family: 'Clash Display', ${spaceGrotesk.style.fontFamily};
+    font-family: ${({theme}) => theme.typography.titleFontFamily};
     font-size: 2.75rem;
     font-weight: 700;
     color: ${({theme}) => theme.colors.text.primary};
@@ -394,127 +356,118 @@ const ServiceCard = ({ title, description, features, price, media }: Omit<Servic
     );
 };
 
-const VideoSkeleton = styled.div`
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s linear infinite;
-    
-    @keyframes shimmer {
-        to {
-            background-position: 200% 0;
-        }
-    }
-`;
-
-// Separate HLS Video component
-const HLSVideo: React.FC<{ src: string; className?: string }> = ({ src, className }) => {
+// Video wrapper component
+const VideoWrapper: React.FC<{ src: string; objectPosition?: string; isPriority?: boolean }> = ({ src, objectPosition, isPriority }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const thumbnailPath = src.replace('.m3u8', '_thumb.webp');
 
     useEffect(() => {
-        if (videoRef.current) {
-            const video = videoRef.current;
-            const loadVideo = async () => {
-                try {
-                    const Hls = (await import('hls.js')).default;
-                    if (Hls.isSupported()) {
-                        const hls = new Hls({
-                            maxBufferLength: 30,
-                            maxMaxBufferLength: 600,
-                            maxBufferSize: 60 * 1000 * 1000,
-                            maxBufferHole: 0.5,
-                            lowLatencyMode: true,
-                            preferManagedMediaSource: false,
-                        });
+        if (!videoRef.current) return;
+        
+        const video = videoRef.current;
+        let hls: any = null;
 
-                        hls.loadSource(src);
-                        hls.attachMedia(video);
-                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                            video.play().catch(() => {
-                                // Autoplay was prevented, ignore
-                            });
-                        });
-                    }
-                    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                        video.src = src;
-                        video.addEventListener('loadedmetadata', () => {
-                            video.play().catch(() => {
-                                // Autoplay was prevented, ignore
-                            });
-                        });
-                    } else {
-                        // Try to get the direct video URL by replacing .m3u8 with _000.ts
-                        const fallbackSrc = src.replace('.m3u8', '_000.ts');
-                        video.src = fallbackSrc;
+        const loadVideo = async () => {
+            try {
+                const Hls = (await import('hls.js')).default;
+                if (Hls.isSupported()) {
+                    hls = new Hls({
+                        maxBufferHole: 0.5,
+                        lowLatencyMode: true,
+                        preferManagedMediaSource: false,
+                        startLevel: isPriority ? -1 : 0, // -1 means auto for priority, 0 means lowest quality for others
+                        capLevelToPlayerSize: !isPriority, // Only adapt quality based on size for non-priority
+                        //maxBufferLength: isPriority ? 30 : 4,
+                        //maxMaxBufferLength: 600,
+                    });
+
+                    // Set up event handlers before loading source
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        if (isPriority) {
+                            // For priority video, start loading immediately at highest quality
+                            const highestLevel = hls.levels.length - 1;
+                            hls.currentLevel = highestLevel;
+                        } else {
+                            // For non-priority, start with lowest quality
+                            hls.currentLevel = 0;
+                            // And limit network usage
+                            hls.autoLevelCapping = 0;
+                        }
                         video.play().catch(() => {
                             // Autoplay was prevented, ignore
                         });
-                    }
-                } catch (error) {
-                    console.error('Error loading video:', error);
+                    });
+
+                    hls.loadSource(src);
+                    hls.attachMedia(video);
                 }
-            };
+                else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    // Safari can play HLS natively
+                    video.src = src;
+                    video.addEventListener('loadedmetadata', () => {
+                        video.play().catch(() => {
+                            // Autoplay was prevented, ignore
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading video:', error);
+            }
+        };
 
-            loadVideo();
+        loadVideo();
 
-            return () => {
-                video.pause();
-                video.src = '';
-                video.load();
-            };
-        }
-    }, [src]);
-
-    // Get the thumbnail path by replacing .m3u8 with _thumb.webp
-    const thumbnailPath = src.replace('.m3u8', '_thumb.webp');
+        return () => {
+            if (hls) {
+                hls.destroy();
+            }
+            video.pause();
+            video.src = '';
+            video.load();
+        };
+    }, [src, isPriority]);
 
     return (
         <video
             ref={videoRef}
-            className={className}
             muted
             loop
             playsInline
             poster={thumbnailPath}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            preload={isPriority ? "auto" : "metadata"}
+            style={{ 
+                width: '102%', 
+                height: '102%', 
+                objectFit: 'cover',
+                objectPosition,
+                transform: 'scale(1.01)',
+            }}
         />
-    );
-};
-
-// Lazy load the HLS video component
-const LazyHLSVideo = lazy(() => 
-    Promise.resolve({
-        default: HLSVideo
-    })
-);
-
-// Video wrapper component with Suspense
-const VideoWrapper: React.FC<{ src: string }> = ({ src }) => {
-    return (
-        <Suspense fallback={<VideoSkeleton />}>
-            <LazyHLSVideo src={src} />
-        </Suspense>
     );
 };
 
 // Lazy load TabCarousel
 const LazyTabCarousel = lazy(() => import('@/components/library/TabCarousel'));
 
+// Simple loading placeholder
+const LoadingPlaceholder = styled.div`
+    width: 100%;
+    height: 100%;
+    background: ${props => props.theme.colors.backgrounds.light};
+`;
+
 // Lazy load Image component
 const LazyImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
     return (
-        <Suspense fallback={<VideoSkeleton />}>
-            <Image
-                src={src}
-                alt={alt}
-                fill
-                style={{ objectFit: 'cover' }}
-                loading="lazy"
-                placeholder="blur"
-                blurDataURL={PLACEHOLDER_IMAGE}
-            />
-        </Suspense>
+        <Image
+            src={src}
+            alt={alt}
+            fill
+            style={{ objectFit: 'cover' }}
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL={PLACEHOLDER_IMAGE}
+        />
     );
 };
 
@@ -523,74 +476,77 @@ const services: Tab[] = [
         title: "Site standard",
         icon: "/icon_website.png",
         content: (
-            <Suspense fallback={<VideoSkeleton />}>
-                <ServiceCard
-                    title="Site standard"
-                    description="Un site web professionnel et moderne pour présenter votre entreprise et attirer de nouveaux clients."
-                    features={[
-                        "Design moderne et responsive",
-                        "Optimisé pour le référencement (SEO)",
-                        "Mise à jour facile du contenu",
-                        "Prix les plus bas du marché"
-                    ]}
-                    price="500 CHF"
-                    media={
-                        <MobileView style={{ display: 'block' }}>
-                            <VideoWrapper src="/portfolio/restaurant/restaurant.m3u8" />
-                        </MobileView>
-                    }
-                />
-            </Suspense>
+            <ServiceCard
+                title="Site standard"
+                description="Un site web professionnel et moderne pour présenter votre entreprise et attirer de nouveaux clients."
+                features={[
+                    "Design moderne et responsive",
+                    "Optimisé pour le référencement (SEO)",
+                    "Mise à jour facile du contenu",
+                    "Prix les plus bas du marché"
+                ]}
+                price="500 CHF"
+                media={
+                    <VideoView>
+                        <VideoWrapper 
+                            src="/portfolio/restaurant/restaurant.m3u8" 
+                            objectPosition="center 60%"
+                            isPriority={true}
+                        />
+                    </VideoView>
+                }
+            />
         )
     },
     {
         title: "Développement sur mesure",
         icon: "/icon_customdev.png",
         content: (
-            <Suspense fallback={<VideoSkeleton />}>
-                <ServiceCard
-                    title="Développement sur mesure"
-                    description="Des solutions web sur mesure pour répondre à vos besoins spécifiques, du site vitrine à l'application web complexe."
-                    features={[
-                        "Architecture moderne",
-                        "Intégration avec vos outils existants",
-                        "Sécurité et performance optimales",
-                        "Solutions métier sur toutes les plateformes"
-                    ]}
-                    price="Sur devis"
-                    media={
-                        <LazyImage
-                            src={PLACEHOLDER_IMAGE}
-                            alt="Développement sur mesure"
+            <ServiceCard
+                title="Développement sur mesure"
+                description="Des solutions web sur mesure pour répondre à vos besoins spécifiques, du site vitrine à l'application web complexe."
+                features={[
+                    "Architecture moderne",
+                    "Intégration avec vos outils existants",
+                    "Sécurité et performance optimales",
+                    "Solutions métier sur toutes les plateformes"
+                ]}
+                price="Sur devis"
+                media={
+                    <VideoView>
+                        <VideoWrapper 
+                            src="/portfolio/warehouse/warehouse.m3u8" 
+                            objectPosition="center center"
                         />
-                    }
-                />
-            </Suspense>
+                    </VideoView>
+                }
+            />
         )
     },
     {
         title: "Assistant IA managé",
         icon: "/icon_assistant.png",
         content: (
-            <Suspense fallback={<VideoSkeleton />}>
-                <ServiceCard
-                    title="Assistant IA managé"
-                    description="Un assistant virtuel intelligent, ayant accès à vos données pour répondre aux questions de vos clients ou de votre équipe."
-                    features={[
-                        "IA dernière génération",
-                        "Intégration de vos données",
-                        "Disponible 24/7",
-                        "Mises à jour automatiques",
-                        "Restez maître de vos données"
-                    ]}
-                    price="à partir de 500 CHF + coûts d'utilisation"
-                    media={
-                        <AIVideoView>
-                            <VideoWrapper src="/portfolio/assistantIA/assistantIA.m3u8" />
-                        </AIVideoView>
-                    }
-                />
-            </Suspense>
+            <ServiceCard
+                title="Assistant IA managé"
+                description="Un assistant virtuel intelligent, ayant accès à vos données pour répondre aux questions de vos clients ou de votre équipe."
+                features={[
+                    "IA dernière génération",
+                    "Intégration de vos données",
+                    "Disponible 24/7",
+                    "Mises à jour automatiques",
+                    "Restez maître de vos données"
+                ]}
+                price="à partir de 500 CHF + coûts d'utilisation"
+                media={
+                    <VideoView>
+                        <VideoWrapper 
+                            src="/portfolio/assistantIA/assistantIA.m3u8" 
+                            objectPosition="center 35%" 
+                        />
+                    </VideoView>
+                }
+            />
         )
     },
     {
@@ -602,6 +558,7 @@ const services: Tab[] = [
                 description="Une solution d'hébergement web suisse fiable et sécurisée pour votre site ou application."
                 features={[
                     "Serveurs en Suisse",
+                    "Performance optimale",
                     "Chiffrement SSL",
                     "Sauvegardes automatiques",
                     //"Support technique local"

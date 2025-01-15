@@ -15,7 +15,32 @@ const nextConfig = {
     }
   },
   images: {
-    domains: ['placehold.co']
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'neuchatech.ch',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.neuchatech.ch',
+      },
+      {
+        protocol: 'https',
+        hostname: 'neuchate.ch',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.neuchate.ch',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      }
+    ],
   },
   // Add webpack configuration for HLS files
   webpack: (config, { isServer }) => {
