@@ -1,27 +1,31 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import Toast from "@/components/shared/Toast";
+import { Toast } from "@/components/shared/Toast";
 import styled from "styled-components";
 
 const LoginFormWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${({ theme }) => theme.spacing.medium};
 `;
 
 const LoginInput = styled.input`
-    padding: 0.5rem;
-    border: 1px solid ${({ theme }) => theme.borderColor};
-    border-radius: 0.25rem;
+    padding: ${({ theme }) => theme.spacing.small};
+    border: 1px solid ${({ theme }) => theme.colors.borders.color};
+    border-radius: ${({ theme }) => theme.borders.radius};
 `;
 
 const LoginButton = styled.button`
-    padding: 0.5rem 1rem;
-    background-color: ${({ theme }) => theme.primaryColor};
-    color: ${({ theme }) => theme.white};
+    padding: ${({ theme }) => theme.spacing.small} ${({ theme }) => theme.spacing.medium};
+    background-color: ${({ theme }) => theme.colors.accent.primary};
+    color: ${({ theme }) => theme.colors.basic.white};
     border: none;
-    border-radius: 0.25rem;
+    border-radius: ${({ theme }) => theme.borders.radius};
     cursor: pointer;
+
+    &:hover {
+        background-color: ${({ theme }) => theme.colors.accent.light};
+    }
 `;
 
 const LoginForm: React.FC = () => {

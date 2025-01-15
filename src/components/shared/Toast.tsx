@@ -54,41 +54,47 @@ const ToastWrapper = styled.div<{ type: ToastProps['type'] }>`
   background-color: ${({ theme, type }) => {
     switch (type) {
       case 'success':
-        return theme.successColor;
+        return theme.colors.status.success;
       case 'error':
-        return theme.errorColor;
+        return theme.colors.status.error;
       case 'warning':
-        return theme.warningColor;
+        return theme.colors.status.warning;
       default:
-        return theme.warningColor;
+        return theme.colors.status.warning;
     }
   }};
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.colors.basic.white};
   padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: ${({ theme }) => theme.cardShadow};
+  border-radius: ${({ theme }) => theme.borders.radius};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   animation: ${fadeIn} 0.3s ease-in-out;
 
   ${({ type }) =>
     type === 'error' &&
     css`
-      border-left: 0.5rem solid ${({ theme }) => theme.errorColor};
+      border-left: 0.5rem solid ${({ theme }) => theme.colors.status.error};
     `}
 
   ${({ type }) =>
     type === 'success' &&
     css`
-      border-left: 0.5rem solid ${({ theme }) => theme.successColor};
+      border-left: 0.5rem solid ${({ theme }) => theme.colors.status.success};
     `}
 
   ${({ type }) =>
     type === 'warning' &&
     css`
-      border-left: 0.5rem solid ${({ theme }) => theme.warningColor};
+      border-left: 0.5rem solid ${({ theme }) => theme.colors.status.warning};
     `}
 `;
 
-const Toast: React.FC<ToastProps> = ({ message, type, duration = 3000, position = 'top-right', onClose }) => {
+export const Toast: React.FC<ToastProps> = ({ 
+  message, 
+  type, 
+  duration = 3000, 
+  position = 'top-right', 
+  onClose 
+}) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -119,4 +125,4 @@ const Toast: React.FC<ToastProps> = ({ message, type, duration = 3000, position 
   );
 };
 
-export default Toast;
+Toast.displayName = 'Toast';

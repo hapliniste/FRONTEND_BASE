@@ -288,7 +288,7 @@ const SubmitButton = styled(motion.button)`
 `;
 
 const StatusMessage = styled(motion.div)<{ $status: 'success' | 'error' }>`
-  color: ${props => props.$status === 'success' ? props.theme.colors.success : props.theme.colors.error};
+  color: ${props => props.$status === 'success' ? props.theme.colors.status.success : props.theme.colors.status.error};
   margin-top: ${props => props.theme.spacing.medium};
   text-align: center;
   font-weight: 500;

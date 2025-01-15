@@ -7,19 +7,19 @@ import { useRouter } from 'next/router';
 import styled from "styled-components";
 import Link from "next/link";
 
-import LocalizedComponent from "@/components/testing/localization/LocalizedComponent";
-import LocalizedComponent2 from "@/components/testing/localization2/LocalizedComponent2";
+//import LocalizedComponent from "@/components/testing/localization/LocalizedComponent";
+//import LocalizedComponent2 from "@/components/testing/localization2/LocalizedComponent2";
 
 const GoHomeButton = styled(Link)`
-  background-color: ${({ theme }) => theme.primaryColor};
-  color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.colors.accent.primary};
+  color: ${({ theme }) => theme.colors.basic.white};
   padding: 0.8rem 1.6rem;
   border-radius: 0.4rem;
   text-decoration: none;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.accentColor};
+    background-color: ${({ theme }) => theme.colors.accent.light};
   }
 `;
 
@@ -33,8 +33,8 @@ export default function Profile() {
 
         
     // Add these debug lines
-    console.log('All ENV:', process.env);
-    console.log('NEXT_PUBLIC_HASURA_URL:', process.env.NEXT_PUBLIC_HASURA_URL);
+    //console.log('All ENV:', process.env);
+    //console.log('NEXT_PUBLIC_HASURA_URL:', process.env.NEXT_PUBLIC_HASURA_URL);
     
     const hasuraUrl = process.env.NEXT_PUBLIC_HASURA_URL;
 

@@ -5,7 +5,6 @@ import { SessionProvider } from "next-auth/react";
 import { appWithTranslation } from "next-i18next";
 import { ApolloProvider } from '@apollo/client';
 import client from '@/state/apollo/client';
-//import { Plus_Jakarta_Sans } from 'next/font/google';
 import { DefaultSeo } from 'next-seo';
 import seoConfig from '@/config/next-seo.config';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
@@ -13,17 +12,11 @@ import { initScrollTracking } from '@/utils/analytics';
 import "normalize.css/normalize.css";
 
 import Main from "@/layout/main";
-
-import { lightTheme, darkTheme } from "@/styles/theme";
-//import PreloadResources from '@/components/library/PreloadResources';
-
-/*const jakarta = Plus_Jakarta_Sans({ 
-  subsets: ['latin'],
-  weight: ['200', '300', '400', '500', '600', '700', '800']  // Added lighter weights
-});*/
+import { lightTheme, darkTheme, Theme } from "../styles/theme";
 
 function App({ Component, pageProps }: AppProps<{}>) {
-    const [currentTheme, setCurrentTheme] = useState(lightTheme);
+    const [currentTheme, setCurrentTheme] = useState<Theme>(lightTheme);
+    
     useEffect(() => {
         const isDarkMode = window.matchMedia(
             "(prefers-color-scheme: dark)"
@@ -41,7 +34,6 @@ function App({ Component, pageProps }: AppProps<{}>) {
             <SessionProvider session={pageProps.session}>
                 <DefaultSeo {...seoConfig} />
                 <GoogleAnalytics />
-                {/*<PreloadResources />*/}
                 <ThemeProvider theme={currentTheme}>
                     <Main>
                         <Component {...pageProps} />

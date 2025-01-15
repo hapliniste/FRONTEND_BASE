@@ -19,7 +19,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/public/*": ["./public/*"],
-      "@/styles/*": ["./styles/*"]
+      "@/styles/*": ["./src/styles/*"]
     },
     "typeRoots": ["./src/types", "./node_modules/@types"]
   },

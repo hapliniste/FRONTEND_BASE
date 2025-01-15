@@ -1,52 +1,53 @@
 // pages/404.tsx
+import React from 'react';
 import { withTranslation } from "@/utils/withTranslation";
 import { useTranslation } from "next-i18next";
-import styled from "styled-components";
+import styled from 'styled-components';
 import Link from "next/link";
 
-const PageContainer = styled.div`
+const NotFoundContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - ${({ theme }) => theme.appBarHeight} - ${({ theme }) => theme.footerHeight});
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  color: ${({ theme }) => theme.primaryColor};
-  margin-bottom: 1rem;
-`;
-
-const Description = styled.p`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.textColor};
-  margin-bottom: 2rem;
+  height: calc(100vh - ${({ theme }) => theme.sizes.appBarHeight} - ${({ theme }) => theme.sizes.footerHeight});
+  padding: ${({ theme }) => theme.spacing.large};
   text-align: center;
 `;
 
-const GoHomeButton = styled(Link)`
-  background-color: ${({ theme }) => theme.primaryColor};
-  color: ${({ theme }) => theme.white};
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.4rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
+const Title = styled.h1`
+  font-size: 4rem;
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
+  color: ${({ theme }) => theme.colors.accent.primary};
+`;
 
+const Message = styled.p`
+  font-size: 1.5rem;
+  margin-bottom: ${({ theme }) => theme.spacing.large};
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
+
+const BackButton = styled(Link)`
+  padding: ${({ theme }) => theme.spacing.medium} ${({ theme }) => theme.spacing.large};
+  background-color: ${({ theme }) => theme.colors.accent.primary};
+  color: ${({ theme }) => theme.colors.basic.white};
+  text-decoration: none;
+  border-radius: ${({ theme }) => theme.borders.radiusLarge};
+  transition: background-color 0.3s ease;
+  
   &:hover {
-    background-color: ${({ theme }) => theme.accentColor};
+    background-color: ${({ theme }) => theme.colors.accent.light};
   }
 `;
 
 const NotFoundPage = () => {
   const { t } = useTranslation("404");
-
   return (
-    <PageContainer>
+    <NotFoundContainer>
       <Title>{t("title")}</Title>
-      <Description>{t("description")}</Description>
-      <GoHomeButton href="/">{t("goHomeButton")}</GoHomeButton>
-    </PageContainer>
+      <Message>{t("description")}</Message>
+      <BackButton href="/">{t("goHomeButton")}</BackButton>
+    </NotFoundContainer>
   );
 };
 
