@@ -12,7 +12,7 @@ import Image from 'next/image';
 // Import fonts
 import { Outfit } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
-import { DM_Sans } from '@next/font/google';
+import { DM_Sans } from "next/font/google";
 
 const titleFont = Outfit({
   subsets: ['latin'],

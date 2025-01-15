@@ -106,7 +106,7 @@ const StyledLink = styled(Link)`
 
 const Divider = styled.div`
     height: 1px;
-    background: ${props => `${props.theme.colors.text.secondary}20`};
+    background: ${props => `${props.theme.colors.borders.color}40`};
     margin: ${({ theme }) => theme.spacing.xsmall} ${({ theme }) => theme.spacing.small};
 `;
 

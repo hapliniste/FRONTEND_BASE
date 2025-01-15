@@ -106,11 +106,6 @@ export interface Theme {
     portrait: string;
     landscape: string;
   };
-  // Backwards compatibility properties
-  baseDark: string;
-  baseMedium: string;
-  accentPrimary: string;
-  appBarHeight: string;
 }
 
 const baseTheme: Theme = {
@@ -207,12 +202,7 @@ const baseTheme: Theme = {
   breakpoints: {
     portrait: '(max-aspect-ratio: 1)',
     landscape: '(min-aspect-ratio: 1)',
-  },
-  // Backwards compatibility properties
-  get baseDark() { return this.colors.base.dark; },
-  get baseMedium() { return this.colors.base.medium; },
-  get accentPrimary() { return this.colors.accent.primary; },
-  get appBarHeight() { return this.sizes.appBarHeight; },
+  }
 };
 
 export const lightTheme: Theme = {

@@ -24,16 +24,18 @@ interface TabCarouselProps {
 const TabBar = styled.div`
     display: flex;
     width: 100%;
-    height: 40px;
-    border-radius: 999px; /* Pill shape */
+    height: 56px;
+    border-radius: 999px;
     overflow: hidden;
     background-color: ${({ theme }) => theme.colors.backgrounds.default};
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     
     @media (max-width: 768px) {
         font-size: 0.875rem;
-        margin: ${({theme}) => theme.spacing.xsmall};
+        height: 48px;
+        margin: 0 ${({theme}) => theme.spacing.xsmall} 1.5rem;
     }
 `;
 
@@ -50,10 +52,41 @@ const TabButton = styled.button<{ isActive: boolean }>`
     font-weight: 500;
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 1rem;
+
+    .tab-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        font-size: 1.25rem;
+
+        img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+    }
+
+    .tab-text {
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0;
+        .tab-text {
+            display: none;
+        }
+    }
 
     &:hover {
         background: ${({ isActive, theme }) =>
-            isActive ? theme.colors.accent.primary : theme.colors.text.secondary}20;
+            isActive ? theme.colors.accent.primary : `${theme.colors.text.secondary}12`};
     }
 `;
 
@@ -86,10 +119,11 @@ const ProgressOverlay = styled.div<{ isAnimating: boolean; interval: number }>`
 `;
 
 const TabContent = styled.div`
-    border: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
-    border-radius: ${({ theme }) => theme.borders.radius};
-    padding: 1rem;
-    margin-top: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -99,13 +133,15 @@ const StyledSwiper = styled(Swiper)`
 
     .swiper-slide {
         transition: all 0.3s ease;
-        //opacity: 0.5;
-        //transform: scale(0.9);
+        opacity: 0.4;
     }
 
     .swiper-slide-active {
-        //opacity: 1;
-        //transform: scale(1);
+        opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        padding: ${({ theme }) => theme.spacing.xsmall} 0;
     }
 `;
 
@@ -114,7 +150,11 @@ const ContentContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    //margin: 0 ${({ theme }) => theme.spacing.medium};
+    margin: 0 ${({ theme }) => theme.spacing.medium};
+
+    @media (max-width: 768px) {
+        margin: 0 ${({ theme }) => theme.spacing.xsmall};
+    }
 `;
 
 const TabCarousel: React.FC<TabCarouselProps> = ({

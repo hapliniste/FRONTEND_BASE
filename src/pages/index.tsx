@@ -11,7 +11,7 @@ import Numerique from "@/components/sections/numerique";
 import ContactForm from "@/components/sections/contactForm";
 import SpecialOffer from "@/components/library/specialOffer";
 import { withTranslation } from "@/utils/withTranslation";
-import Temoignages from "@/components/sections/temoignages";
+//import Temoignages from "@/components/sections/temoignages";
 
 const SectionWrapper = styled.div<{ isFirst?: boolean; isSecond?: boolean }>`
     margin-top: ${props => {
@@ -88,7 +88,8 @@ export default function Home() {
                 }}
             />
             <Hero />
-            {isMobile && <Temoignages />}
+            {//isMobile && <Temoignages />
+            }
             <SectionWrapper isSecond>
                 <DynamicServices />
             </SectionWrapper>

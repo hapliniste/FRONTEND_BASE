@@ -129,7 +129,7 @@ const ArrowIcon = styled(ArrowUpRight)`
   position: absolute;
   top: 2.75rem;
   right: 2.75rem;
-  color: ${props => props.theme.baseMedium};
+  color: ${props => props.theme.colors.text.secondary};
   opacity: 0.5;
   transition: all 0.3s ease;
 `;
@@ -138,10 +138,10 @@ const Divider = styled.div`
   height: 1px;
   background: linear-gradient(
     to right,
-    ${props => props.theme.accentPrimary}12,
+    ${props => props.theme.colors.accent.primary}12,
     transparent
   );
-  margin: 1rem 0;  // Reduced from 2rem to 1rem
+  margin: 1rem 0;
   width: 100%;
 `;
 

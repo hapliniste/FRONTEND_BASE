@@ -437,39 +437,6 @@ const Temoignages: React.FC = () => {
     const baseOffset = useRef(0);
     const lastUpdatePosition = useRef(0);
 
-    // Initialize the pool
-    useEffect(() => {
-        if (!carouselRef.current || !containerRef.current) return;
-        
-        // Calculate widths
-        const container = containerRef.current;
-        containerWidth.current = container.clientWidth;
-        
-        // Create initial pool
-        const initialPool: PooledItem[] = [];
-        const itemsNeeded = Math.ceil(containerWidth.current * BUFFER_MULTIPLIER / 250); // Assuming min item width
-        
-        for (let i = 0; i < itemsNeeded; i++) {
-            const sourceItem = testimonials[i % testimonials.length];
-            initialPool.push({
-                ...sourceItem,
-                poolIndex: i,
-                virtualIndex: i,
-            });
-        }
-        
-        setPooledItems(initialPool);
-        
-        // Setup resize observer
-        const observer = new ResizeObserver(() => {
-            containerWidth.current = container.clientWidth;
-            updatePool();
-        });
-        
-        observer.observe(container);
-        return () => observer.disconnect();
-    }, []);
-
     const updatePool = useCallback(() => {
         if (!carouselRef.current || !containerRef.current) return;
 
@@ -512,7 +479,40 @@ const Temoignages: React.FC = () => {
 
             return needsUpdate ? newItems : prevItems;
         });
-    }, [testimonials]);
+    }, []);
+
+    // Initialize the pool
+    useEffect(() => {
+        if (!carouselRef.current || !containerRef.current) return;
+        
+        // Calculate widths
+        const container = containerRef.current;
+        containerWidth.current = container.clientWidth;
+        
+        // Create initial pool
+        const initialPool: PooledItem[] = [];
+        const itemsNeeded = Math.ceil(containerWidth.current * BUFFER_MULTIPLIER / 250); // Assuming min item width
+        
+        for (let i = 0; i < itemsNeeded; i++) {
+            const sourceItem = testimonials[i % testimonials.length];
+            initialPool.push({
+                ...sourceItem,
+                poolIndex: i,
+                virtualIndex: i,
+            });
+        }
+        
+        setPooledItems(initialPool);
+        
+        // Setup resize observer
+        const observer = new ResizeObserver(() => {
+            containerWidth.current = container.clientWidth;
+            updatePool();
+        });
+        
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, [updatePool]);
 
     const setPosition = useCallback(() => {
         if (!carouselRef.current) return;

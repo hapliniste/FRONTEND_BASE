@@ -1,150 +1,137 @@
-import React, { useRef, useEffect, useState, Suspense } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { NextSeo } from 'next-seo';
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { Outfit } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
 
-// Optimize font loading
-const outfit = Outfit({
+const titleFont = Outfit({
   subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-  weight: ['700']
+  weight: ['700'],
 });
 
-// Dynamically import HeroCanvas with no SSR
-const DynamicHeroCanvas = dynamic(() => import('./HeroCanvas'), {
-    ssr: false
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700']
 });
 
-// Layout Components
-const Section = styled.section<{ isHalfSize?: boolean }>`
+const DMSansFont = DM_Sans({ 
+  subsets: ['latin'], 
+  weight: ['400'] 
+});
+
+const Section = styled.section`
   position: relative;
   width: 100%;
-  height: ${props => props.isHalfSize ? '60vh' : '70vh'};
+  height: 70vh;
+  min-height: 600px;
   background-color: ${(props) => props.theme.colors.backgrounds.default};
   overflow: hidden;
-  //padding-top: ${props => props.theme.spacing.xlarge};
   
   @media (max-width: 768px) {
     height: auto;
+    min-height: 500px;
     padding-top: ${props => props.theme.spacing.xlarge};
-  }
-`;
-
-const InnerSection = styled.div`
-  overflow: hidden;
-  position: relative;
-  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
-  height: 100%;
-  display: flex;
-  align-items: center;
-  
-  @media (min-width: 105rem) {
-    padding: ${props => `${props.theme.spacing.section.paddingY.desktop} ${props.theme.spacing.section.paddingX.desktop}`};
-    background-color: #504540;
   }
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
-  //max-width: ${props => props.theme.sizes.maxWidth};
+  height: 100%;
+  max-width: ${props => props.theme.sizes.maxWidth};
   margin: 0 auto;
-  position: relative;
-  z-index: 2;
+  padding: ${props => `${props.theme.spacing.section.paddingY.mobile} ${props.theme.spacing.section.paddingX.mobile}`};
   display: flex;
   align-items: center;
-  gap: ${props => props.theme.spacing.xlarge};
+  justify-content: flex-start;
+  position: relative;
+  z-index: 2;
 
   @media (max-width: 1024px) {
-    flex-direction: column;
-  }
-`;
-
-const CardContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  
-  .canvas-container {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    //width: 60%;
-    height: 100%;
-    //left: 30%;
-
-    //background-color: #504540;
-    
-    @media (max-width: 105rem) {
-      display: none;
-    }
-  }
-`;
-
-const ContentArea = styled.div`
-  width: 100%;
-  max-width: 800px;
-  margin-left: 8%;
-  text-align: left;
-  position: relative;
-  padding: ${props => props.theme.spacing.large};
-  border-radius: ${props => props.theme.borders.radius};
-  background: ${props => props.theme.colors.backgrounds.default};
-  box-shadow: 0 0 50px 50px ${props => props.theme.colors.backgrounds.default};
-  z-index: 2;
-  
-  @media (max-width: 768px) {
+    justify-content: center;
     text-align: center;
-    margin: 0 auto;
-    box-shadow: none;
-    padding: 0;
-    width: 100%;
+    padding: ${props => props.theme.spacing.medium} 0;
   }
 `;
 
-// Typography Components
-const Title = styled.h1`
+const ContentArea = styled(motion.div)`
+  flex: 0 1 800px;
+  display: grid;
+  gap: 2rem;
+  margin-left: 8%;
+
+  @media (max-width: 1024px) {
+    flex: none;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+`;
+
+const Title = styled(motion.h1)`
   color: ${(props) => props.theme.colors.text.primary};
   font-size: 5rem;
   font-weight: 700;
   margin: 0;
-  line-height: 1.1;
-  font-family: ${outfit.style.fontFamily};  // Use the optimized font
+  line-height: 1.2;
+  font-family: ${titleFont.style.fontFamily};
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0em;
+  align-items: flex-start;
+
+  img {
+    height: 1em;
+    width: auto !important;
+    vertical-align: baseline;
+    position: relative;
+    display: block;
+    object-fit: contain;
+  }
+
+  .line {
+    display: block;
+    line-height: inherit;
+  }
 
   .gradient {
     background: ${(props) => props.theme.colors.accent.gradient};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: block;
+    line-height: inherit;
   }
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
+    text-align: center;
     white-space: normal;
+    align-items: center;
   }
 `;
 
-const SubTitle = styled.h2`
+const SubTitle = styled(motion.h2)`
   color: ${(props) => props.theme.colors.text.primary};
   font-size: 2rem;
   font-weight: 400;
-  margin-top: 1.5rem;
+  margin: 0;
+  font-family: ${montserrat.style.fontFamily};
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
   }
 `;
 
-const Description = styled.p`
+const Description = styled(motion.p)`
   color: ${(props) => props.theme.colors.text.secondary};
   font-size: 1.25rem;
-  margin-top: 2rem;
-  max-width: 90%;
   line-height: 1.4;
+  margin: 0;
+  max-width: 90%;
+  font-family: ${DMSansFont.style.fontFamily};
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -152,16 +139,7 @@ const Description = styled.p`
   }
 `;
 
-// UI Elements
-const LogoTitle = styled.img`
-  height: 1em;
-  margin-right: 0.5rem;
-  vertical-align: baseline;
-  position: relative;
-  top: 0.15em;
-`;
-
-const CTAButton = styled.button`
+const CTAButton = styled(motion.button)`
   display: inline-block;
   padding: 1.25rem 3rem;
   background-color: ${(props) => props.theme.colors.accent.primary};
@@ -171,70 +149,23 @@ const CTAButton = styled.button`
   font-weight: 600;
   font-size: 1.8rem;
   cursor: pointer;
+  font-family: ${montserrat.style.fontFamily};
   transition: all 0.3s ease;
-  margin: 0;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.accent.light};
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {
     font-size: 1.4rem;
     padding: 1rem 2.5rem;
+    margin: 0 auto;
   }
-`;
-
-const CTAContainer = styled.div`
-  margin-top: 3rem;
-  
-  @media (max-width: 768px) {
-    margin-top: 2rem;
-  }
-`;
-
-const BackgroundLayer = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-`;
-
-const ContentLayer = styled.div<{ isHalfSize?: boolean }>`
-    position: relative;
-    z-index: 2;
-    height: 100%;
-    //width: ${props => props.isHalfSize ? '50%' : '100%'};
 `;
 
 const Hero: React.FC = () => {
   const contactRef = useRef<HTMLElement | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const mobileQuery = window.matchMedia('(max-width: 768px)');
-      const tabletQuery = window.matchMedia('(min-width: 769px) and (max-width: 1024px)');
-      
-      // Set initial values
-      setIsMobile(mobileQuery.matches);
-      setIsTablet(tabletQuery.matches);
-
-      // Add listeners
-      const mobileHandler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-      const tabletHandler = (e: MediaQueryListEvent) => setIsTablet(e.matches);
-      
-      mobileQuery.addEventListener('change', mobileHandler);
-      tabletQuery.addEventListener('change', tabletHandler);
-
-      return () => {
-        mobileQuery.removeEventListener('change', mobileHandler);
-        tabletQuery.removeEventListener('change', tabletHandler);
-      };
-    }
-  }, []);
 
   useEffect(() => {
     contactRef.current = document.getElementById('contact');
@@ -254,55 +185,83 @@ const Hero: React.FC = () => {
     }
   };
 
-  const titleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (custom: number) => ({
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
       opacity: 1,
-      y: 0,
-      transition: { delay: custom * 0.2 },
-    }),
-  };
-
-  const heroSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Neuchatech",
-    "url": "https://neuchatech.ch",
-    "description": "Solutions web professionnelles à Neuchâtel",
-    "potentialAction": {
-      "@type": "ContactAction",
-      "target": "https://neuchatech.ch/#contact"
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      }
     }
   };
 
-  /*
-  We should use a single canva for the hero and put all the content in it.
-  As we can render components with Drei, we should be able to use an orthographic camera and render it like a normal react component.
-  This would allow us more flexibility and make the placement of the 3D components easier.
-  */
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
 
   return (
     <>
-      {/*<NextSeo
-        title="Accueil"
-        description="Solutions web professionnelles à Neuchâtel. Développement de sites web, applications et assistants IA pour votre entreprise."
-      />*/}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(heroSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Neuchatech",
+            "url": "https://neuchatech.ch",
+            "description": "Solutions web professionnelles à Neuchâtel",
+            "potentialAction": {
+              "@type": "ContactAction",
+              "target": "https://neuchatech.ch/#contact"
+            }
+          })
+        }}
       />
       <Section>
-        <Suspense fallback={
-          <div style={{ 
-            width: '100%', 
-            height: '60vh',
-            background: 'linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%)',
-            backgroundSize: '200% 100%',
-            animation: 'shimmer 1.5s linear infinite',
-          }} />
-        }>
-          <DynamicHeroCanvas />
-        </Suspense>
+        <ContentWrapper>
+          <ContentArea
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <Title variants={itemVariants}>
+              <Image 
+                src="/neuchatech_logo.webp"
+                alt="Neuchatech"
+                width={200}
+                height={50}
+                style={{ height: '1em', width: 'auto' }}
+                priority
+              />
+              <span className="line">donne vie à vos</span>
+              <span className="gradient">projets numériques</span>
+            </Title>
+            <SubTitle variants={itemVariants}>
+              Votre partenaire suisse pour une transition numérique réussie
+            </SubTitle>
+            <Description variants={itemVariants}>
+              Des solutions web modernes et performantes pour faire de chaque
+              projet un pilier de votre succès.
+            </Description>
+            <CTAButton
+              variants={itemVariants}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={scrollToContact}
+            >
+              Obtenez un devis gratuit
+            </CTAButton>
+          </ContentArea>
+        </ContentWrapper>
       </Section>
     </>
   );

@@ -35,8 +35,14 @@ function Convert-ToHLS {
     $segmentPath = Join-Path $outputDir "${fileName}_%03d.ts"
     $playlistPath = Join-Path $outputDir "${fileName}.m3u8"
     $mp4Path = Join-Path $outputDir "${fileName}_converted.mp4"
+    $thumbnailPath = Join-Path $outputDir "${fileName}_thumb.webp"
     
     Write-Host "Converting $inputFile to HLS format..." -ForegroundColor Cyan
+    
+    # Extract thumbnail first
+    Write-Host "`nExtracting thumbnail..." -ForegroundColor Cyan
+    $thumbnailCmd = "ffmpeg -i `"$inputFile`" -vf `"select=eq(n\,0)`" -vframes 1 -c:v webp -quality 90 `"$thumbnailPath`""
+    Invoke-Expression $thumbnailCmd
     
     # Base FFmpeg command
     $ffmpegCmd = "ffmpeg -i `"$inputFile`""
@@ -116,12 +122,14 @@ function Convert-ToHLS {
         Write-Host "Original: $([math]::Round($inputSize/1MB, 2)) MB" -ForegroundColor Yellow
         Write-Host "Converted: $([math]::Round($outputSize/1MB, 2)) MB" -ForegroundColor Yellow
         Write-Host "Number of segments: $segmentCount" -ForegroundColor Yellow
+        Write-Host "Thumbnail created: $thumbnailPath" -ForegroundColor Yellow
         $savings = (1 - ($outputSize / $inputSize)) * 100
         Write-Host "Space saved: $([math]::Round($savings, 1))%" -ForegroundColor Green
         
         Write-Host "`nNote: HLS files (.m3u8) are primarily for web playback." -ForegroundColor Yellow
+        Write-Host "A WebP thumbnail was created for fast initial loading." -ForegroundColor Yellow
         if ($createMP4) {
-            Write-Host "An MP4 file was also created for testing in media players." -ForegroundColor Yellow
+            Write-Host "An MP4 file was also created for testing." -ForegroundColor Yellow
         }
     }
     catch {

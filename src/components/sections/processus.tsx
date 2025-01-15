@@ -175,7 +175,7 @@ const ClickableCard = styled(TimelineCard)`
 const CardTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 600;
-  color: ${props => props.theme.baseDark};
+  color: ${props => props.theme.colors.text.primary};
   margin: 0;
   line-height: 1.3;
 
@@ -199,7 +199,7 @@ const CardTitle = styled.h3`
 const CardSubtitle = styled.h4`
   font-size: 1.1rem;
   font-weight: 500;
-  color: ${props => props.theme.accentPrimary};
+  color: ${props => props.theme.colors.text.primary};
   margin: 0.5rem 0 1rem 0;
   opacity: 0.9;
 
@@ -212,7 +212,7 @@ const CardSubtitle = styled.h4`
 const CardDescription = styled.p`
   font-size: 1rem;
   line-height: 1.6;
-  color: ${props => props.theme.baseMedium};
+  color: ${props => props.theme.colors.text.secondary};
   margin: 0;
   white-space: pre-line;
 
@@ -228,7 +228,7 @@ const OfferCard = styled(motion.div)`
   border-radius: 1.5rem;
   padding: 2.5rem;
   text-align: center;
-  border: 1px solid ${props => props.theme.accentPrimary}12;
+  border: 1px solid ${props => props.theme.colors.accent.primary}12;
 
   @media (max-width: 768px) {
     margin-top: 2rem;
@@ -237,25 +237,23 @@ const OfferCard = styled(motion.div)`
 `;
 
 const OfferTitle = styled.h3`
-  //font-family: 'Montserrat', sans-serif;
   font-size: 1.75rem;
   font-weight: 600;
-  color: ${props => props.theme.baseDark};
+  color: ${props => props.theme.colors.text.primary};
   margin: 0 0 1rem 0;
 `;
 
 const OfferPrice = styled.div`
-  //font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: ${props => props.theme.accentPrimary};
+  color: ${props => props.theme.colors.accent.primary};
   margin: 1.5rem 0;
 `;
 
 const ContactButton = styled.a`
   display: inline-block;
   padding: 1rem 2rem;
-  background: ${props => props.theme.accentPrimary};
+  background: ${props => props.theme.colors.accent.primary};
   color: white;
   border-radius: 0.75rem;
   text-decoration: none;

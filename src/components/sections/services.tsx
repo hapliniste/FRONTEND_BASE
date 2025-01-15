@@ -8,9 +8,9 @@ import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import Float3DCard from '@/components/library/Float3DCard';
+//import Float3DCard from '@/components/library/Float3DCard';
 import { Space_Grotesk } from 'next/font/google';
-import Hls from 'hls.js';
+//import type Hls from 'hls.js';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720' fill='%23f0f0f0'%3E%3Crect width='1280' height='720'/%3E%3C/svg%3E";
 
@@ -19,7 +19,6 @@ const Section = styled.section`
     position: relative;
     padding: ${({theme}) => `${theme.spacing.section.paddingY.mobile} ${theme.spacing.section.paddingX.mobile}`};
     margin: 0;
-    padding: 0;
     
     @media (min-width: 1024px) {
         padding: ${({theme}) => `${theme.spacing.section.paddingY.desktop} ${theme.spacing.section.paddingX.desktop}`};
@@ -33,6 +32,11 @@ const ContentWrapper = styled.div`
     margin: 0 auto;
 `;
 
+const TabContent = styled.div`
+    padding: 0;
+    margin: 0;
+`;
+
 const CardContainer = styled.div`
     background-color: ${({theme}) => theme.colors.backgrounds.white};
     border-radius: ${({theme}) => theme.borders.radius};
@@ -43,7 +47,7 @@ const CardContainer = styled.div`
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     position: relative;
-    border: 1px solid ${({theme}) => `${theme.accentPrimary}12`};
+    border: 1px solid ${({theme}) => `${theme.colors.accent.primary}12`};
     margin: 0 ${({theme}) => theme.spacing.xsmall};
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
@@ -203,7 +207,7 @@ const CardTitle = styled(motion.h3)`
 const CardDescription = styled.p`
     font-size: 1.1rem;
     line-height: 1.6;
-    color: ${({theme}) => theme.baseMedium};
+    color: ${({theme}) => theme.colors.base.medium};
     margin-bottom: 1.5rem;
 
     @media (max-width: 768px) {
@@ -334,10 +338,10 @@ const FeaturesList = ({ features }: { features: string[] }) => {
 const PriceTag = styled(motion.div)`
     font-size: 1.5rem;
     font-weight: 600;
-    color: ${({theme}) => theme.baseDark};
+    color: ${({theme}) => theme.colors.base.dark};
     margin-top: auto;
     padding-top: 1.5rem;
-    border-top: 1px solid ${({theme}) => `${theme.accentPrimary}12`};
+    border-top: 1px solid ${({theme}) => `${theme.colors.accent.primary}12`};
 
     @media (max-width: 768px) {
         font-size: 1.375rem;
@@ -412,68 +416,48 @@ const HLSVideo: React.FC<{ src: string; className?: string }> = ({ src, classNam
         if (videoRef.current) {
             const video = videoRef.current;
             const loadVideo = async () => {
-                const Hls = (await import('hls.js')).default;
-                if (Hls.isSupported()) {
-                    const hls = new Hls({
-                        debug: false,
-                        enableWorker: true,
-                        lowLatencyMode: true,
-                        backBufferLength: 90,
-                        // Try to use modern codecs if supported
-                        preferManagedMediaSource: false,
-                        enableSoftwareAES: true
-                    });
-
-                    hls.on(Hls.Events.ERROR, (event, data) => {
-                        if (data.fatal) {
-                            switch (data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    // Try to recover network error
-                                    hls.startLoad();
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    // Try to recover media error
-                                    hls.recoverMediaError();
-                                    break;
-                                default:
-                                    // Cannot recover
-                                    hls.destroy();
-                                    break;
-                            }
-                        }
-                    });
-
-                    hls.loadSource(src);
-                    hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                        video.play().catch(() => {
-                            console.log('Playback failed, probably due to autoplay restrictions');
+                try {
+                    const Hls = (await import('hls.js')).default;
+                    if (Hls.isSupported()) {
+                        const hls = new Hls({
+                            maxBufferLength: 30,
+                            maxMaxBufferLength: 600,
+                            maxBufferSize: 60 * 1000 * 1000,
+                            maxBufferHole: 0.5,
+                            lowLatencyMode: true,
+                            preferManagedMediaSource: false,
                         });
-                    });
-                }
-                // Fallback for Safari
-                else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = src;
-                    video.addEventListener('loadedmetadata', () => {
-                        video.play().catch(() => {
-                            console.log('Playback failed, probably due to autoplay restrictions');
+
+                        hls.loadSource(src);
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            video.play().catch(() => {
+                                // Autoplay was prevented, ignore
+                            });
                         });
-                    });
-                }
-                // If neither HLS.js nor native HLS is supported
-                else {
-                    console.warn('HLS is not supported in this browser');
-                    // Try to get the direct video URL by replacing .m3u8 with _000.ts
-                    const fallbackSrc = src.replace('.m3u8', '_000.ts');
-                    video.src = fallbackSrc;
-                    video.play().catch(() => {
-                        console.log('Fallback playback failed');
-                    });
+                    }
+                    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = src;
+                        video.addEventListener('loadedmetadata', () => {
+                            video.play().catch(() => {
+                                // Autoplay was prevented, ignore
+                            });
+                        });
+                    } else {
+                        // Try to get the direct video URL by replacing .m3u8 with _000.ts
+                        const fallbackSrc = src.replace('.m3u8', '_000.ts');
+                        video.src = fallbackSrc;
+                        video.play().catch(() => {
+                            // Autoplay was prevented, ignore
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading video:', error);
                 }
             };
+
             loadVideo();
 
-            // Cleanup
             return () => {
                 video.pause();
                 video.src = '';
@@ -482,14 +466,18 @@ const HLSVideo: React.FC<{ src: string; className?: string }> = ({ src, classNam
         }
     }, [src]);
 
+    // Get the thumbnail path by replacing .m3u8 with _thumb.webp
+    const thumbnailPath = src.replace('.m3u8', '_thumb.webp');
+
     return (
         <video
             ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
             className={className}
+            muted
+            loop
+            playsInline
+            poster={thumbnailPath}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
     );
 };
@@ -595,7 +583,7 @@ const services: Tab[] = [
                         "Mises à jour automatiques",
                         "Restez maître de vos données"
                     ]}
-                    price="à partir de500 CHF + coûts d'utilisation"
+                    price="à partir de 500 CHF + coûts d'utilisation"
                     media={
                         <AIVideoView>
                             <VideoWrapper src="/portfolio/assistantIA/assistantIA.m3u8" />
@@ -683,16 +671,6 @@ const Services: React.FC = () => {
 
     return (
         <>
-            {/*<NextSeo
-                title="Services Web Professionnels"
-                description="Développement web sur mesure, sites web standards, hébergement et assistants IA pour votre entreprise à Neuchâtel."
-                additionalMetaTags={[
-                    {
-                        name: 'keywords',
-                        content: 'développement web, site web standard, développement sur mesure, assistant IA, hébergement web, Neuchâtel'
-                    }
-                ]}
-            />*/}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
@@ -700,15 +678,13 @@ const Services: React.FC = () => {
             <Section id="services" ref={sectionRef}>
                 <ContentWrapper>
                     <SectionTitle $centered $noUnderline>Nos Services</SectionTitle>
-                    <Suspense fallback={<VideoSkeleton />}>
-                        {isVisible && (
-                            <LazyTabCarousel
-                                tabs={services}
-                                interval={7000}
-                                swiperEffect="slide"
-                            />
-                        )}
-                    </Suspense>
+                    {isVisible && (
+                        <TabCarousel
+                            tabs={services}
+                            interval={7000}
+                            swiperEffect="slide"
+                        />
+                    )}
                 </ContentWrapper>
             </Section>
         </>
