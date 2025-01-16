@@ -67,11 +67,11 @@ const TabButton = styled.button<{ isActive: boolean }>`
         height: 24px;
         font-size: 1.25rem;
         transition: transform 0.3s ease;
-        color: ${({ isActive, theme }) =>
-            isActive ? theme.colors.basic.white : theme.colors.text.primary};
+        color: ${({ isActive, theme }) => isActive ? theme.colors.basic.white : theme.colors.text.primary};
 
         svg [opacity="0.2"] {
             opacity: 0.2;
+            //fill: ${({ isActive, theme }) => isActive ? theme.colors.basic.white : theme.colors.accent.primary};
             fill: ${({ theme }) => theme.colors.accent.primary};
         }
     }
@@ -93,8 +93,6 @@ const TabButton = styled.button<{ isActive: boolean }>`
         
         .tab-icon {
             transform: scale(1.1);
-            color: ${({ isActive, theme }) =>
-                isActive ? theme.colors.basic.white : theme.colors.text.primary};
         }
     }
 `;

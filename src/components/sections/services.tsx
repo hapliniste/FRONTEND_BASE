@@ -488,7 +488,9 @@ const LazyImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
 };
 
 const IconWrapper = styled.div`
-    color: ${({theme}) => theme.colors.text.primary};
+    // When using inherit, the dual tone is not working, but the red/white is working
+    //color: inherit;
+    //color: ${({theme}) => theme.colors.text.primary};
     svg [opacity="0.2"] {
         opacity: 1;
         fill: ${({theme}) => theme.colors.accent.primary};
