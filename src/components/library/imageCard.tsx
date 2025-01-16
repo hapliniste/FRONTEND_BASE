@@ -6,7 +6,7 @@ import Link from 'next/link';
 export type Image = {
   id: number;
   href?: string;
-  icon: string;
+  icon: React.ReactNode;
   title: string;
   content: React.ReactNode;
   fullContent?: React.ReactNode;
@@ -58,12 +58,16 @@ const IconWrapper = styled.div`
 const IconBackground = styled.div`
   width: 2.5rem;
   height: 2.5rem;
-  background-color: ${({theme}) => `${theme.colors.accent.primary}12`};
-  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
+  color: ${({theme}) => theme.colors.text.primary};
+
+  svg [opacity="0.2"] {
+    opacity: 0.2;
+    fill: ${({theme}) => theme.colors.accent.primary};
+  }
 
   @media (min-width: 768px) {
     width: 3rem;

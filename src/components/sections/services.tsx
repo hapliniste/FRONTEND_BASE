@@ -8,6 +8,7 @@ import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Desktop, Code, Robot, Cloud } from '@phosphor-icons/react';
 //import Float3DCard from '@/components/library/Float3DCard';
 //import type Hls from 'hls.js';
 
@@ -126,11 +127,11 @@ const VideoView = styled.div`
     }
 `;
 
-const CardBody = styled(motion.div)`
-    padding: 2.5rem;
+const CardBody = styled.div`
+    padding: ${({theme}) => theme.spacing.large};
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    flex: 1;
 `;
 
 const CardHeader = styled(motion.div)`
@@ -145,10 +146,25 @@ const CardIcon = styled(motion.div)`
     justify-content: center;
     width: 80px;
     height: 80px;
-    background: ${({theme}) => `${theme.colors.accent.primary}12`};
     border-radius: 16px;
     padding: 1.25rem;
     transition: all 0.3s ease;
+    color: ${({theme}) => theme.colors.text.primary};
+    
+    svg [opacity="0.2"] {
+        opacity: 0.2;
+        fill: ${({theme}) => theme.colors.accent.primary};
+    }
+
+    .active & {
+        color: white;
+        background: ${({theme}) => theme.colors.accent.primary};
+        
+        svg [opacity="0.2"] {
+            opacity: 0.2;
+            fill: white;
+        }
+    }
 `;
 
 const CardTitle = styled(motion.h3)`
@@ -313,7 +329,7 @@ const PriceTag = styled(motion.div)`
 
 interface Tab {
     title: string;
-    icon: string;
+    icon: React.ReactNode;
     content: React.ReactNode;
 }
 
@@ -471,10 +487,18 @@ const LazyImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
     );
 };
 
+const IconWrapper = styled.div`
+    color: ${({theme}) => theme.colors.text.primary};
+    svg [opacity="0.2"] {
+        opacity: 1;
+        fill: ${({theme}) => theme.colors.accent.primary};
+    }
+`;
+
 const services: Tab[] = [
     {
         title: "Site standard",
-        icon: "/icon_website.png",
+        icon: <IconWrapper><Desktop size={32} weight="duotone" /></IconWrapper>,
         content: (
             <ServiceCard
                 title="Site standard"
@@ -500,7 +524,7 @@ const services: Tab[] = [
     },
     {
         title: "Développement sur mesure",
-        icon: "/icon_customdev.png",
+        icon: <IconWrapper><Code size={32} weight="duotone" /></IconWrapper>,
         content: (
             <ServiceCard
                 title="Développement sur mesure"
@@ -525,7 +549,7 @@ const services: Tab[] = [
     },
     {
         title: "Assistant IA managé",
-        icon: "/icon_assistant.png",
+        icon: <IconWrapper><Robot size={32} weight="duotone" /></IconWrapper>,
         content: (
             <ServiceCard
                 title="Assistant IA managé"
@@ -551,7 +575,7 @@ const services: Tab[] = [
     },
     {
         title: "Hébergement web",
-        icon: "☁️",
+        icon: <IconWrapper><Cloud size={32} weight="duotone" /></IconWrapper>,
         content: (
             <ServiceCard
                 title="Hébergement web"
@@ -561,7 +585,6 @@ const services: Tab[] = [
                     "Performance optimale",
                     "Chiffrement SSL",
                     "Sauvegardes automatiques",
-                    //"Support technique local"
                 ]}
                 price="10 CHF / mois"
                 media={

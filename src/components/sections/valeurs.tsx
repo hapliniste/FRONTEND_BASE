@@ -5,11 +5,12 @@ import ImageCard from "@/components/library/imageCard";
 import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
 import { motion } from 'framer-motion';
+import { Handshake, Rocket, Code, LockOpen, PiggyBank } from '@phosphor-icons/react';
 
 interface ValeurCardProps {
   title: string;
   content: React.ReactNode;
-  icon: string;
+  icon: React.ReactNode;
   isEven: boolean;
 }
 
@@ -214,7 +215,7 @@ const cardContent: ValeurCardProps[] = [
         </p>
       </>
     ),
-    icon: "🤝",
+    icon: <Handshake size={32} weight="duotone" />,
     isEven: false
   },
   {
@@ -231,7 +232,7 @@ const cardContent: ValeurCardProps[] = [
         </p>
       </>
     ),
-    icon: "⚡",
+    icon: <Rocket size={32} weight="duotone" />,
     isEven: true
   },
   {
@@ -253,7 +254,7 @@ const cardContent: ValeurCardProps[] = [
         </TechList>
       </>
     ),
-    icon: "💻",
+    icon: <Code size={32} weight="duotone" />,
     isEven: false
   },
   {
@@ -271,7 +272,7 @@ const cardContent: ValeurCardProps[] = [
         </p>
       </>
     ),
-    icon: "🔓",
+    icon: <LockOpen size={32} weight="duotone" />,
     isEven: true
   },
   {
@@ -288,7 +289,7 @@ const cardContent: ValeurCardProps[] = [
         </p>
       </>
     ),
-    icon: "💰",
+    icon: <PiggyBank size={32} weight="duotone" />,
     isEven: false
   },
 ];

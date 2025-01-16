@@ -10,8 +10,8 @@ On fera 7 lignes dans cette grid, une par item.
 import React, { useRef, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { motion } from "framer-motion";
-import SpecialOffer from "../library/specialOffer";
 import { SectionTitle } from '@/components/library/typography';
+import { CheckCircle, Target, Code, RocketLaunch, Handshake } from '@phosphor-icons/react';
 
 // Update the ProcessSteps type
 type StepStatus = 'completed' | 'bonus' | undefined;
@@ -21,7 +21,7 @@ interface ProcessStep {
   title: string;
   subtitle?: string;
   description?: string;
-  icon: string;
+  icon: React.ReactNode;
   status?: StepStatus;
   isClickable?: boolean;
 }
@@ -32,7 +32,7 @@ const ProcessSteps: ProcessStep[] = [
     id: 1,
     title: "Vous Nous Avez Trouvés",
     description: "Félicitations! Vous avez déjà franchi la première étape en nous trouvant.\nNous sommes maintenant à votre disposition pour concrétiser votre vision.",
-    icon: "✓",
+    icon: <CheckCircle size={32} weight="duotone" />,
     status: "completed"
   },
   {
@@ -40,27 +40,27 @@ const ProcessSteps: ProcessStep[] = [
     title: "Premier Contact",
     subtitle: "Discutons et Visualisons Ensemble",
     description: "Commençons par un entretien gratuit pour comprendre vos objectifs et besoins. Nous créerons ensuite des prototypes personnalisés pour vous permettre de visualiser concrètement votre projet avant son développement.",
-    icon: "🎯",
+    icon: <Target size={32} weight="duotone" />,
     isClickable: true
   },
   {
     id: 3,
     title: "Développement",
-    icon: "💻"
+    icon: <Code size={32} weight="duotone" />
   },
   {
     id: 4,
     title: "Test & Lancement",
     subtitle: "De la Validation au Déploiement",
     description: "Testez votre solution et partagez vos retours pour les ajustements finaux.\nUne fois satisfait, nous déployons votre projet sur nos serveurs suisses sécurisés.",
-    icon: "🚀"
+    icon: <RocketLaunch size={32} weight="duotone" />
   },
   {
     id: 5,
     title: "Support & Évolution",
     subtitle: "Un Accompagnement Sur le Long Terme",
     description: "Notre engagement continue après le lancement.\nNous restons à vos côtés pour maintenir, optimiser et faire évoluer votre solution selon vos besoins futurs.",
-    icon: "🤝",
+    icon: <Handshake size={32} weight="duotone" />,
     status: "bonus"
   }
 ];
@@ -193,6 +193,12 @@ const CardTitle = styled.h3`
     .mobile-icon {
       display: inline;
       font-size: 1.25rem;
+      color: ${props => props.theme.colors.text.primary};
+      
+      svg [opacity="0.2"] {
+        opacity: 0.2;
+        fill: ${props => props.theme.colors.accent.primary};
+      }
     }
   }
 `;
@@ -296,10 +302,21 @@ const TimelineIcon = styled(motion.div)<{ status?: 'completed' | 'clickable' }>`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.03);
   cursor: ${props => props.status === 'clickable' ? 'pointer' : 'default'};
+  color: ${props => props.theme.colors.text.primary};
+
+  svg [opacity="0.2"] {
+    opacity: 0.2;
+    fill: ${props => props.theme.colors.accent.primary};
+  }
   
   ${props => props.status === 'completed' && css`
     background: ${props.theme.colors.status.success};
     color: white;
+    
+    svg [opacity="0.2"] {
+      opacity: 0.2;
+      fill: white;
+    }
   `}
 
   ${props => props.status === 'clickable' && css`
@@ -309,6 +326,13 @@ const TimelineIcon = styled(motion.div)<{ status?: 'completed' | 'clickable' }>`
       animation: none;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: ${props.theme.colors.accent.primary};
+      color: white;
+      
+      svg [opacity="0.2"] {
+        opacity: 0.2;
+        fill: white;
+      }
     }
   `}
 

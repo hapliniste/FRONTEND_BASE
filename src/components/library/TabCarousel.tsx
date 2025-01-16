@@ -28,7 +28,7 @@ const TabBar = styled.div`
     height: 56px;
     border-radius: 999px;
     overflow: hidden;
-    background-color: ${({ theme }) => theme.colors.backgrounds.default};
+    background-color: ${({ theme }) => theme.colors.backgrounds.white};
     margin-bottom: 2rem;
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -47,7 +47,7 @@ const TabButton = styled.button<{ isActive: boolean }>`
     background: ${({ isActive, theme }) =>
         isActive ? theme.colors.accent.primary : 'transparent'};
     color: ${({ isActive, theme }) =>
-        isActive ? theme.colors.basic.white : theme.colors.text.primary};
+        isActive ? theme.colors.basic.white : theme.colors.accent.primary};
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
@@ -66,11 +66,13 @@ const TabButton = styled.button<{ isActive: boolean }>`
         width: 24px;
         height: 24px;
         font-size: 1.25rem;
+        transition: transform 0.3s ease;
+        color: ${({ isActive, theme }) =>
+            isActive ? theme.colors.basic.white : theme.colors.text.primary};
 
-        img {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
+        svg [opacity="0.2"] {
+            opacity: 0.2;
+            fill: ${({ theme }) => theme.colors.accent.primary};
         }
     }
 
@@ -87,7 +89,13 @@ const TabButton = styled.button<{ isActive: boolean }>`
 
     &:hover {
         background: ${({ isActive, theme }) =>
-            isActive ? theme.colors.accent.primary : `${theme.colors.text.secondary}12`};
+            isActive ? theme.colors.accent.primary : `${theme.colors.accent.primary}12`};
+        
+        .tab-icon {
+            transform: scale(1.1);
+            color: ${({ isActive, theme }) =>
+                isActive ? theme.colors.basic.white : theme.colors.text.primary};
+        }
     }
 `;
 
