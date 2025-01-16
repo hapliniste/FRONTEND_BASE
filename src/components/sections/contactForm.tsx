@@ -59,6 +59,7 @@ const Title = styled.h2`
   font-size: 2.75rem;
   font-weight: 700;
   margin-bottom: ${props => props.theme.spacing.medium};
+  margin-top: ${props => props.theme.spacing.medium};
   letter-spacing: -0.03em;
   font-family: ${props => props.theme.typography.fontFamily};
 
@@ -796,16 +797,16 @@ const ContactForm: React.FC = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <ContactItem>
-                        <ContactIcon>📍</ContactIcon>
-                        <ContactText>{contactInfo.address}</ContactText>
-                      </ContactItem>
-                      <ContactItem>
                         <ContactIcon>📧</ContactIcon>
                         <ContactText>{contactInfo.email}</ContactText>
                       </ContactItem>
                       <ContactItem>
                         <ContactIcon>📞</ContactIcon>
                         <ContactText>{contactInfo.phone}</ContactText>
+                      </ContactItem>
+                      <ContactItem>
+                        <ContactIcon>📍</ContactIcon>
+                        <ContactText>{contactInfo.address}</ContactText>
                       </ContactItem>
                     </ContactDetails>
                   )}

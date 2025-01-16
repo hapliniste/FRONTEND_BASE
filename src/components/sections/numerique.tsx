@@ -4,7 +4,6 @@ import { motion, useAnimation, animate } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { SectionTitle } from '@/components/library/typography';
 import Image from 'next/image';
-import { jakarta } from '@/styles/theme';
 import { NextSeo } from 'next-seo';
 
 const Section = styled.section`
@@ -68,6 +67,7 @@ const ContentSection = styled(motion.div)`
 `;
 
 const FeatureTitle = styled(motion.h3)`
+  font-family: ${props => props.theme.typography.titleFontFamily};
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: ${props => props.theme.spacing.medium};
@@ -128,7 +128,7 @@ const StatNumber = styled(motion.span)`
   font-size: 2.5rem;
   font-weight: 300;
   color: ${props => props.theme.colors.text.primary};
-  font-family: ${props => props.theme.typography.headingFontFamily};
+  font-family: ${props => props.theme.typography.titleFontFamily};
   line-height: 1;
   letter-spacing: -0.02em;
 `;

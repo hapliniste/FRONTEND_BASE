@@ -2,24 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Outfit } from 'next/font/google';
-import { Montserrat } from 'next/font/google';
-import { DM_Sans } from 'next/font/google';
-
-const titleFont = Outfit({
-  subsets: ['latin'],
-  weight: ['700'],
-});
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700']
-});
-
-const DMSansFont = DM_Sans({ 
-  subsets: ['latin'], 
-  weight: ['400'] 
-});
 
 const Section = styled.section`
   position: relative;
@@ -76,7 +58,7 @@ const Title = styled(motion.h1)`
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
-  font-family: ${titleFont.style.fontFamily};
+  font-family: ${props => props.theme.typography.headingFontFamily};
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -118,7 +100,7 @@ const SubTitle = styled(motion.h2)`
   font-size: 2rem;
   font-weight: 400;
   margin: 0;
-  font-family: ${montserrat.style.fontFamily};
+  font-family: ${props => props.theme.typography.fontFamily};
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
@@ -131,7 +113,7 @@ const Description = styled(motion.p)`
   line-height: 1.4;
   margin: 0;
   max-width: 90%;
-  font-family: ${DMSansFont.style.fontFamily};
+  font-family: ${props => props.theme.typography.fontFamily};
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -149,7 +131,7 @@ const CTAButton = styled(motion.button)`
   font-weight: 600;
   font-size: 1.8rem;
   cursor: pointer;
-  font-family: ${montserrat.style.fontFamily};
+  font-family: ${props => props.theme.typography.fontFamily};
   transition: all 0.3s ease;
 
   &:hover {

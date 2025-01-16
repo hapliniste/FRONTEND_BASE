@@ -1,5 +1,6 @@
 import { Montserrat } from 'next/font/google';
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 
 export const montserrat = Montserrat({
   subsets: ['latin'],
@@ -9,6 +10,11 @@ export const montserrat = Montserrat({
 export const jakarta = Plus_Jakarta_Sans({ 
   subsets: ['latin'],
   weight: ['200', '300', '400', '500', '600', '700', '800']
+});
+
+export const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700']
 });
 
 export interface Theme {
@@ -168,7 +174,7 @@ const baseTheme: Theme = {
   },
   typography: {
     fontFamily: montserrat.style.fontFamily,
-    headingFontFamily: jakarta.style.fontFamily,
+    headingFontFamily: outfit.style.fontFamily,
     titleFontFamily: jakarta.style.fontFamily,
     fontSize: '1rem',
     lineHeight: '1.5',

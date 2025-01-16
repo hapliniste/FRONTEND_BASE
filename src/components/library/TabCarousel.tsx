@@ -19,6 +19,7 @@ interface TabCarouselProps {
     tabs: Tab[];
     interval?: number; // Interval in milliseconds (default: 7000ms)
     swiperEffect?: 'slide' | 'fade' | 'cards'; // Supported Swiper effects
+    enableAutoplay?: boolean; // Whether autoplay should be enabled
 }
 
 const TabBar = styled.div`
@@ -124,6 +125,7 @@ const TabContent = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    //cursor: pointer;
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -161,6 +163,7 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
     tabs,
     interval = 7000,
     swiperEffect = 'slide',
+    enableAutoplay = true,
 }) => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isAutoplay, setIsAutoplay] = useState(false);
@@ -179,7 +182,7 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setIsInView(true);
-                        setIsAutoplay(true);
+                        setIsAutoplay(enableAutoplay);
                         setAnimationKey((prevKey) => prevKey + 1);
                     } else {
                         setIsInView(false);
@@ -200,7 +203,7 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                 observer.unobserve(currentRef);
             }
         };
-    }, []);
+    }, [enableAutoplay]);
 
     // Handle autoplay control based on isAutoplay and isInView
     useEffect(() => {
@@ -218,8 +221,8 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
         if (swiperRef.current) {
             swiperRef.current.slideTo(index);
         }
-        setIsAutoplay(false); // Stop auto-play on manual interaction
-        setAnimationKey((prevKey) => prevKey + 1); // Set progress bar to 100%
+        setIsAutoplay(false); // Stop auto-play on tab click
+        setAnimationKey((prevKey) => prevKey + 1);
     };
 
     // Handle manual swipe interaction
@@ -296,6 +299,12 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
         };
     }, []);
 
+    // Add content click handler
+    const handleContentClick = () => {
+        setIsAutoplay(false);
+        setAnimationKey((prevKey) => prevKey + 1);
+    };
+
     return (
         <div ref={carouselRef}>
             <TabBar role="tablist">
@@ -351,7 +360,9 @@ const TabCarousel: React.FC<TabCarouselProps> = ({
                 >
                     {tabs.map((tab, index) => (
                         <SwiperSlide key={index}>
-                            <TabContent>{tab.content}</TabContent>
+                            <TabContent onClick={handleContentClick}>
+                                {tab.content}
+                            </TabContent>
                         </SwiperSlide>
                     ))}
                 </StyledSwiper>

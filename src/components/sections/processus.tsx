@@ -173,6 +173,7 @@ const ClickableCard = styled(TimelineCard)`
 `;
 
 const CardTitle = styled.h3`
+  //font-family: ${props => props.theme.typography.titleFontFamily};
   font-size: 1.5rem;
   font-weight: 600;
   color: ${props => props.theme.colors.text.primary};

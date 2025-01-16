@@ -2,9 +2,9 @@
 
 ## Todo
 
-- [ ] Faire le Hero
+- [-] Faire le Hero
 - [x] Mettre les services en haut, suivi des valeurs, ce que le web vous apporte, processus, contact
-- [ ] Faire une section "ce que le web vous apporte"
+- [-] Faire une section "ce que le web vous apporte"
 - [x] Ameliorer le rendu mobile
 - [x] Rendre le site plus compact et simple à lire vite *
 - [ ] Mettre les images et icones

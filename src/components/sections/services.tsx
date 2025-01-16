@@ -574,7 +574,19 @@ const services: Tab[] = [
 
 const Services: React.FC = () => {
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(false);
     const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -640,6 +652,7 @@ const Services: React.FC = () => {
                             tabs={services}
                             interval={7000}
                             swiperEffect="slide"
+                            enableAutoplay={!isMobile}
                         />
                     )}
                 </ContentWrapper>
