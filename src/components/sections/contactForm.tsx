@@ -5,6 +5,7 @@ import Image from "next/image";
 import { montserrat } from '@/styles/theme';
 import { NextSeo } from 'next-seo';
 import { trackFormSubmission } from '@/utils/analytics';
+import { EnvelopeSimple, Phone, MapPinSimple } from '@phosphor-icons/react';
 
 // Layout Components
 const Section = styled.section`
@@ -209,10 +210,15 @@ const ContactItem = styled.div`
 `;
 
 const ContactIcon = styled.span`
-  font-size: 1.5rem;
+  color: ${props => props.theme.colors.text.primary};
   width: 2rem;
   display: flex;
   justify-content: center;
+  
+  svg [opacity="0.2"] {
+    opacity: 0.2;
+    fill: ${props => props.theme.colors.accent.primary};
+  }
 `;
 
 const ContactText = styled.span`
@@ -220,6 +226,16 @@ const ContactText = styled.span`
   flex: 1;
   justify-content: left;
   text-align: left;
+`;
+
+const ContactLink = styled.a`
+  color: ${props => props.theme.colors.text.primary};
+  text-decoration: none;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: ${props => props.theme.colors.accent.primary};
+  }
 `;
 
 const RevealButton = styled(motion.button)`
@@ -797,15 +813,29 @@ const ContactForm: React.FC = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <ContactItem>
-                        <ContactIcon>📧</ContactIcon>
-                        <ContactText>{contactInfo.email}</ContactText>
+                        <ContactIcon>
+                          <EnvelopeSimple size={24} weight="duotone" />
+                        </ContactIcon>
+                        <ContactText>
+                          <ContactLink href={`mailto:${contactInfo.email}`}>
+                            {contactInfo.email}
+                          </ContactLink>
+                        </ContactText>
                       </ContactItem>
                       <ContactItem>
-                        <ContactIcon>📞</ContactIcon>
-                        <ContactText>{contactInfo.phone}</ContactText>
+                        <ContactIcon>
+                          <Phone size={24} weight="duotone" />
+                        </ContactIcon>
+                        <ContactText>
+                          <ContactLink href={`tel:${contactInfo.phone}`}>
+                            {contactInfo.phone}
+                          </ContactLink>
+                        </ContactText>
                       </ContactItem>
                       <ContactItem>
-                        <ContactIcon>📍</ContactIcon>
+                        <ContactIcon>
+                          <MapPinSimple size={24} weight="duotone" />
+                        </ContactIcon>
                         <ContactText>{contactInfo.address}</ContactText>
                       </ContactItem>
                     </ContactDetails>

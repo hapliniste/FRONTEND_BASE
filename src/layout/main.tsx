@@ -120,7 +120,7 @@ const NavSection = styled.div`
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.spacing.medium};
-    background-color: ${({ theme }) => `${theme.colors.backgrounds.default}`};
+    background-color: ${({ theme }) => theme.colors.backgrounds.white};
     padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
     border-radius: 99em;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);

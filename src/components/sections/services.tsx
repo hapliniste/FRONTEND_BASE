@@ -8,7 +8,7 @@ import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Desktop, Code, Robot, Cloud } from '@phosphor-icons/react';
+import { Devices, Code, Brain, Cloud } from '@phosphor-icons/react';
 //import Float3DCard from '@/components/library/Float3DCard';
 //import type Hls from 'hls.js';
 
@@ -500,7 +500,7 @@ const IconWrapper = styled.div`
 const services: Tab[] = [
     {
         title: "Site standard",
-        icon: <IconWrapper><Desktop size={32} weight="duotone" /></IconWrapper>,
+        icon: <IconWrapper><Devices size={32} weight="duotone" /></IconWrapper>,
         content: (
             <ServiceCard
                 title="Site standard"
@@ -551,7 +551,7 @@ const services: Tab[] = [
     },
     {
         title: "Assistant IA managé",
-        icon: <IconWrapper><Robot size={32} weight="duotone" /></IconWrapper>,
+        icon: <IconWrapper><Brain size={32} weight="duotone" /></IconWrapper>,
         content: (
             <ServiceCard
                 title="Assistant IA managé"

@@ -11,7 +11,7 @@ import React, { useRef, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { SectionTitle } from '@/components/library/typography';
-import { CheckCircle, Target, Code, RocketLaunch, Handshake } from '@phosphor-icons/react';
+import { CheckFat, Users, TerminalWindow, RocketLaunch, Handshake } from '@phosphor-icons/react';
 
 // Update the ProcessSteps type
 type StepStatus = 'completed' | 'bonus' | undefined;
@@ -32,7 +32,7 @@ const ProcessSteps: ProcessStep[] = [
     id: 1,
     title: "Vous Nous Avez Trouvés",
     description: "Félicitations! Vous avez déjà franchi la première étape en nous trouvant.\nNous sommes maintenant à votre disposition pour concrétiser votre vision.",
-    icon: <CheckCircle size={32} weight="duotone" />,
+    icon: <CheckFat size={32} weight="duotone" />,
     status: "completed"
   },
   {
@@ -40,13 +40,13 @@ const ProcessSteps: ProcessStep[] = [
     title: "Premier Contact",
     subtitle: "Discutons et Visualisons Ensemble",
     description: "Commençons par un entretien gratuit pour comprendre vos objectifs et besoins. Nous créerons ensuite des prototypes personnalisés pour vous permettre de visualiser concrètement votre projet avant son développement.",
-    icon: <Target size={32} weight="duotone" />,
+    icon: <Users size={32} weight="duotone" />,
     isClickable: true
   },
   {
     id: 3,
     title: "Développement",
-    icon: <Code size={32} weight="duotone" />
+    icon: <TerminalWindow size={32} weight="duotone" />
   },
   {
     id: 4,

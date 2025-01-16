@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const HamburgerButton = styled.button<{ isOpen: boolean }>`
     display: none;
-    background: ${({ theme }) => theme.colors.backgrounds.default};
+    background: ${({ theme }) => theme.colors.backgrounds.white};
     border: none;
     cursor: pointer;
     padding: 0;
@@ -62,7 +62,7 @@ const MenuDropdown = styled.div<{ isOpen: boolean }>`
     top: 4rem;
     right: ${({ theme }) => theme.spacing.medium};
     width: 240px;
-    background: ${props => props.theme.colors.backgrounds.default};
+    background: ${props => props.theme.colors.backgrounds.white};
     border-radius: 1.25rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     opacity: ${props => props.isOpen ? 1 : 0};

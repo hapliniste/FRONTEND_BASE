@@ -5,7 +5,7 @@ import ImageCard from "@/components/library/imageCard";
 import { SectionTitle } from '@/components/library/typography';
 import { NextSeo } from 'next-seo';
 import { motion } from 'framer-motion';
-import { Handshake, Rocket, Code, LockOpen, PiggyBank } from '@phosphor-icons/react';
+import { Handshake, Rocket, Code, Key, PiggyBank } from '@phosphor-icons/react';
 
 interface ValeurCardProps {
   title: string;
@@ -272,7 +272,7 @@ const cardContent: ValeurCardProps[] = [
         </p>
       </>
     ),
-    icon: <LockOpen size={32} weight="duotone" />,
+    icon: <Key size={32} weight="duotone" />,
     isEven: true
   },
   {

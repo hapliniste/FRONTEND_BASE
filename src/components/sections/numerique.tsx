@@ -274,7 +274,7 @@ const features: Feature[] = [
     stats: [
       {
         value: "72%",
-        text: "des consommateurs qui font une recherche locale visitent un magasin dans un rayon de 8 km",
+        text: "des consommateurs qui font une recherche locale visitent un commerce dans un rayon de 8 km",
         source: "https://www.ascendbusinessgrowth.com/blog/online-presence"
       },
     ],
